@@ -18,9 +18,13 @@ Flask was installed as the main web framework, and Flask-SQLAlchemy was added to
 
 All dependencies were documented in requirements.txt to ensure reproducibility and professional project structure.
 
-## 04/03/2026 – Database Approach Revision
+## 27/03/2026 – Database Approach Revision
 After reviewing project complexity and personal skill level, I decided to simplify the backend by removing SQLAlchemy and implementing direct SQLite queries using Python’s sqlite3 module.
 
 This decision was made to improve clarity, maintain control over database logic, and strengthen foundational SQL understanding. The project dependencies were updated accordingly, and the repository was synchronised with GitHub.
 
 This change maintains professional structure while ensuring the system remains manageable within the project timeframe.
+
+## 04/03/2026 – Refactoring to Modular Structure
+
+Today I refactored the Flask application from a single-file structure to a modular architecture. I implemented the Application Factory pattern and organised routes using a Blueprint. This improves code organisation, scalability, and maintainability. The application was tested and runs successfully in modular format.
