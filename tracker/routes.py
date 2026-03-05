@@ -14,7 +14,8 @@ Blueprints are used to:
 
 # Import Blueprint from Flask.
 # A Blueprint is used to group related routes.
-from flask import Blueprint
+# render_template is used to render HTML templates.
+from flask import Blueprint, render_template
 
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
@@ -28,5 +29,6 @@ main = Blueprint("main", __name__)
 def home():
     
     # Return a simple string response to the browser.
-    # Later this will be replaced with an HTML template.
-    return "Welcome to MySpend - Modular Version"
+    # This will display "Welcome to MySpend!" on the homepage.
+    return render_template("index.html") # Render the index.html template when the root URL is accessed.
+

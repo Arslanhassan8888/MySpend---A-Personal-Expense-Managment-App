@@ -28,3 +28,6 @@ This change maintains professional structure while ensuring the system remains m
 ## 04/03/2026 – Refactoring to Modular Structure
 
 Today I refactored the Flask application from a single-file structure to a modular architecture. I implemented the Application Factory pattern and organised routes using a Blueprint. This improves code organisation, scalability, and maintainability. The application was tested and runs successfully in modular format.
+
+## 05/03/2026 - HTML Template Integration
+I connected the Flask backend to a frontend HTML template using render_template(). I created a templates folder and added an index.html file for the home page. This step allowed the application to return a structured webpage instead of plain text. The integration was tested successfully and the page renders correctly in the browser.
