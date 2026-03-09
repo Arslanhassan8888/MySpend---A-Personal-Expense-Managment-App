@@ -13,8 +13,12 @@ Using the Application Factory pattern improves:
 - Testing capability
 """
 
-# Import Flask class from the flask module.
 from flask import Flask
+
+# Import the get_db_connection function from models.py.
+from .models import get_db_connection
+
+
 # Application Factory Function
 # This function creates and configures the Flask application.
 # It returns a fully initialized app instance.
@@ -34,6 +38,12 @@ def create_app():
     # This connects all routes defined in routes.py.
     app.register_blueprint(main)
     
+    
+    # Connect to the SQLite database using the get_db_connection function.
+    conn = get_db_connection()
+    
+    # Close the database connection after testing it.
+    conn.close()
     
     
     # Return the configured Flask application. 

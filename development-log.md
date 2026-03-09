@@ -31,3 +31,11 @@ Today I refactored the Flask application from a single-file structure to a modul
 
 ## 05/03/2026 - HTML Template Integration
 I connected the Flask backend to a frontend HTML template using render_template(). I created a templates folder and added an index.html file for the home page. This step allowed the application to return a structured webpage instead of plain text. The integration was tested successfully and the page renders correctly in the browser.
+
+
+## 09/03/2026 – SQLite Database Connection
+Implemented the initial SQLite database connection using Python’s sqlite3 module. The connection function was added in models.py and integrated into the Flask Application Factory.
+
+An import error occurred during testing. The issue was resolved by deleting Python cache files (__pycache__) and restarting Visual Studio Code.
+
+After fixing the environment issue, the application ran successfully and the database file (myspend.db) was created.

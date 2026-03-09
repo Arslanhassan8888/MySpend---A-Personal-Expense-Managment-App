@@ -17,9 +17,11 @@ Blueprints are used to:
 # render_template is used to render HTML templates.
 from flask import Blueprint, render_template
 
+
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
 main = Blueprint("main", __name__)
+
 
 # This route handles requests to the root URL "/".
 # When a user visits:
@@ -28,7 +30,5 @@ main = Blueprint("main", __name__)
 @main.route("/")
 def home():
     
-    # Return a simple string response to the browser.
-    # This will display "Welcome to MySpend!" on the homepage.
-    return render_template("index.html") # Render the index.html template when the root URL is accessed.
-
+    # Render the index.html template when the root URL is accessed.
+    return render_template("index.html")
