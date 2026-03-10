@@ -39,3 +39,16 @@ Implemented the initial SQLite database connection using Python’s sqlite3 modu
 An import error occurred during testing. The issue was resolved by deleting Python cache files (__pycache__) and restarting Visual Studio Code.
 
 After fixing the environment issue, the application ran successfully and the database file (myspend.db) was created.
+
+## 10/03/2026 Part A- Database Schema Implementation
+Implemented the SQLite database schema for the MySpend application. The database tables were created using SQL queries inside models.py, representing the core entities of the system including users, expenses, income, budgets, goals, recurring expenses, and categories.
+
+The table creation process was integrated into the Flask Application Factory so that the database schema is automatically initialized when the application starts. This ensures that the system can create and manage persistent financial data without requiring manual database setup.
+
+## 10/03/2026 Part B – Default Categories Initialization
+
+Implemented automatic insertion of predefined spending categories into the database. A function was added in models.py to insert default categories such as Food, Transport, Entertainment, Rent, Utilities, Shopping, Health, Education, and Other.
+
+This function is executed when the Flask application starts, ensuring that the categories table always contains the required options for expense classification. The categories are inserted using `INSERT OR IGNORE` to prevent duplicate entries if the application restarts.
+
+The changes were committed to the repository after verifying that the database correctly creates the categories when the application is launched.

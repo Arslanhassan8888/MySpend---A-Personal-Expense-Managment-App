@@ -18,7 +18,8 @@ from flask import Flask
 # Import the get_db_connection function from models.py.
 # This allows us to test the database connection when the app starts.
 # create_tables is imported to ensure that the database tables are created when the app starts.
-from .models import get_db_connection, create_tables
+# insert_default_categories is imported to populate the categories table with default values if they don't already exist.
+from .models import get_db_connection, create_tables, insert_default_categories
 
 
 # Application Factory Function
@@ -49,6 +50,7 @@ def create_app():
     
     create_tables()  # Ensure database tables are created when the app starts.
     
+    insert_default_categories()  # Insert default categories if they don't exist.
     
     # Return the configured Flask application. 
     return app

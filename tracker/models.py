@@ -9,24 +9,23 @@ While routes.py defines how users interact with the application
 the application will manage.
 """
 
-# Import the sqlite3 module from Python
-# This module allows Python to work with SQLite databases
+# Import sqlite3 to allow Python to work with SQLite databases
 import sqlite3
 
 
-# Function that creates a database connection
+# Function to create a database connection
 def get_db_connection():
 
-    # Connect to a SQLite database file called "myspend.db"
-    # If the file does not exist, SQLite will automatically create it
+    # Connect to the SQLite database file
+    # If the file does not exist, SQLite will create it automatically
     connection = sqlite3.connect("myspend.db")
 
-    # This line allows us to access database columns by name instead of number
+    # Allows rows to be accessed like dictionaries
     # Example: row["email"] instead of row[0]
     connection.row_factory = sqlite3.Row
 
-    # Return the connection so other parts of the app can use it
     return connection
+
 
 # Function to create database tables
 def create_tables():
@@ -34,10 +33,11 @@ def create_tables():
     # Get a database connection
     conn = get_db_connection()
 
-    # Create a cursor object to execute SQL commands
+    # Create a cursor to execute SQL commands
     cursor = conn.cursor()
 
-    # Create Users table
+    # USERS TABLE
+    # Stores user account information
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,15 +46,17 @@ def create_tables():
     )
     """)
 
-    # Create Categories table
+    # CATEGORIES TABLE
+    # Stores predefined spending categories
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS categories (
         category_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
+        name TEXT NOT NULL UNIQUE
     )
     """)
 
-    # Create Expenses table
+    # EXPENSES TABLE
+    # Stores spending transactions recorded by users
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS expenses (
         expense_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -68,7 +70,8 @@ def create_tables():
     )
     """)
 
-    # Create Income table
+    # INCOME TABLE
+    # Stores money received by users
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS income (
         income_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,7 +83,8 @@ def create_tables():
     )
     """)
 
-    # Create Budgets table
+    # BUDGETS TABLE
+    # Stores the monthly spending limit for a user
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS budgets (
         budget_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -90,7 +94,8 @@ def create_tables():
     )
     """)
 
-    # Create Goals table
+    # GOALS TABLE
+    # Stores financial saving goals
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS goals (
         goal_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -101,7 +106,8 @@ def create_tables():
     )
     """)
 
-    # Create Recurring Expenses table
+    # RECURRING EXPENSES TABLE
+    # Stores subscriptions or repeated payments
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS recurring_expenses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,6 +119,40 @@ def create_tables():
         FOREIGN KEY (category_id) REFERENCES categories(category_id)
     )
     """)
+
+    # Save changes to the database
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+
+
+# Function to insert default categories
+def insert_default_categories():
+
+    # Connect to database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # List of predefined categories
+    categories = [
+        "Food",
+        "Transport",
+        "Entertainment",
+        "Rent",
+        "Utilities",
+        "Shopping",
+        "Health",
+        "Education",
+        "Other"
+    ]
+
+    # Insert categories if they do not already exist
+    for category in categories:
+        cursor.execute(
+            "INSERT OR IGNORE INTO categories (name) VALUES (?)",
+            (category,)
+        )
 
     # Save changes
     conn.commit()
