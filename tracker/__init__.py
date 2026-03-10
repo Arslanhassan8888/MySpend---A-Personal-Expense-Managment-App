@@ -16,7 +16,9 @@ Using the Application Factory pattern improves:
 from flask import Flask
 
 # Import the get_db_connection function from models.py.
-from .models import get_db_connection
+# This allows us to test the database connection when the app starts.
+# create_tables is imported to ensure that the database tables are created when the app starts.
+from .models import get_db_connection, create_tables
 
 
 # Application Factory Function
@@ -44,6 +46,8 @@ def create_app():
     
     # Close the database connection after testing it.
     conn.close()
+    
+    create_tables()  # Ensure database tables are created when the app starts.
     
     
     # Return the configured Flask application. 
