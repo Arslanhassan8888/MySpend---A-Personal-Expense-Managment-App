@@ -62,3 +62,8 @@ Password security was implemented using generate_password_hash from the werkzeug
 A new template page register.html was created to provide the registration interface. Jinja templating was used to display an error message when a user attempts to register with an email that already exists in the database. This prevents duplicate accounts and improves user feedback.
 
 The redirect and url_for functions were used to navigate the user back to the home page after successful registration. The feature was tested successfully by verifying both normal registration and duplicate email handling.
+
+## 11/03/2026 – Login and Session Implementation
+Implemented the user login functionality by creating a /login route and a new login.html template. I used Flask’s request object to retrieve the email and password from the form and verified the credentials using check_password_hash.
+
+I also introduced session management using Flask’s session object. After successful authentication, I stored the user’s user_id in the session to keep the user logged in. Basic error handling was added to display a message when invalid login credentials are entered.

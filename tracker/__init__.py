@@ -31,6 +31,8 @@ def create_app():
     # __name__ tells Flask where the application is located.
     app = Flask(__name__)
     
+    app.secret_key = "ciao_bello"  # Set a secret key for session management and security features.
+    
     
     # Import the Blueprint named "main" from routes.py.
     # The dot (.) indicates importing from the current package.

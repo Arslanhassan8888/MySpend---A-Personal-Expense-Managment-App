@@ -23,8 +23,9 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from .models import get_db_connection
 # Import generate_password_hash to securely hash user passwords before storing them in the database.
 # werkzeug.security is a module that provides utilities for hashing passwords and checking hashed passwords.
-from werkzeug.security import generate_password_hash
-
+from werkzeug.security import check_password_hash, generate_password_hash
+# Import session to manage user sessions (e.g., keeping users logged in).
+from  flask import session
 
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
@@ -91,7 +92,43 @@ def register():
         conn.close()
 
         # Redirect user to login page
-        return redirect(url_for("main.home")) # url_for("main.home") generates the URL for the home route defined in this Blueprint.
+        return redirect(url_for("main.login")) # url_for("main.home") generates the URL for the home route defined in this Blueprint.
 
     # If user simply opened /register page
     return render_template("register.html", error=error)
+
+# Login route handles both:
+# - displaying the login page
+@main.route("/login", methods=["GET", "POST"])
+def login():
+
+    error = None
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        user = cursor.execute(
+            "SELECT * FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+
+        conn.close()
+
+        # Check if user exists and password matches
+        if user and check_password_hash(user["password_hash"], password):
+
+            # Store user id in session
+            # session is a special object in Flask that allows you to store information across requests.
+            session["user_id"] = user["user_id"]
+
+            return redirect(url_for("main.home"))
+
+        else:
+            error = "Invalid email or password"
+
+    return render_template("login.html", error=error)
