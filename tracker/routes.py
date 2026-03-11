@@ -39,8 +39,10 @@ main = Blueprint("main", __name__)
 @main.route("/")
 def home():
     
+    user_id = session.get("user_id")  # Get the user_id from the session, if it exists.
+    
     # Render the index.html template when the root URL is accessed.
-    return render_template("index.html")
+    return render_template("index.html", user_id=user_id)  # Pass user_id to the template for conditional display.
 
 # Register route
 # This route handles BOTH:
@@ -54,7 +56,7 @@ def register():
     if request.method == "POST":
 
         # Get form data from the registration form
-        email = request.form["email"]
+        email = request.form["email"].strip().lower()  # Remove leading/trailing whitespace and convert to lowercase
         password = request.form["password"]
 
         # Connect to database
@@ -106,7 +108,7 @@ def login():
 
     if request.method == "POST":
 
-        email = request.form["email"]
+        email = request.form["email"].strip().lower()  # Remove leading/trailing whitespace from email input
         password = request.form["password"]
 
         conn = get_db_connection()
@@ -125,6 +127,8 @@ def login():
             # Store user id in session
             # session is a special object in Flask that allows you to store information across requests.
             session["user_id"] = user["user_id"]
+            
+            
 
             return redirect(url_for("main.home"))
 

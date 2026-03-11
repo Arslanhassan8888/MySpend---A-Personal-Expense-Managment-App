@@ -17,6 +17,11 @@
             <section>
                 <h2>Welcome</h2>
                 <p>Your personal expense management app.</p>
+                {% if user_id %}
+                <p>You are logged in as user {{ user_id }}</p>
+                {% else %}
+                <p>You are not logged in</p>
+                {% endif %}
             </section>
         </main>
     </body>
