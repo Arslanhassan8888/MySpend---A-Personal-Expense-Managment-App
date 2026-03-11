@@ -23,6 +23,8 @@ def get_db_connection():
     # Allows rows to be accessed like dictionaries
     # Example: row["email"] instead of row[0]
     connection.row_factory = sqlite3.Row
+    # Enable foreign key support in SQLite
+    connection.execute("PRAGMA foreign_keys = ON")  # Enable foreign key support
 
     return connection
 

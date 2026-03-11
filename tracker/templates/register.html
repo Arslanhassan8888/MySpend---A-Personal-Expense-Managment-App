@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register | MySpend</title>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="/">Main menu</a>
+            </nav>
+            <h1>MySpend</h1>
+            <p>Create an account</p>
+        </header>
+        <main>
+            <section>
+                <h2>Register</h2>
+                <!-- Show error message if one exists 
+                jinja2  template -->
+                 
+                {% if error %}
+                <p role="alert" style="color: red;">{{ error }}</p>
+                {% endif %}
+                <!-- Registration form -->
+                <form method="POST">
+                    <fieldset>
+                        <legend>Create Account</legend>
+                        <!-- Email field -->
+                        <div>
+                            <label for="email">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                autocomplete="email"
+                                placeholder="example@email.com"
+                            >
+                        </div>
+                        <!-- Password field -->
+                        <div>
+                            <label for="password">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                placeholder="Create a password"
+                            >
+                        </div>
+                        <!-- Submit button -->
+                        <div>
+                            <button type="submit"> Register</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>

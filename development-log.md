@@ -52,3 +52,13 @@ Implemented automatic insertion of predefined spending categories into the datab
 This function is executed when the Flask application starts, ensuring that the categories table always contains the required options for expense classification. The categories are inserted using `INSERT OR IGNORE` to prevent duplicate entries if the application restarts.
 
 The changes were committed to the repository after verifying that the database correctly creates the categories when the application is launched.
+
+## 11/03/2026 – User Registration Implementation
+
+Implemented the user registration functionality in the MySpend application. A new /register route was created in routes.py to display the registration page and process form submissions. The Flask request object was used to retrieve the email and password values from the HTML form.
+
+Password security was implemented using generate_password_hash from the werkzeug.security module to store passwords as secure hashes instead of plain text.
+
+A new template page register.html was created to provide the registration interface. Jinja templating was used to display an error message when a user attempts to register with an email that already exists in the database. This prevents duplicate accounts and improves user feedback.
+
+The redirect and url_for functions were used to navigate the user back to the home page after successful registration. The feature was tested successfully by verifying both normal registration and duplicate email handling.

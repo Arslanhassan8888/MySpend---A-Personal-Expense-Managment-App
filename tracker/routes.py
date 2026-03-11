@@ -15,7 +15,15 @@ Blueprints are used to:
 # Import Blueprint from Flask.
 # A Blueprint is used to group related routes.
 # render_template is used to render HTML templates.
-from flask import Blueprint, render_template
+# request is used to access form data sent by the user.
+# redirect and url_for are used to redirect users to different pages after certain actions (like registration).
+# url_for is used to generate URLs for the specified endpoint (route function).
+from flask import Blueprint, render_template, request, redirect, url_for
+# Import the get_db_connection function from models.py to interact with the database.
+from .models import get_db_connection
+# Import generate_password_hash to securely hash user passwords before storing them in the database.
+# werkzeug.security is a module that provides utilities for hashing passwords and checking hashed passwords.
+from werkzeug.security import generate_password_hash
 
 
 # "main" is the name of this Blueprint.
@@ -32,3 +40,58 @@ def home():
     
     # Render the index.html template when the root URL is accessed.
     return render_template("index.html")
+
+# Register route
+# This route handles BOTH:
+# - displaying the registration page
+# - processing the registration form
+@main.route("/register", methods=["GET", "POST"])
+def register():
+    
+    error = None  # Initialize error variable to None
+    # If the user submitted the form
+    if request.method == "POST":
+
+        # Get form data from the registration form
+        email = request.form["email"]
+        password = request.form["password"]
+
+        # Connect to database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+       # Check if the email already exists "? mean parameterized query to prevent SQL injection" means that the value of email will be safely inserted into the SQL query,
+       # preventing malicious input from breaking the query or accessing unauthorized data. The actual value of email is passed as a tuple (email,) to the execute method, 
+       # which ensures that it is treated as a parameter rather than part of the SQL command.
+        existing_user = cursor.execute(
+            "SELECT * FROM users WHERE email = ?",
+            (email,) # Note the comma to make it a tuple
+        ).fetchone() # fetchone() retrieves the first row of the result, or None if there are no results.
+
+        # If email exists, show error message
+        if existing_user:
+            conn.close()  # Close the database connection
+            error = "Email already registered"
+            return render_template("register.html", error=error)   # Render the registration page with the error message    
+
+        else:
+            # Hash the password
+            password_hash = generate_password_hash(password)
+
+            # Insert new user into database
+            cursor.execute(
+                "INSERT INTO users (email, password_hash) VALUES (?, ?)",
+                (email, password_hash)
+            )
+
+        # Save changes
+        conn.commit()
+
+        # Close connection
+        conn.close()
+
+        # Redirect user to login page
+        return redirect(url_for("main.home")) # url_for("main.home") generates the URL for the home route defined in this Blueprint.
+
+    # If user simply opened /register page
+    return render_template("register.html", error=error)
