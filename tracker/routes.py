@@ -31,6 +31,9 @@ from  flask import session
 # __name__ helps Flask locate resources correctly.
 main = Blueprint("main", __name__)
 
+@main.route("/test")
+def test():
+    return "This is a test route to check if the Blueprint is working!"
 
 # This route handles requests to the root URL "/".
 # When a user visits:
