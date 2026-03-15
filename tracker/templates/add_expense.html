@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Expense</title>
+    </head>
+    <body>
+        <h2>Add Expense</h2>
+        <form method="POST">
+            <label>Amount</label>
+            <input
+                type="number"
+                step="0.01"
+                name="amount"
+                required
+            >
+            <label>Category</label>
+            <select name="category_id">
+                <option value="1">Food</option>
+                <option value="2">Transport</option>
+                <option value="3">Entertainment</option>
+                <option value="4">Shopping</option>
+                <option value="5">Other</option>
+            </select>
+            <label>Description</label>
+            <input type="text" name="description">
+            <button type="submit">Save</button>
+        </form>
+    </body>
+</html>

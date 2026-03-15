@@ -19,7 +19,6 @@
                 <h2>Register</h2>
                 <!-- Show error message if one exists 
                 jinja2  template -->
-                 
                 {% if error %}
                 <p role="alert" style="color: red;">{{ error }}</p>
                 {% endif %}
@@ -27,6 +26,11 @@
                 <form method="POST">
                     <fieldset>
                         <legend>Create Account</legend>
+                        <!-- Name field -->
+                        <div>
+                            <label>Name</label>
+                            <input type="text" name="name" required>
+                        </div>
                         <!-- Email field -->
                         <div>
                             <label for="email">Email</label>

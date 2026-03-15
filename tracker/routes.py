@@ -59,6 +59,7 @@ def register():
     if request.method == "POST":
 
         # Get form data from the registration form
+        name = request.form["name"].strip()  # Remove leading/trailing whitespace from name input
         email = request.form["email"].strip().lower()  # Remove leading/trailing whitespace and convert to lowercase
         password = request.form["password"]
 
@@ -86,8 +87,8 @@ def register():
 
             # Insert new user into database
             cursor.execute(
-                "INSERT INTO users (email, password_hash) VALUES (?, ?)",
-                (email, password_hash)
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                (name, email, password_hash)
             )
 
         # Save changes
@@ -96,8 +97,8 @@ def register():
         # Close connection
         conn.close()
 
-        # Redirect user to login page
-        return redirect(url_for("main.login")) # url_for("main.home") generates the URL for the home route defined in this Blueprint.
+       # After successful registration, redirect to a success page or login page
+        return render_template("register_success.html")
 
     # If user simply opened /register page
     return render_template("register.html", error=error)
@@ -149,3 +150,33 @@ def logout():
 
     # Redirect user to the home page
     return redirect(url_for("main.home"))
+
+@main.route("/add-expense", methods=["GET","POST"])
+def add_expense():
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    if request.method == "POST":
+
+        amount = request.form["amount"]
+        category_id = request.form["category_id"]
+        description = request.form["description"]
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO expenses (user_id, category_id, date, amount, description)
+            VALUES (?, ?, date('now'), ?, ?)
+            """,
+            (session["user_id"], category_id, amount, description)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("main.home"))
+
+    return render_template("add_expense.html")

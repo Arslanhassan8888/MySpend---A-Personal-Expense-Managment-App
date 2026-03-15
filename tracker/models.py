@@ -43,8 +43,12 @@ def create_tables():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL
+        password_hash TEXT NOT NULL,
+        failed_attempts INTEGER DEFAULT 0,
+        lockout_until TEXT
+        monthly_budget REAL DEFAULT 0
     )
     """)
 
