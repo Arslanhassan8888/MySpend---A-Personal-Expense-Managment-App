@@ -8,8 +8,13 @@
     <body>
         <header>
             <nav>
-                <a href="/register">Create Account</a>
+                <a href="/">Home Page</a>
+                {% if user_id %}
+                <a href="/logout">Logout</a>
+                {% else %}
                 <a href="/login">Login</a>
+                <a href="/register">Create Account</a>
+                {% endif %}
             </nav>
             <h1>MySpend</h1>
         </header>

@@ -138,4 +138,14 @@ def login():
         else:
             error = "Invalid email or password"
 
+    
     return render_template("login.html", error=error)
+
+@main.route("/logout")
+def logout():
+
+    # Remove the user_id from the session
+    session.pop("user_id", None)
+
+    # Redirect user to the home page
+    return redirect(url_for("main.home"))
