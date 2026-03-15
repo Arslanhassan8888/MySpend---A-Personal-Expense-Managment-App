@@ -47,7 +47,7 @@ def create_tables():
         email TEXT NOT NULL UNIQUE,
         password_hash TEXT NOT NULL,
         failed_attempts INTEGER DEFAULT 0,
-        lockout_until TEXT
+        lockout_until TEXT,
         monthly_budget REAL DEFAULT 0
     )
     """)

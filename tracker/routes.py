@@ -26,6 +26,8 @@ from .models import get_db_connection
 from werkzeug.security import check_password_hash, generate_password_hash
 # Import session to manage user sessions (e.g., keeping users logged in).
 from  flask import session
+# Import datetime and timedelta for handling date and time operations, such as calculating date ranges for expense tracking.
+from datetime import datetime, timedelta
 
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
@@ -112,7 +114,7 @@ def login():
 
     if request.method == "POST":
 
-        email = request.form["email"].strip().lower()  # Remove leading/trailing whitespace from email input
+        email = request.form["email"].strip().lower()
         password = request.form["password"]
 
         conn = get_db_connection()
@@ -123,25 +125,66 @@ def login():
             (email,)
         ).fetchone()
 
-        conn.close()
+        if user:
 
-        # Check if user exists and password matches
-        if user and check_password_hash(user["password_hash"], password):
+            # Check if account is locked
+            if user["lockout_until"] is not None:
+                lock_time = datetime.fromisoformat(user["lockout_until"])
 
-            # Store user id in session
-            # session is a special object in Flask that allows you to store information across requests.
-            session["user_id"] = user["user_id"]
-            
-            
+                if datetime.now() < lock_time:
+                    error = "Account locked. Try again later."
+                    conn.close()
+                    return render_template("login.html", error=error)
 
-            return redirect(url_for("main.home"))
+            # Check password
+            if check_password_hash(user["password_hash"], password):
+
+                # Reset failed attempts
+                cursor.execute(
+                    "UPDATE users SET failed_attempts = 0, lockout_until = NULL WHERE user_id = ?",
+                    (user["user_id"],)
+                )
+
+                conn.commit()
+                conn.close()
+
+                session["user_id"] = user["user_id"]
+
+                return redirect(url_for("main.home"))
+
+            else:
+
+                attempts = user["failed_attempts"] + 1
+
+                if attempts >= 3:
+
+                    lock_time = datetime.now() + timedelta(minutes=15)
+
+                    cursor.execute(
+                        "UPDATE users SET failed_attempts = ?, lockout_until = ? WHERE user_id = ?",
+                        (attempts, lock_time.isoformat(), user["user_id"])
+                    )
+
+                    error = "Too many failed attempts. Account locked for 15 minutes."
+
+                else:
+
+                    cursor.execute(
+                        "UPDATE users SET failed_attempts = ? WHERE user_id = ?",
+                        (attempts, user["user_id"])
+                    )
+
+                    remaining = 3 - attempts
+                    error = f"Invalid login. {remaining} attempts remaining."
+
+                conn.commit()
 
         else:
             error = "Invalid email or password"
 
-    
-    return render_template("login.html", error=error)
+        conn.close()
 
+    return render_template("login.html", error=error)
 @main.route("/logout")
 def logout():
 

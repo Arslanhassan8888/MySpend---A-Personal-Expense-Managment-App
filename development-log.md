@@ -67,3 +67,11 @@ The redirect and url_for functions were used to navigate the user back to the ho
 Implemented the user login functionality by creating a /login route and a new login.html template. I used Flask’s request object to retrieve the email and password from the form and verified the credentials using check_password_hash.
 
 I also introduced session management using Flask’s session object. After successful authentication, I stored the user’s user_id in the session to keep the user logged in. Basic error handling was added to display a message when invalid login credentials are entered.
+
+## 12/03/2026 – Registration Improvements and Login Security
+
+Improved the registration system by adding a name field to the registration form and updating the users table to store this information. I also created a registration success page (register_success.html) to confirm that the account was created before the user proceeds to login.
+
+Additionally, I implemented a login security feature that limits users to three failed login attempts. If the password is entered incorrectly three times, the account is locked for 15 minutes using the lockout_until field in the database.
+
+During development I encountered an issue where login stopped working due to a database schema error (a missing comma in the users table definition). After correcting the schema and recreating the database, the login system functioned correctly.
