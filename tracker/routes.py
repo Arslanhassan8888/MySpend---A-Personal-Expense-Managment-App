@@ -189,6 +189,9 @@ def login():
 # Dashboard route - shows user-specific information after login
 @main.route("/dashboard")
 def dashboard():
+    
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -202,16 +205,7 @@ def dashboard():
 
     return render_template("dashboard.html", name=user["name"])
 
-@main.route("/logout")
-def logout():
-
-    # Remove the user_id from the session
-    session.pop("user_id", None)
-
-    # Redirect user to the home page
-    return redirect(url_for("main.home"))
-
-@main.route("/add-expense", methods=["GET","POST"])
+@main.route("/add-expense", methods=["GET", "POST"])
 def add_expense():
 
     if "user_id" not in session:
@@ -220,7 +214,7 @@ def add_expense():
     if request.method == "POST":
 
         amount = request.form["amount"]
-        category_id = request.form["category_id"]
+        category_id = request.form["category"]
         description = request.form["description"]
 
         conn = get_db_connection()
@@ -237,6 +231,16 @@ def add_expense():
         conn.commit()
         conn.close()
 
-        return redirect(url_for("main.home"))
+        return redirect(url_for("main.dashboard"))
 
     return render_template("add_expense.html")
+
+@main.route("/logout")
+def logout():
+
+    # Remove the user_id from the session
+    session.pop("user_id", None)
+
+    # Redirect user to the home page
+    return redirect(url_for("main.home"))
+

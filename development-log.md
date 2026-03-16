@@ -75,3 +75,6 @@ Improved the registration system by adding a name field to the registration form
 Additionally, I implemented a login security feature that limits users to three failed login attempts. If the password is entered incorrectly three times, the account is locked for 15 minutes using the lockout_until field in the database.
 
 During development I encountered an issue where login stopped working due to a database schema error (a missing comma in the users table definition). After correcting the schema and recreating the database, the login system functioned correctly.
+
+## 14/03/2026 – Dashboard Implementation and Access Control
+I implemented the first version of the dashboard page to display a welcome message and navigation links for the user area. During testing I discovered that the dashboard route assumed a valid session always existed. When accessing /dashboard without logging in, the application attempted to read session["user_id"], which could cause an error. I solved this by adding a session validation check that redirects unauthenticated users to the login page.
