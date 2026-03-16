@@ -150,7 +150,7 @@ def login():
 
                 session["user_id"] = user["user_id"]
 
-                return redirect(url_for("main.home"))
+                return redirect(url_for("main.dashboard"))
 
             else:
 
@@ -185,6 +185,23 @@ def login():
         conn.close()
 
     return render_template("login.html", error=error)
+
+# Dashboard route - shows user-specific information after login
+@main.route("/dashboard")
+def dashboard():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    user = cursor.execute(
+        "SELECT name FROM users WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template("dashboard.html", name=user["name"])
+
 @main.route("/logout")
 def logout():
 
