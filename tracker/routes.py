@@ -215,6 +215,7 @@ def add_expense():
 
         amount = request.form["amount"]
         category_id = request.form["category_id"]
+        date = request.form["date"]
         description = request.form["description"]
 
         conn = get_db_connection()
@@ -223,9 +224,10 @@ def add_expense():
         cursor.execute(
             """
             INSERT INTO expenses (user_id, category_id, date, amount, description)
-            VALUES (?, ?, date('now'), ?, ?)
+            VALUES (?, ?, ?, ?, ?)
             """,
-            (session["user_id"], category_id, amount, description)
+            (session["user_id"], category_id, date, 
+             amount, description)
         )
 
         conn.commit()
