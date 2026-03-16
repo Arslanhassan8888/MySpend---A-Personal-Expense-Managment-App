@@ -8,6 +8,31 @@ h1 {
     color: #2c3e50;
 }
 
+h3 {
+    margin-top: 30px;
+}
+
+
+/* Add Expense Form */
+
+.add-expense-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.add-expense-form input,
+.add-expense-form select {
+    padding: 6px;
+}
+
+.add-expense-form button {
+    padding: 6px 12px;
+}
+
+
+/* Table */
+
 table {
     border-collapse: collapse;
     width: 750px;
@@ -29,9 +54,15 @@ tr:hover {
     background-color: #f9fafb;
 }
 
+
+/* Selected rows */
+
 .selected-row {
     background-color: #e6f2ff !important;
 }
+
+
+/* Buttons */
 
 button {
     padding: 8px 16px;
@@ -50,6 +81,9 @@ button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
+
+
+/* Links */
 
 a {
     color: #2c3e50;

@@ -9,9 +9,34 @@
         <h1>MySpend Dashboard</h1>
         <h2>Welcome {{ name }}</h2>
         <p>Your personal finance space.</p>
-        <a href="/add-expense">Add Expense</a>
-        <br>
-        <br>
+        <!-- ADD EXPENSE FORM -->
+        <h3>Add Expense</h3>
+        <form method="POST" action="/add-expense" class="add-expense-form">
+            <input
+                type="number"
+                step="0.01"
+                name="amount"
+                placeholder="Amount"
+                required
+            >
+            <select name="category_id" required>
+                <option value="1">Food</option>
+                <option value="2">Transport</option>
+                <option value="3">Entertainment</option>
+                <option value="4">Rent</option>
+                <option value="5">Utilities</option>
+                <option value="6">Shopping</option>
+                <option value="7">Health</option>
+                <option value="8">Education</option>
+                <option value="9">Other</option>
+            </select>
+            <input type="date" name="date" required>
+            <input type="text" name="description" placeholder="Description">
+            <button type="submit">
+                Add Expense
+            </button>
+        </form>
+        <!-- EXPENSE LIST -->
         <h3>Your Expenses</h3>
         <form method="POST" action="/delete-selected-expenses">
             <table>
