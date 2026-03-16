@@ -266,6 +266,28 @@ def delete_expense(expense_id):
 
     return redirect(url_for("main.dashboard"))
 
+@main.route("/delete-selected-expenses", methods=["POST"])
+def delete_selected_expenses():
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    expense_ids = request.form.getlist("expense_ids")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    for expense_id in expense_ids:
+        cursor.execute(
+            "DELETE FROM expenses WHERE expense_id = ? AND user_id = ?",
+            (expense_id, session["user_id"])
+        )
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("main.dashboard"))
+
 @main.route("/logout")
 def logout():
 

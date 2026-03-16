@@ -12,24 +12,30 @@
         <br>
         <br>
         <h3>Your Expenses</h3>
-        <table border="1">
-            <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Delete</th>
-            </tr>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.date }}</td>
-                <td>{{ expense.name }}</td>
-                <td>{{ expense.amount }}</td>
-                <td>{{ expense.description }}</td>
-                <td><a href="/delete-expense/{{ expense.expense_id }}">Delete</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <form method="POST" action="/delete-selected-expenses">
+            <table border="1">
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Select</th>
+                </tr>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.name }}</td>
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>
+                        <input type="checkbox" name="expense_ids" value="{{ expense.expense_id }}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit">Delete Selected</button>
+        </form>
         <br>
         <a href="/logout">Logout</a>
     </body>
