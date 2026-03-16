@@ -200,13 +200,16 @@ def dashboard():
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
-    
+    # Fetch the user's expenses along with category names using a JOIN query.
+    # This query retrieves the expense_id, date, amount, description from the expenses table and the corresponding category name from the categories table.
+    # The results are ordered by date in descending order, showing the most recent expenses first.
     expenses = cursor.execute(
         """
         SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name
         FROM expenses
         JOIN categories ON expenses.category_id = categories.category_id
         WHERE expenses.user_id = ?
+        ORDER BY expenses.date DESC 
         """,
         (session["user_id"],)
     ).fetchall()
@@ -215,7 +218,7 @@ def dashboard():
 
     return render_template("dashboard.html", name=user["name"], expenses=expenses)
 
-@main.route("/add-expense", methods=["GET", "POST"])
+@main.route("/add-expense", methods=["POST"])
 def add_expense():
 
     if "user_id" not in session:
@@ -245,7 +248,6 @@ def add_expense():
 
         return redirect(url_for("main.dashboard"))
 
-    return render_template("add_expense.html")
 
 @main.route("/delete-expense/<int:expense_id>")
 def delete_expense(expense_id):
