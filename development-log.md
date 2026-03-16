@@ -76,5 +76,23 @@ Additionally, I implemented a login security feature that limits users to three 
 
 During development I encountered an issue where login stopped working due to a database schema error (a missing comma in the users table definition). After correcting the schema and recreating the database, the login system functioned correctly.
 
-## 14/03/2026 – Dashboard Implementation and Access Control
+## 15/03/2026 – Dashboard Implementation and Access Control
 I implemented the first version of the dashboard page to display a welcome message and navigation links for the user area. During testing I discovered that the dashboard route assumed a valid session always existed. When accessing /dashboard without logging in, the application attempted to read session["user_id"], which could cause an error. I solved this by adding a session validation check that redirects unauthenticated users to the login page.
+
+## 16/03/2026 – Debugging Add Expense Feature
+
+During testing of the expense submission form,
+the application raised a Flask BadRequestKeyError.
+
+Investigation of the traceback revealed that the
+add_expense() route attempted to access
+request.form["category"] while the HTML form
+used the field name "category_id".
+
+After verifying the mismatch between the
+backend route and frontend form, the issue was
+resolved by correcting the field name in routes.py.
+
+Reference consulted:
+https://stackoverflow.com/questions/51700053/flask-werkzeug-exceptions-badrequestkeyerror
+https://flask.palletsprojects.com/en/latest/quickstart/#accessing-request-data

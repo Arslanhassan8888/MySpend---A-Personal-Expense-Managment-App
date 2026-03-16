@@ -214,7 +214,7 @@ def add_expense():
     if request.method == "POST":
 
         amount = request.form["amount"]
-        category_id = request.form["category"]
+        category_id = request.form["category_id"]
         description = request.form["description"]
 
         conn = get_db_connection()
