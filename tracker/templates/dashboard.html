@@ -11,6 +11,24 @@
         <a href="/add-expense">Add Expense</a>
         <br>
         <br>
+        <h3>Your Expenses</h3>
+        <table border="1">
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Description</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.name }}</td>
+                <td>{{ expense.amount }}</td>
+                <td>{{ expense.description }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
         <a href="/logout">Logout</a>
     </body>
 </html>

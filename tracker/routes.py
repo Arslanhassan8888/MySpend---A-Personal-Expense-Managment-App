@@ -200,10 +200,20 @@ def dashboard():
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
+    
+    expenses = cursor.execute(
+        """
+        SELECT expenses.date, expenses.amount, expenses.description, categories.name
+        FROM expenses
+        JOIN categories ON expenses.category_id = categories.category_id
+        WHERE expenses.user_id = ?
+        """,
+        (session["user_id"],)
+    ).fetchall()
 
     conn.close()
 
-    return render_template("dashboard.html", name=user["name"])
+    return render_template("dashboard.html", name=user["name"], expenses=expenses)
 
 @main.route("/add-expense", methods=["GET", "POST"])
 def add_expense():
