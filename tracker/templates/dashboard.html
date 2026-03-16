@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>MySpend Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
         <h1>MySpend Dashboard</h1>
@@ -13,7 +14,7 @@
         <br>
         <h3>Your Expenses</h3>
         <form method="POST" action="/delete-selected-expenses">
-            <table border="1">
+            <table>
                 <tr>
                     <th>Date</th>
                     <th>Category</th>
@@ -22,7 +23,7 @@
                     <th>
                         Select
                         <br>
-                        <input type="checkbox" onclick="toggleAll(this)">
+                        <input type="checkbox" id="select-all">
                     </th>
                 </tr>
                 {% for expense in expenses %}
@@ -32,13 +33,20 @@
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.description }}</td>
                     <td>
-                        <input type="checkbox" class="expense-checkbox" name="expense_ids" value="{{ expense.expense_id }}">
+                        <input
+                            type="checkbox"
+                            class="expense-checkbox"
+                            name="expense_ids"
+                            value="{{ expense.expense_id }}"
+                        >
                     </td>
                 </tr>
                 {% endfor %}
             </table>
             <br>
-            <button type="submit">Delete Selected</button>
+            <button id="delete-button" type="submit">
+                Delete Selected
+            </button>
         </form>
         <br>
         <a href="/logout">Logout</a>

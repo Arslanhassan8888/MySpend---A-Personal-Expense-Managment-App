@@ -28,3 +28,4 @@ if __name__ == "__main__":
     # - Automatic reload when code changes
     # - Detailed error messages
     app.run(debug=True)
+    
