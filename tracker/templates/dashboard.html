@@ -53,7 +53,7 @@
                 </tr>
                 {% for expense in expenses %}
                 <tr>
-                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
                     <td>{{ expense.name }}</td>
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.description }}</td>
@@ -69,7 +69,8 @@
                 {% endfor %}
             </table>
             <br>
-            <button id="delete-button" type="submit">
+            <button id="delete-button" type="submit" onclick="return confirm('Are you sure you want to delete the selected expenses?')" disabled
+            >
                 Delete Selected
             </button>
         </form>
