@@ -189,13 +189,13 @@ def login():
 # Dashboard route - shows user-specific information after login
 @main.route("/dashboard")
 def dashboard():
-    
+    # Check if user is logged in by verifying if "user_id" exists in the session.
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    # Fetch the user's name using their user_id stored in the session. This is used to personalize the dashboard.
     user = cursor.execute(
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
@@ -213,10 +213,20 @@ def dashboard():
         """,
         (session["user_id"],)
     ).fetchall()
+    
+    # Calculate total spending for the user by summing the amount column from the expenses table for the logged-in user.
+    total = cursor.execute(
+        "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchone()[0]
 
+    # If user has no expenses yet
+    if total is None:
+        total = 0
+    
     conn.close()
 
-    return render_template("dashboard.html", name=user["name"], expenses=expenses)
+    return render_template("dashboard.html", name=user["name"], expenses=expenses, total=total)
 
 @main.route("/add-expense", methods=["POST"])
 def add_expense():
