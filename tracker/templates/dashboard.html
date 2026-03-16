@@ -19,7 +19,11 @@
                     <th>Category</th>
                     <th>Amount</th>
                     <th>Description</th>
-                    <th>Select</th>
+                    <th>
+                        Select
+                        <br>
+                        <input type="checkbox" onclick="toggleAll(this)">
+                    </th>
                 </tr>
                 {% for expense in expenses %}
                 <tr>
@@ -28,7 +32,7 @@
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.description }}</td>
                     <td>
-                        <input type="checkbox" name="expense_ids" value="{{ expense.expense_id }}">
+                        <input type="checkbox" class="expense-checkbox" name="expense_ids" value="{{ expense.expense_id }}">
                     </td>
                 </tr>
                 {% endfor %}
@@ -38,5 +42,6 @@
         </form>
         <br>
         <a href="/logout">Logout</a>
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     </body>
 </html>
