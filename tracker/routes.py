@@ -203,7 +203,7 @@ def dashboard():
     
     expenses = cursor.execute(
         """
-        SELECT expenses.date, expenses.amount, expenses.description, categories.name
+        SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name
         FROM expenses
         JOIN categories ON expenses.category_id = categories.category_id
         WHERE expenses.user_id = ?
@@ -246,6 +246,25 @@ def add_expense():
         return redirect(url_for("main.dashboard"))
 
     return render_template("add_expense.html")
+
+@main.route("/delete-expense/<int:expense_id>")
+def delete_expense(expense_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM expenses WHERE expense_id = ? AND user_id = ?",
+        (expense_id, session["user_id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("main.dashboard"))
 
 @main.route("/logout")
 def logout():
