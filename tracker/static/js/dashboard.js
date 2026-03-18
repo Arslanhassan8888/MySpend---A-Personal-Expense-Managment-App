@@ -42,3 +42,29 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDeleteButton();
 
 });
+
+function openEditModal(id, amount, category, date, description) {
+
+    document.getElementById("editModal").style.display = "block";
+
+    document.getElementById("edit_id").value = id;
+    document.getElementById("edit_amount").value = amount;
+    document.getElementById("edit_category").value = category;
+    document.getElementById("edit_date").value = date;
+    document.getElementById("edit_description").value = description;
+
+    document.getElementById("editForm").action = "/update-expense";
+}
+
+function closeModal() {
+    document.getElementById("editModal").style.display = "none";
+}
+
+// ================= SORT MODAL =================
+function openSortModal() {
+    document.getElementById("sortModal").style.display = "block";
+}
+
+function closeSortModal() {
+    document.getElementById("sortModal").style.display = "none";
+}

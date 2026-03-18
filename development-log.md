@@ -89,3 +89,11 @@ used the field name "category_id".
 
 After verifying the mismatch between the backend route and frontend form, the issue was resolved by correcting the field name in routes.py.
 
+## 18/03/2026 – Editing and Sorting Features
+
+I implemented an edit functionality that allows users to update expenses through a modal interface, improving usability and avoiding unnecessary page navigation.
+I also added a sorting system to help users organise expenses by date, amount, category, and description. Initially, I attempted to use sorting arrows in the table headers, but this caused HTML rendering issues and was not user-friendly.
+
+While implementing sorting, I encountered errors in the SQL query due to incorrect string formatting when applying the dynamic ORDER BY clause. I resolved this by using a properly structured f-string.
+
+I then redesigned the feature using a modal-based sorting interface, which provides a clearer and more structured user experience. Both features were tested successfully and improved the overall functionality of the dashboard.

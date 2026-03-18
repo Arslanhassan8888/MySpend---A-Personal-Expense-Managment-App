@@ -88,3 +88,54 @@ button:disabled {
 a {
     color: #2c3e50;
 }
+
+.modal {
+    display: none; /* important */
+    position: fixed;
+    z-index: 1000; /* VERY IMPORTANT */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin: 5px 0;
+}

@@ -200,20 +200,32 @@ def dashboard():
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
+    sort = request.args.get("sort", "date_desc")
+
+    order_clause = {
+        "date_desc": "expenses.date DESC",
+        "date_asc": "expenses.date ASC",
+        "amount_asc": "expenses.amount ASC",
+        "amount_desc": "expenses.amount DESC",
+        "category_asc": "categories.name ASC",
+        "category_desc": "categories.name DESC",
+        "desc_asc": "expenses.description ASC",
+        "desc_desc": "expenses.description DESC"
+    }.get(sort, "expenses.date DESC")
     # Fetch the user's expenses along with category names using a JOIN query.
     # This query retrieves the expense_id, date, amount, description from the expenses table and the corresponding category name from the categories table.
     # The results are ordered by date in descending order, showing the most recent expenses first.
     expenses = cursor.execute(
-        """
-        SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name
+        f"""
+        SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name, expenses.category_id
         FROM expenses
         JOIN categories ON expenses.category_id = categories.category_id
         WHERE expenses.user_id = ?
-        ORDER BY expenses.date DESC 
+        ORDER BY {order_clause}
         """,
         (session["user_id"],)
     ).fetchall()
-    
+        
     # Calculate total spending for the user by summing the amount column from the expenses table for the logged-in user.
     total = cursor.execute(
         "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ?",
@@ -331,4 +343,33 @@ def logout():
 
     # Redirect user to the home page
     return redirect(url_for("main.home"))
+
+@main.route("/update-expense", methods=["POST"])
+def update_expense():
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    expense_id = request.form["expense_id"]
+    amount = request.form["amount"]
+    category_id = request.form["category_id"]
+    date = request.form["date"]
+    description = request.form["description"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE expenses
+        SET amount = ?, category_id = ?, date = ?, description = ?
+        WHERE expense_id = ? AND user_id = ?
+        """,
+        (amount, category_id, date, description, expense_id, session["user_id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("main.dashboard"))
 
