@@ -219,6 +219,29 @@ def dashboard():
         "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()[0]
+    
+    # TOTAL FOR CURRENT MONTH
+    monthly_total = cursor.execute(
+        """
+        SELECT COALESCE(SUM(amount), 0)
+        FROM expenses
+        WHERE user_id = ?
+        AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now')
+        """,
+        (session["user_id"],)
+    ).fetchone()[0]
+    
+    # TOTAL FOR CURRENT WEEK
+    daily_total = cursor.execute(
+    """
+    SELECT COALESCE(SUM(amount), 0)
+    FROM expenses
+    WHERE user_id = ?
+    AND date = DATE('now')
+    """,
+    (session["user_id"],)
+).fetchone()[0]
+    
 
     # If user has no expenses yet
     if total is None:
@@ -226,7 +249,7 @@ def dashboard():
     
     conn.close()
 
-    return render_template("dashboard.html", name=user["name"], expenses=expenses, total=total)
+    return render_template("dashboard.html", name=user["name"], expenses=expenses, total=total,monthly_total=monthly_total, daily_total=daily_total)
 
 @main.route("/add-expense", methods=["POST"])
 def add_expense():
