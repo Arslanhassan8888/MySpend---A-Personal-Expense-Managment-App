@@ -84,15 +84,8 @@ I implemented the first version of the dashboard page to display a welcome messa
 During testing of the expense submission form,
 the application raised a Flask BadRequestKeyError.
 
-Investigation of the traceback revealed that the
-add_expense() route attempted to access
-request.form["category"] while the HTML form
+Investigation of the traceback revealed that the add_expense() route attempted to access request.form["category"] while the HTML form
 used the field name "category_id".
 
-After verifying the mismatch between the
-backend route and frontend form, the issue was
-resolved by correcting the field name in routes.py.
+After verifying the mismatch between the backend route and frontend form, the issue was resolved by correcting the field name in routes.py.
 
-Reference consulted:
-https://stackoverflow.com/questions/51700053/flask-werkzeug-exceptions-badrequestkeyerror
-https://flask.palletsprojects.com/en/latest/quickstart/#accessing-request-data
