@@ -203,7 +203,10 @@ def dashboard():
     ).fetchone()
 
     # SORT
-    sort = request.args.get("sort", "date_desc")
+    sort = request.args.get("sort")
+
+    if not sort:
+        sort = "date_desc"
 
     order_clause = {
         "date_desc": "expenses.date DESC",
