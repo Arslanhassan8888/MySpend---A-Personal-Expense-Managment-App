@@ -10,178 +10,252 @@
 
 <main class="dashboard">
 
-    <!-- HEADER -->
-    <header class="topbar">
-        <div class="logo">
-            <h1>MySpend</h1>
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MySpend Logo">
+        <div class="logo-text">
+            <h2>MySpend</h2>
             <span>Financial Dashboard</span>
         </div>
-        <a href="/logout" class="logout-btn">Logout</a>
-    </header>
+    </div>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h2>Welcome back, {{ name }} 👋</h2>
-        <p>Here's your financial overview</p>
-    </section>
+    <nav>
+        <a class="active">Dashboard</a>
+        <a href="#">Overview</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
 
-    <!-- CARDS -->
-    <section class="cards">
-        <div class="card">
-            <h4>Total Spent</h4>
-            <p>£{{ total }}</p>
+<!-- HERO -->
+<section class="hero">
+    <h1>Welcome back, {{ name }} 👋</h1>
+    <p>Here's your financial overview for {{ current_month }}</p>
+</section>
+
+<!-- SUMMARY CARDS -->
+<section class="summary-cards">
+
+    <div class="card red">
+        <div class="card-top">
+            <span>📈</span>
+            <small>78%</small>
         </div>
+        <h4>Total Spent</h4>
+        <h2>£{{ total }}</h2>
+    </div>
 
-        <div class="card">
-            <h4>Monthly</h4>
-            <p>£{{ monthly_total }}</p>
+    <div class="card blue">
+        <div class="card-top">
+            <span>📅</span>
+            <small>Monthly</small>
         </div>
+        <h4>Monthly Spent</h4>
+        <h2>£{{ monthly_total }}</h2>
+    </div>
 
-        <div class="card">
-            <h4>Daily</h4>
-            <p>£{{ daily_total }}</p>
+    <div class="card green">
+        <div class="card-top">
+            <span>💲</span>
+            <small>Today</small>
         </div>
+        <h4>Daily Spent</h4>
+        <h2>£{{ daily_total }}</h2>
+    </div>
 
-        <div class="card">
-            <h4>Remaining</h4>
-            <p>£{{ remaining }}</p>
+    <div class="card orange">
+        <div class="card-top">
+            <span>💳</span>
+            <small>Available</small>
         </div>
-    </section>
+        <h4>Remaining</h4>
+        <h2>£{{ remaining }}</h2>
+    </div>
 
-    <!-- BUDGET -->
+</section>
+
+<!-- GRID -->
+<div class="dashboard-grid">
+
+    <!-- LEFT: BUDGET -->
     <section class="budget-section">
 
-        <h3>Monthly Budget Overview</h3>
+        <div class="budget-wrapper">
 
-        <form method="POST" action="/set-budget">
-            <input type="number" step="0.01" name="budget_amount"
-                   value="{{ budget_amount }}" required>
-            <button type="submit">Save Budget</button>
-        </form>
-
-        <div class="budget-info">
-            <div>
-                <span>Budget Limit</span>
-                <h2>£{{ budget_amount }}</h2>
+            <!-- HEADER (inside card) -->
+            <div class="section-header">
+                <div class="section-icon purple">📈</div>
+                <h3>Monthly Budget Overview</h3>
             </div>
 
-            <div>
-                <span>Remaining</span>
-                <h2 class="green">£{{ remaining }}</h2>
+            <!-- INNER PURPLE CARD -->
+            <div class="budget-card">
+
+                <form method="POST" action="/set-budget">
+                    <input type="number" step="0.01" name="budget_amount"
+                           value="{{ budget_amount }}" required>
+                    <button type="submit">Save Budget</button>
+                </form>
+
+                <!-- TOP -->
+                <div class="budget-top">
+
+                    <div class="left">
+                        <span>Budget Limit</span>
+                        <h2>£{{ budget_amount }}</h2>
+                    </div>
+
+                    <div class="right">
+                        <span>Remaining Balance</span>
+                        <h2>£{{ remaining }}</h2>
+                    </div>
+
+                </div>
+
+                <!-- PROGRESS -->
+                <div class="progress-container">
+                    <div class="progress-bar
+                        {% if progress >= 100 %}
+                            danger
+                        {% elif progress >= 80 %}
+                            warning
+                        {% else %}
+                            safe
+                        {% endif %}
+                    "
+                    style="width: {{ progress if progress <= 100 else 100 }}%;">
+                        {{ progress|round(0) }}%
+                    </div>
+                </div>
+
+                <!-- BOTTOM -->
+                <div class="budget-bottom">
+
+                    <div class="left">
+                        {% if progress >= 100 %}
+                            <span class="danger">🚨 You exceeded your budget!</span>
+                        {% elif progress >= 80 %}
+                            <span class="warning">⚠ Less than 20% remaining</span>
+                        {% else %}
+                            <span class="safe">✔ Budget under control</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="right">
+                        <span><strong>{{ expenses|length }}</strong> transactions</span>
+                    </div>
+
+                </div>
+
+            </div> <!-- END budget-card -->
+
+        </div> <!-- END budget-wrapper -->
+
+    </section>
+
+    <!-- RIGHT: CATEGORY -->
+    <section class="category-section">
+
+        <div class="budget-wrapper">
+
+            <div class="section-header">
+                <div class="section-icon pink">⏱</div>
+                <h3>Category Split</h3>
             </div>
+
+            <div class="category-card">
+                <!-- Chart goes here -->
+            </div>
+
         </div>
 
-        <!-- PROGRESS -->
-        <div class="progress-container">
-            <div class="progress-bar 
-                {% if progress > 100 %}
-                    danger
-                {% elif progress > 80 %}
-                    warning
-                {% else %}
-                    safe
-                {% endif %}
-            "
-            style="width: {{ progress if progress <= 100 else 100 }}%;">
-                {{ progress|round(0) }}%
-            </div>
+    </section>
+
+</div>
+
+<!-- ADD EXPENSE -->
+<section class="add-expense">
+
+    <h3>Add New Expense</h3>
+
+    <form method="POST" action="/add-expense" class="add-expense-form">
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+        <input type="date" name="date" required>
+
+        <select name="category_id">
+            <option value="1">Food</option>
+            <option value="2">Transport</option>
+            <option value="3">Entertainment</option>
+            <option value="4">Rent</option>
+            <option value="5">Utilities</option>
+            <option value="6">Shopping</option>
+            <option value="7">Health</option>
+            <option value="8">Education</option>
+            <option value="9">Other</option>
+        </select>
+
+        <input type="text" name="description" placeholder="Description">
+
+        <button type="submit">+ Add Expense</button>
+    </form>
+
+</section>
+
+<!-- EXPENSE TABLE -->
+<section class="expenses">
+
+    <h3>Expense History</h3>
+
+    <form method="POST" action="/delete-selected-expenses">
+
+        <table>
+            <tr>
+                <th><input type="checkbox" id="select-all"></th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for expense in expenses %}
+            <tr>
+                <td>
+                    <input type="checkbox" class="expense-checkbox"
+                           name="expense_ids"
+                           value="{{ expense.expense_id }}">
+                </td>
+
+                <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+                <td><span class="tag">{{ expense.name }}</span></td>
+                <td>£{{ expense.amount }}</td>
+                <td>{{ expense.description }}</td>
+
+                <td>
+                    <a href="#" onclick="openEditModal(
+                        '{{ expense.expense_id }}',
+                        '{{ expense.amount }}',
+                        '{{ expense.category_id }}',
+                        '{{ expense.date }}',
+                        '{{ expense.description | e }}'
+                    ); return false;">
+                        ✏ Edit
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="action-bar">
+            <button id="delete-button" type="submit">Delete Selected</button>
+            <button type="button" onclick="openSortModal()">Sort</button>
+            <button type="button" onclick="openSearchModal()">Search</button>
+            <button type="button" onclick="window.location.href='/dashboard'">Clear</button>
         </div>
 
-        <!-- STATUS -->
-        {% if progress > 100 %}
-            <p class="alert danger">🚨 You exceeded your budget!</p>
-        {% elif progress > 80 %}
-            <p class="alert warning">⚠ Less than 20% remaining</p>
-        {% else %}
-            <p class="alert safe">✔ Budget under control</p>
-        {% endif %}
+    </form>
 
-    </section>
-
-    <!-- ADD EXPENSE -->
-    <section class="add-expense">
-
-        <h3>Add New Expense</h3>
-
-        <form method="POST" action="/add-expense" class="add-expense-form">
-            <input type="number" step="0.01" name="amount" placeholder="Amount" required>
-            <input type="date" name="date" required>
-
-            <select name="category_id">
-                <option value="1">Food</option>
-                <option value="2">Transport</option>
-                <option value="3">Entertainment</option>
-                <option value="4">Rent</option>
-                <option value="5">Utilities</option>
-                <option value="6">Shopping</option>
-                <option value="7">Health</option>
-                <option value="8">Education</option>
-                <option value="9">Other</option>
-            </select>
-
-            <input type="text" name="description" placeholder="Description">
-
-            <button type="submit">+ Add Expense</button>
-        </form>
-
-    </section>
-
-    <!-- EXPENSE TABLE -->
-    <section class="expenses">
-
-        <h3>Expense History</h3>
-
-        <form method="POST" action="/delete-selected-expenses">
-
-            <table>
-                <tr>
-                    <th><input type="checkbox" id="select-all"></th>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-
-                {% for expense in expenses %}
-                <tr>
-                    <td>
-                        <input type="checkbox" class="expense-checkbox"
-                               name="expense_ids"
-                               value="{{ expense.expense_id }}">
-                    </td>
-
-                    <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
-                    <td><span class="tag">{{ expense.name }}</span></td>
-                    <td>£{{ expense.amount }}</td>
-                    <td>{{ expense.description }}</td>
-
-                    <td>
-                        <a href="#" onclick="openEditModal(
-                            '{{ expense.expense_id }}',
-                            '{{ expense.amount }}',
-                            '{{ expense.category_id }}',
-                            '{{ expense.date }}',
-                            '{{ expense.description | e }}'
-                        ); return false;">
-                            ✏ Edit
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <!-- ACTION BUTTONS -->
-            <div class="action-bar">
-                <button id="delete-button" type="submit">Delete Selected</button>
-                <button type="button" onclick="openSortModal()">Sort</button>
-                <button type="button" onclick="openSearchModal()">Search</button>
-                <button type="button" onclick="window.location.href='/dashboard'">Clear</button>
-            </div>
-
-        </form>
-
-    </section>
+</section>
 
 </main>
 

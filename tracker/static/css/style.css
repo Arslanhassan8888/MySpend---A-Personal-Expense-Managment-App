@@ -1,3 +1,4 @@
+/* ================= GLOBAL ================= */
 body {
     font-family: Arial;
     background: #f5f7fb;
@@ -8,115 +9,341 @@ body {
 .dashboard {
     max-width: 1100px;
     margin: auto;
+    max-height: 2000px;
 }
 
-/* HEADER */
-.topbar {
+
+
+/* ================= NAVBAR ================= */
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 25px;
 }
 
-.logo span {
-    font-size: 12px;
-    color: gray;
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.logout-btn {
-    color: #555;
+.logo img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    color: #7b2ff7;
+}
+
+.logo-text span {
+    font-size: 17px;
+    color: #777;
+}
+
+/* NAV LINKS */
+.navbar nav a {
+    margin-left: 18px;
     text-decoration: none;
+    color: #555;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.25s ease;
 }
 
-/* HERO */
+.navbar nav a.active {
+    background: linear-gradient(135deg, #7b2ff7, #9b59b6);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 25px;
+}
+
+.navbar nav a:not(.active):hover {
+    background: rgba(123, 47, 247, 0.12);
+    color: #7b2ff7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* ================= HERO ================= */
 .hero {
     background: linear-gradient(135deg, #7b2ff7, #9b59b6);
     color: white;
     padding: 30px;
     border-radius: 20px;
-    margin: 20px 0;
+    margin-bottom: 25px;
 }
 
-/* CARDS */
-.cards {
-    display: flex;
-    gap: 15px;
+.hero h1 {
+    margin: 0;
+    font-size: 32px;
 }
 
+.hero p {
+    margin-top: 8px;
+    opacity: 0.9;
+}
+
+/* ================= SUMMARY CARDS ================= */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* CARD */
 .card {
-    flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.08);
+    border: 1px solid rgba(123, 47, 247, 0.08);
+    background: linear-gradient(145deg, #f3efff, #ebe5ff);
+    padding: 26px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
 }
 
-.card p {
-    font-size: 24px;
-    font-weight: bold;
+.card:hover {
+    transform: translateY(-6px);
+    background: linear-gradient(145deg, #ffffff, #e0d6ff);
+    box-shadow: 
+        0 14px 30px rgba(123, 47, 247, 0.15),
+        0 6px 15px rgba(0,0,0,0.08);
 }
 
-/* BUDGET */
-.budget-section {
-    background: #f8f9fc;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
+.card h4 {
+    color: #555;
+    margin-top: 10px;
+    font-size: 17px;
 }
 
-.budget-info {
+.card h2 {
+    margin-top: 10px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111;
+}
+
+/* CARD TOP */
+.card-top {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-.green {
-    color: green;
+.card-top span {
+    font-size: 40px;
+}
+
+.card-top small {
+    font-size: 15px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: #eee;
+}
+
+/* COLOR BADGES */
+.card.red small {
+    background: rgba(255, 77, 77, 0.15);
+    color: #ff4d4d;
+}
+.card.blue small {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+}
+.card.green small {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+.card.orange small {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+}
+
+/* ICON COLORS */
+.card.red span { color: #ff4d4d; }
+.card.blue span { color: #3498db; }
+.card.green span { color: #2ecc71; }
+.card.orange span { color: #f39c12; }
+
+/* ================= GRID ================= */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    margin-top: 20px;
+    align-items: stretch;
+}
+
+/* ================= SECTION ================= */
+.budget-section,
+.category-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= OUTER CARD ================= */
+.budget-wrapper {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    
+}
+/* HEADER */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+/* ICON */
+.section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 18px;
+}
+
+.section-icon.purple {
+    background: linear-gradient(135deg, #7b2ff7, #9b59b6);
+}
+
+.section-icon.pink {
+    background: linear-gradient(135deg, #ff4da6, #ff0066);
+}
+
+/* ================= INNER PURPLE CARD ================= */
+.budget-card {
+    background: linear-gradient(145deg, #f3efff, #ebe5ff);
+    padding: 16px 20px 12px;
+    border-radius: 18px;
+    margin-top: 15px;
+    flex: 1;
+}
+
+.category-card {
+    background: linear-gradient(145deg, #f3efff, #ebe5ff);
+    padding: 20px;
+    border-radius: 18px;
+    margin-top: 15px;
+    flex: 1;
+}
+
+/* FORM */
+.budget-card form {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 50px;
+    margin-top: 12px
+}
+
+.budget-card input {
+    flex: 1;
+    padding: 20pxx;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.budget-card button {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+
+    background: linear-gradient(135deg, #7b2ff7, #9b59b6);
+    color: white;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+/* TOP */
+.budget-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.budget-top span {
+    color: #666;
+    font-size: 14px;
+}
+
+.budget-top h2 {
+    margin: 5px 0 0;
 }
 
 /* PROGRESS */
 .progress-container {
-    background: #ddd;
-    height: 20px;
+    margin-top: 12px;
+    height: 24px;
     border-radius: 20px;
+    background: #ddd;
     overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
-    text-align: center;
-    color: white;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 600;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
 }
 
-.progress-bar.safe {
-    background: #2ecc71;
+/* COLORS */
+.progress-bar.safe { background: #2ecc71; }
+.progress-bar.warning { background: #f1c40f; color: black; }
+.progress-bar.danger { background: #e74c3c; }
+
+/* BOTTOM */
+.budget-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
 }
 
-.progress-bar.warning {
-    background: #f1c40f;
-    color: black;
-}
+.budget-bottom .safe { color: #2ecc71; }
+.budget-bottom .warning { color: #f1c40f; }
+.budget-bottom .danger { color: #e74c3c; }
 
-.progress-bar.danger {
-    background: #e74c3c;
-}
-
-/* ALERT */
-.alert {
-    font-weight: bold;
-}
-
-.alert.warning { color: orange; }
-.alert.danger { color: red; }
-.alert.safe { color: green; }
-
-/* FORM */
+/* ================= ADD EXPENSE ================= */
 .add-expense-form {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
 
-/* TABLE */
+/* ================= TABLE ================= */
 table {
     width: 100%;
     background: white;
@@ -133,7 +360,6 @@ td, th {
     padding: 10px;
 }
 
-/* TAG */
 .tag {
     padding: 4px 8px;
     border-radius: 10px;
@@ -149,7 +375,6 @@ button {
     color: white;
 }
 
-/* ACTION BAR */
 .action-bar {
     margin-top: 15px;
     display: flex;

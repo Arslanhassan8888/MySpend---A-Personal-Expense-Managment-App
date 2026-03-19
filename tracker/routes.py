@@ -319,7 +319,9 @@ def dashboard():
         daily_total=daily_total,
         budget_amount=budget_amount,
         remaining=remaining,
-        progress=progress
+        progress=progress,
+        current_month=datetime.now().strftime("%B %Y")
+        
     )
 
 @main.route("/add-expense", methods=["POST"])
