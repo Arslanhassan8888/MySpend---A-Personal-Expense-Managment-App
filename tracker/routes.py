@@ -189,17 +189,20 @@ def login():
 # Dashboard route - shows user-specific information after login
 @main.route("/dashboard")
 def dashboard():
-    # Check if user is logged in by verifying if "user_id" exists in the session.
+
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Fetch the user's name using their user_id stored in the session. This is used to personalize the dashboard.
+
+    # USER
     user = cursor.execute(
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
+
+    # SORT
     sort = request.args.get("sort", "date_desc")
 
     order_clause = {
@@ -212,27 +215,59 @@ def dashboard():
         "desc_asc": "expenses.description ASC",
         "desc_desc": "expenses.description DESC"
     }.get(sort, "expenses.date DESC")
-    # Fetch the user's expenses along with category names using a JOIN query.
-    # This query retrieves the expense_id, date, amount, description from the expenses table and the corresponding category name from the categories table.
-    # The results are ordered by date in descending order, showing the most recent expenses first.
-    expenses = cursor.execute(
-        f"""
-        SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name, expenses.category_id
-        FROM expenses
-        JOIN categories ON expenses.category_id = categories.category_id
-        WHERE expenses.user_id = ?
-        ORDER BY {order_clause}
-        """,
-        (session["user_id"],)
-    ).fetchall()
-        
-    # Calculate total spending for the user by summing the amount column from the expenses table for the logged-in user.
+
+    # SEARCH FILTERS
+    date_from = request.args.get("date_from")
+    date_to = request.args.get("date_to")
+    min_amount = request.args.get("min_amount")
+    max_amount = request.args.get("max_amount")
+    description = request.args.get("description")
+
+    # BASE QUERY
+    query = f"""
+    SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name, expenses.category_id
+    FROM expenses
+    JOIN categories ON expenses.category_id = categories.category_id
+    WHERE expenses.user_id = ?
+    """
+
+    params = [session["user_id"]]
+
+    # APPLY FILTERS (only if user entered values)
+
+    if date_from and date_from != "":
+        query += " AND expenses.date >= ?"
+        params.append(date_from)
+
+    if date_to and date_to != "":
+        query += " AND expenses.date <= ?"
+        params.append(date_to)
+
+    if min_amount and min_amount != "":
+        query += " AND expenses.amount >= ?"
+        params.append(min_amount)
+
+    if max_amount and max_amount != "":
+        query += " AND expenses.amount <= ?"
+        params.append(max_amount)
+
+    if description and description != "":
+        query += " AND expenses.description LIKE ?"
+        params.append(f"%{description}%")
+
+    # SORT
+    query += f" ORDER BY {order_clause}"
+
+    # EXECUTE
+    expenses = cursor.execute(query, params).fetchall()
+
+    # TOTAL
     total = cursor.execute(
         "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()[0]
-    
-    # TOTAL FOR CURRENT MONTH
+
+    # MONTHLY TOTAL
     monthly_total = cursor.execute(
         """
         SELECT COALESCE(SUM(amount), 0)
@@ -242,26 +277,28 @@ def dashboard():
         """,
         (session["user_id"],)
     ).fetchone()[0]
-    
-    # TOTAL FOR CURRENT WEEK
-    daily_total = cursor.execute(
-    """
-    SELECT COALESCE(SUM(amount), 0)
-    FROM expenses
-    WHERE user_id = ?
-    AND date = DATE('now')
-    """,
-    (session["user_id"],)
-).fetchone()[0]
-    
 
-    # If user has no expenses yet
-    if total is None:
-        total = 0
-    
+    # DAILY TOTAL
+    daily_total = cursor.execute(
+        """
+        SELECT COALESCE(SUM(amount), 0)
+        FROM expenses
+        WHERE user_id = ?
+        AND date = DATE('now')
+        """,
+        (session["user_id"],)
+    ).fetchone()[0]
+
     conn.close()
 
-    return render_template("dashboard.html", name=user["name"], expenses=expenses, total=total,monthly_total=monthly_total, daily_total=daily_total)
+    return render_template(
+        "dashboard.html",
+        name=user["name"],
+        expenses=expenses,
+        total=total,
+        monthly_total=monthly_total,
+        daily_total=daily_total
+    )
 
 @main.route("/add-expense", methods=["POST"])
 def add_expense():

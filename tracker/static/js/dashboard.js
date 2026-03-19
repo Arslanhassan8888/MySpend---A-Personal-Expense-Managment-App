@@ -68,3 +68,11 @@ function openSortModal() {
 function closeSortModal() {
     document.getElementById("sortModal").style.display = "none";
 }
+// ================= SEARCH MODAL =================
+function openSearchModal() {
+    document.getElementById("searchModal").style.display = "block";
+}
+
+function closeSearchModal() {
+    document.getElementById("searchModal").style.display = "none";
+}

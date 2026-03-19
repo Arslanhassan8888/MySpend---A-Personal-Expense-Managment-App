@@ -8,200 +8,238 @@
 
 <body>
 
-    <h1>MySpend Dashboard</h1>
-    <h2>Welcome {{ name }}</h2>
-    <p>Your personal finance space.</p>
+<h1>MySpend Dashboard</h1>
+<h2>Welcome {{ name }}</h2>
+<p>Your personal finance space.</p>
 
-    <!-- ADD EXPENSE -->
-    <h3>Add Expense</h3>
-    <form method="POST" action="/add-expense" class="add-expense-form">
-        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+<!-- ADD EXPENSE -->
+<h3>Add Expense</h3>
+<form method="POST" action="/add-expense" class="add-expense-form">
+    <input type="number" step="0.01" name="amount" placeholder="Amount" required>
 
-        <select name="category_id" required>
-            <option value="1">Food</option>
-            <option value="2">Transport</option>
-            <option value="3">Entertainment</option>
-            <option value="4">Rent</option>
-            <option value="5">Utilities</option>
-            <option value="6">Shopping</option>
-            <option value="7">Health</option>
-            <option value="8">Education</option>
-            <option value="9">Other</option>
-        </select>
+    <select name="category_id" required>
+        <option value="1">Food</option>
+        <option value="2">Transport</option>
+        <option value="3">Entertainment</option>
+        <option value="4">Rent</option>
+        <option value="5">Utilities</option>
+        <option value="6">Shopping</option>
+        <option value="7">Health</option>
+        <option value="8">Education</option>
+        <option value="9">Other</option>
+    </select>
 
-        <input type="date" name="date" required>
-        <input type="text" name="description" placeholder="Description">
+    <input type="date" name="date" required>
+    <input type="text" name="description" placeholder="Description">
 
-        <button type="submit">Add Expense</button>
-    </form>
+    <button type="submit">Add Expense</button>
+</form>
 
-    <!-- TOTALS -->
-    <h3>Total Spending: £{{ total }}</h3>
-    <h3>Monthly Total: £{{ monthly_total }}</h3>
-    <h3>Daily Total: £{{ daily_total }}</h3>
+<!-- TOTALS -->
+<h3>Total Spending: £{{ total }}</h3>
+<h3>Monthly Total: £{{ monthly_total }}</h3>
+<h3>Daily Total: £{{ daily_total }}</h3>
 
-    <!-- EXPENSE TABLE -->
-    <h3>Your Expenses</h3>
+<!-- EXPENSE TABLE -->
+<h3>Your Expenses</h3>
 
-    <form method="POST" action="/delete-selected-expenses">
+<form method="POST" action="/delete-selected-expenses">
 
-        <!-- BUTTONS -->
-        <div style="margin-bottom: 15px;">
-            <button
-                id="delete-button"
-                type="submit"
-                onclick="return confirm('Delete selected expenses?')"
-                disabled
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>
+            Select<br>
+            <input type="checkbox" id="select-all">
+        </th>
+        <th>Actions</th>
+    </tr>
+
+    {% for expense in expenses %}
+    <tr>
+        <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+        <td>{{ expense.name }}</td>
+        <td>{{ expense.amount }}</td>
+        <td>{{ expense.description }}</td>
+
+        <td>
+            <input
+                type="checkbox"
+                class="expense-checkbox"
+                name="expense_ids"
+                value="{{ expense.expense_id }}"
             >
-                Delete Selected
-            </button>
+        </td>
 
-            <button type="button" onclick="openSortModal()">
-                Sort
-            </button>
-        </div>
+        <td>
+            <a href="#" onclick="openEditModal(
+                '{{ expense.expense_id }}',
+                '{{ expense.amount }}',
+                '{{ expense.category_id }}',
+                '{{ expense.date }}',
+                '{{ expense.description | e }}'
+            ); return false;">
+                Edit
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>
-                    Select
-                    <br>
-                    <input type="checkbox" id="select-all">
-                </th>
-                <th>Actions</th>
-            </tr>
+<br>
 
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
-                <td>{{ expense.name }}</td>
-                <td>{{ expense.amount }}</td>
-                <td>{{ expense.description }}</td>
+<!-- ACTION BUTTONS -->
+<button id="delete-button" type="submit" disabled>
+    Delete Selected
+</button>
 
-                <td>
-                    <input
-                        type="checkbox"
-                        class="expense-checkbox"
-                        name="expense_ids"
-                        value="{{ expense.expense_id }}"
-                    >
-                </td>
+<button type="button" onclick="openSortModal()">
+    Sort
+</button>
 
-                <td>
-                    <a href="#" onclick="openEditModal(
-                        '{{ expense.expense_id }}',
-                        '{{ expense.amount }}',
-                        '{{ expense.category_id }}',
-                        '{{ expense.date }}',
-                        '{{ expense.description | e }}'
-                    ); return false;">
-                        Edit
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </form>
+<button type="button" onclick="openSearchModal()">
+    Search
+</button>
+<button type="button" onclick="window.location.href='/dashboard'">
+    Clear
+</button>
+</a>
 
-    <br>
-    <a href="/logout">Logout</a>
+</form>
 
-    <!-- JS FILE -->
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<br>
+<a href="/logout">Logout</a>
 
-    <!-- ================= EDIT MODAL ================= -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
-            <h2>Edit Expense</h2>
+<!-- ================= EDIT MODAL ================= -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2>Edit Expense</h2>
 
-            <form method="POST" id="editForm">
+        <form method="POST" id="editForm">
+            <input type="hidden" name="expense_id" id="edit_id">
 
-                <input type="hidden" name="expense_id" id="edit_id">
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" step="0.01" name="amount" id="edit_amount" required>
+            </div>
 
-                <div class="form-group">
-                    <label>Amount:</label>
-                    <input type="number" step="0.01" name="amount" id="edit_amount" required>
-                </div>
+            <div class="form-group">
+                <label>Category:</label>
+                <select name="category_id" id="edit_category">
+                    <option value="1">Food</option>
+                    <option value="2">Transport</option>
+                    <option value="3">Entertainment</option>
+                    <option value="4">Rent</option>
+                    <option value="5">Utilities</option>
+                    <option value="6">Shopping</option>
+                    <option value="7">Health</option>
+                    <option value="8">Education</option>
+                    <option value="9">Other</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label>Category:</label>
-                    <select name="category_id" id="edit_category">
-                        <option value="1">Food</option>
-                        <option value="2">Transport</option>
-                        <option value="3">Entertainment</option>
-                        <option value="4">Rent</option>
-                        <option value="5">Utilities</option>
-                        <option value="6">Shopping</option>
-                        <option value="7">Health</option>
-                        <option value="8">Education</option>
-                        <option value="9">Other</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label>Date:</label>
+                <input type="date" name="date" id="edit_date" required>
+            </div>
 
-                <div class="form-group">
-                    <label>Date:</label>
-                    <input type="date" name="date" id="edit_date" required>
-                </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" name="description" id="edit_description">
+            </div>
 
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" name="description" id="edit_description">
-                </div>
-
-                <div class="button-group">
-                    <button type="submit">Save Changes</button>
-                    <button type="button" onclick="closeModal()">Cancel</button>
-                </div>
-
-            </form>
-        </div>
+            <div class="button-group">
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <!-- ================= SORT MODAL ================= -->
-    <div id="sortModal" class="modal">
-        <div class="modal-content">
+<!-- ================= SORT MODAL ================= -->
+<div id="sortModal" class="modal">
+    <div class="modal-content">
+        <h2>Sort Expenses</h2>
 
-            <h2>Sort Options</h2>
+        <form method="GET" action="/dashboard">
 
-            <form method="GET" action="/dashboard">
+            <div class="form-group">
+                <label><b>Date</b></label>
+                <input type="radio" name="sort" value="date_desc"> Newest first
+                <input type="radio" name="sort" value="date_asc"> Oldest first
+            </div>
 
-                <div class="form-group">
-                    <label><strong>Date</strong></label>
-                    <label><input type="radio" name="sort" value="date_desc"> Newest First</label>
-                    <label><input type="radio" name="sort" value="date_asc"> Oldest First</label>
-                </div>
+            <div class="form-group">
+                <label><b>Amount</b></label>
+                <input type="radio" name="sort" value="amount_desc"> Highest first
+                <input type="radio" name="sort" value="amount_asc"> Lowest first
+            </div>
 
-                <div class="form-group">
-                    <label><strong>Amount</strong></label>
-                    <label><input type="radio" name="sort" value="amount_asc"> Low to High</label>
-                    <label><input type="radio" name="sort" value="amount_desc"> High to Low</label>
-                </div>
+            <div class="form-group">
+                <label><b>Category</b></label>
+                <input type="radio" name="sort" value="category_asc"> A–Z
+                <input type="radio" name="sort" value="category_desc"> Z–A
+            </div>
 
-                <div class="form-group">
-                    <label><strong>Category</strong></label>
-                    <label><input type="radio" name="sort" value="category_asc"> A → Z</label>
-                    <label><input type="radio" name="sort" value="category_desc"> Z → A</label>
-                </div>
+            <div class="form-group">
+                <label><b>Description</b></label>
+                <input type="radio" name="sort" value="desc_asc"> A–Z
+                <input type="radio" name="sort" value="desc_desc"> Z–A
+            </div>
 
-                <div class="form-group">
-                    <label><strong>Description</strong></label>
-                    <label><input type="radio" name="sort" value="desc_asc"> A → Z</label>
-                    <label><input type="radio" name="sort" value="desc_desc"> Z → A</label>
-                </div>
-
-                <div class="button-group">
-                    <button type="submit">Apply</button>
-                    <button type="button" onclick="closeSortModal()">Cancel</button>
-                </div>
-
-            </form>
-        </div>
+            <div class="button-group">
+                <button type="submit">Apply</button>
+                <button type="button" onclick="closeSortModal()">Cancel</button>
+            </div>
+        </form>
     </div>
+</div>
+
+<!-- ================= SEARCH MODAL ================= -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <h2>Search Expenses</h2>
+
+        <form method="GET" action="/dashboard">
+
+            <div class="form-group">
+                <label>Date From:</label>
+                <input type="date" name="date_from">
+            </div>
+
+            <div class="form-group">
+                <label>Date To:</label>
+                <input type="date" name="date_to">
+            </div>
+
+            <div class="form-group">
+                <label>Min Amount:</label>
+                <input type="number" step="0.01" name="min_amount">
+            </div>
+
+            <div class="form-group">
+                <label>Max Amount:</label>
+                <input type="number" step="0.01" name="max_amount">
+            </div>
+
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" name="description">
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Apply Search</button>
+                <button type="button" onclick="closeSearchModal()">Cancel</button>
+            </div>
+
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

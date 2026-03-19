@@ -26,7 +26,6 @@ This decision was made to improve clarity, maintain control over database logic,
 This change maintains professional structure while ensuring the system remains manageable within the project timeframe.
 
 ## 04/03/2026 – Refactoring to Modular Structure
-
 Today I refactored the Flask application from a single-file structure to a modular architecture. I implemented the Application Factory pattern and organised routes using a Blueprint. This improves code organisation, scalability, and maintainability. The application was tested and runs successfully in modular format.
 
 ## 05/03/2026 - HTML Template Integration
@@ -46,7 +45,6 @@ Implemented the SQLite database schema for the MySpend application. The database
 The table creation process was integrated into the Flask Application Factory so that the database schema is automatically initialized when the application starts. This ensures that the system can create and manage persistent financial data without requiring manual database setup.
 
 ## 10/03/2026 Part B – Default Categories Initialization
-
 Implemented automatic insertion of predefined spending categories into the database. A function was added in models.py to insert default categories such as Food, Transport, Entertainment, Rent, Utilities, Shopping, Health, Education, and Other.
 
 This function is executed when the Flask application starts, ensuring that the categories table always contains the required options for expense classification. The categories are inserted using `INSERT OR IGNORE` to prevent duplicate entries if the application restarts.
@@ -54,7 +52,6 @@ This function is executed when the Flask application starts, ensuring that the c
 The changes were committed to the repository after verifying that the database correctly creates the categories when the application is launched.
 
 ## 11/03/2026 – User Registration Implementation
-
 Implemented the user registration functionality in the MySpend application. A new /register route was created in routes.py to display the registration page and process form submissions. The Flask request object was used to retrieve the email and password values from the HTML form.
 
 Password security was implemented using generate_password_hash from the werkzeug.security module to store passwords as secure hashes instead of plain text.
@@ -69,7 +66,6 @@ Implemented the user login functionality by creating a /login route and a new lo
 I also introduced session management using Flask’s session object. After successful authentication, I stored the user’s user_id in the session to keep the user logged in. Basic error handling was added to display a message when invalid login credentials are entered.
 
 ## 12/03/2026 – Registration Improvements and Login Security
-
 Improved the registration system by adding a name field to the registration form and updating the users table to store this information. I also created a registration success page (register_success.html) to confirm that the account was created before the user proceeds to login.
 
 Additionally, I implemented a login security feature that limits users to three failed login attempts. If the password is entered incorrectly three times, the account is locked for 15 minutes using the lockout_until field in the database.
@@ -80,7 +76,6 @@ During development I encountered an issue where login stopped working due to a d
 I implemented the first version of the dashboard page to display a welcome message and navigation links for the user area. During testing I discovered that the dashboard route assumed a valid session always existed. When accessing /dashboard without logging in, the application attempted to read session["user_id"], which could cause an error. I solved this by adding a session validation check that redirects unauthenticated users to the login page.
 
 ## 16/03/2026 – Debugging Add Expense Feature
-
 During testing of the expense submission form,
 the application raised a Flask BadRequestKeyError.
 
@@ -90,10 +85,16 @@ used the field name "category_id".
 After verifying the mismatch between the backend route and frontend form, the issue was resolved by correcting the field name in routes.py.
 
 ## 18/03/2026 – Editing and Sorting Features
-
 I implemented an edit functionality that allows users to update expenses through a modal interface, improving usability and avoiding unnecessary page navigation.
 I also added a sorting system to help users organise expenses by date, amount, category, and description. Initially, I attempted to use sorting arrows in the table headers, but this caused HTML rendering issues and was not user-friendly.
 
 While implementing sorting, I encountered errors in the SQL query due to incorrect string formatting when applying the dynamic ORDER BY clause. I resolved this by using a properly structured f-string.
-
 I then redesigned the feature using a modal-based sorting interface, which provides a clearer and more structured user experience. Both features were tested successfully and improved the overall functionality of the dashboard.
+
+## 19/03/2026 – Search and Filter Features
+I implemented a search and filtering functionality using a modal interface, allowing users to find expenses based on date range, amount range, and description. This improved usability by enabling quicker access to specific data without navigating away from the dashboard.
+
+Initially, the search feature did not work correctly, as all expenses were still displayed even when filters were applied. This was due to the SQL query being static and not including the filtering conditions.
+I resolved this by modifying the query to dynamically add conditions only when input values were provided, using request arguments and parameterised queries.
+
+I also added a clear button to reset all filters and restore the full list. 
