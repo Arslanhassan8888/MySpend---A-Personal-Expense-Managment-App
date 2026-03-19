@@ -95,7 +95,8 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS budgets (
         budget_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        monthly_limit REAL,
+        amount REAL,
+        month TEXT,
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     )
     """)

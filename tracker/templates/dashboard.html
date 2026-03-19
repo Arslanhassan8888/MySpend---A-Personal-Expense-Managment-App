@@ -8,238 +8,184 @@
 
 <body>
 
-<h1>MySpend Dashboard</h1>
-<h2>Welcome {{ name }}</h2>
-<p>Your personal finance space.</p>
+<main class="dashboard">
 
-<!-- ADD EXPENSE -->
-<h3>Add Expense</h3>
-<form method="POST" action="/add-expense" class="add-expense-form">
-    <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+    <!-- HEADER -->
+    <header class="topbar">
+        <div class="logo">
+            <h1>MySpend</h1>
+            <span>Financial Dashboard</span>
+        </div>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </header>
 
-    <select name="category_id" required>
-        <option value="1">Food</option>
-        <option value="2">Transport</option>
-        <option value="3">Entertainment</option>
-        <option value="4">Rent</option>
-        <option value="5">Utilities</option>
-        <option value="6">Shopping</option>
-        <option value="7">Health</option>
-        <option value="8">Education</option>
-        <option value="9">Other</option>
-    </select>
+    <!-- HERO -->
+    <section class="hero">
+        <h2>Welcome back, {{ name }} 👋</h2>
+        <p>Here's your financial overview</p>
+    </section>
 
-    <input type="date" name="date" required>
-    <input type="text" name="description" placeholder="Description">
+    <!-- CARDS -->
+    <section class="cards">
+        <div class="card">
+            <h4>Total Spent</h4>
+            <p>£{{ total }}</p>
+        </div>
 
-    <button type="submit">Add Expense</button>
-</form>
+        <div class="card">
+            <h4>Monthly</h4>
+            <p>£{{ monthly_total }}</p>
+        </div>
 
-<!-- TOTALS -->
-<h3>Total Spending: £{{ total }}</h3>
-<h3>Monthly Total: £{{ monthly_total }}</h3>
-<h3>Daily Total: £{{ daily_total }}</h3>
+        <div class="card">
+            <h4>Daily</h4>
+            <p>£{{ daily_total }}</p>
+        </div>
 
-<!-- EXPENSE TABLE -->
-<h3>Your Expenses</h3>
+        <div class="card">
+            <h4>Remaining</h4>
+            <p>£{{ remaining }}</p>
+        </div>
+    </section>
 
-<form method="POST" action="/delete-selected-expenses">
+    <!-- BUDGET -->
+    <section class="budget-section">
 
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Description</th>
-        <th>
-            Select<br>
-            <input type="checkbox" id="select-all">
-        </th>
-        <th>Actions</th>
-    </tr>
+        <h3>Monthly Budget Overview</h3>
 
-    {% for expense in expenses %}
-    <tr>
-        <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
-        <td>{{ expense.name }}</td>
-        <td>{{ expense.amount }}</td>
-        <td>{{ expense.description }}</td>
+        <form method="POST" action="/set-budget">
+            <input type="number" step="0.01" name="budget_amount"
+                   value="{{ budget_amount }}" required>
+            <button type="submit">Save Budget</button>
+        </form>
 
-        <td>
-            <input
-                type="checkbox"
-                class="expense-checkbox"
-                name="expense_ids"
-                value="{{ expense.expense_id }}"
-            >
-        </td>
+        <div class="budget-info">
+            <div>
+                <span>Budget Limit</span>
+                <h2>£{{ budget_amount }}</h2>
+            </div>
 
-        <td>
-            <a href="#" onclick="openEditModal(
-                '{{ expense.expense_id }}',
-                '{{ expense.amount }}',
-                '{{ expense.category_id }}',
-                '{{ expense.date }}',
-                '{{ expense.description | e }}'
-            ); return false;">
-                Edit
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+            <div>
+                <span>Remaining</span>
+                <h2 class="green">£{{ remaining }}</h2>
+            </div>
+        </div>
 
-<br>
+        <!-- PROGRESS -->
+        <div class="progress-container">
+            <div class="progress-bar 
+                {% if progress > 100 %}
+                    danger
+                {% elif progress > 80 %}
+                    warning
+                {% else %}
+                    safe
+                {% endif %}
+            "
+            style="width: {{ progress if progress <= 100 else 100 }}%;">
+                {{ progress|round(0) }}%
+            </div>
+        </div>
 
-<!-- ACTION BUTTONS -->
-<button id="delete-button" type="submit" disabled>
-    Delete Selected
-</button>
+        <!-- STATUS -->
+        {% if progress > 100 %}
+            <p class="alert danger">🚨 You exceeded your budget!</p>
+        {% elif progress > 80 %}
+            <p class="alert warning">⚠ Less than 20% remaining</p>
+        {% else %}
+            <p class="alert safe">✔ Budget under control</p>
+        {% endif %}
 
-<button type="button" onclick="openSortModal()">
-    Sort
-</button>
+    </section>
 
-<button type="button" onclick="openSearchModal()">
-    Search
-</button>
-<button type="button" onclick="window.location.href='/dashboard'">
-    Clear
-</button>
-</a>
+    <!-- ADD EXPENSE -->
+    <section class="add-expense">
 
-</form>
+        <h3>Add New Expense</h3>
 
-<br>
-<a href="/logout">Logout</a>
+        <form method="POST" action="/add-expense" class="add-expense-form">
+            <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+            <input type="date" name="date" required>
+
+            <select name="category_id">
+                <option value="1">Food</option>
+                <option value="2">Transport</option>
+                <option value="3">Entertainment</option>
+                <option value="4">Rent</option>
+                <option value="5">Utilities</option>
+                <option value="6">Shopping</option>
+                <option value="7">Health</option>
+                <option value="8">Education</option>
+                <option value="9">Other</option>
+            </select>
+
+            <input type="text" name="description" placeholder="Description">
+
+            <button type="submit">+ Add Expense</button>
+        </form>
+
+    </section>
+
+    <!-- EXPENSE TABLE -->
+    <section class="expenses">
+
+        <h3>Expense History</h3>
+
+        <form method="POST" action="/delete-selected-expenses">
+
+            <table>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for expense in expenses %}
+                <tr>
+                    <td>
+                        <input type="checkbox" class="expense-checkbox"
+                               name="expense_ids"
+                               value="{{ expense.expense_id }}">
+                    </td>
+
+                    <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+                    <td><span class="tag">{{ expense.name }}</span></td>
+                    <td>£{{ expense.amount }}</td>
+                    <td>{{ expense.description }}</td>
+
+                    <td>
+                        <a href="#" onclick="openEditModal(
+                            '{{ expense.expense_id }}',
+                            '{{ expense.amount }}',
+                            '{{ expense.category_id }}',
+                            '{{ expense.date }}',
+                            '{{ expense.description | e }}'
+                        ); return false;">
+                            ✏ Edit
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-bar">
+                <button id="delete-button" type="submit">Delete Selected</button>
+                <button type="button" onclick="openSortModal()">Sort</button>
+                <button type="button" onclick="openSearchModal()">Search</button>
+                <button type="button" onclick="window.location.href='/dashboard'">Clear</button>
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
-<!-- ================= EDIT MODAL ================= -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <h2>Edit Expense</h2>
-
-        <form method="POST" id="editForm">
-            <input type="hidden" name="expense_id" id="edit_id">
-
-            <div class="form-group">
-                <label>Amount:</label>
-                <input type="number" step="0.01" name="amount" id="edit_amount" required>
-            </div>
-
-            <div class="form-group">
-                <label>Category:</label>
-                <select name="category_id" id="edit_category">
-                    <option value="1">Food</option>
-                    <option value="2">Transport</option>
-                    <option value="3">Entertainment</option>
-                    <option value="4">Rent</option>
-                    <option value="5">Utilities</option>
-                    <option value="6">Shopping</option>
-                    <option value="7">Health</option>
-                    <option value="8">Education</option>
-                    <option value="9">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Date:</label>
-                <input type="date" name="date" id="edit_date" required>
-            </div>
-
-            <div class="form-group">
-                <label>Description:</label>
-                <input type="text" name="description" id="edit_description">
-            </div>
-
-            <div class="button-group">
-                <button type="submit">Save Changes</button>
-                <button type="button" onclick="closeModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- ================= SORT MODAL ================= -->
-<div id="sortModal" class="modal">
-    <div class="modal-content">
-        <h2>Sort Expenses</h2>
-
-        <form method="GET" action="/dashboard">
-
-            <div class="form-group">
-                <label><b>Date</b></label>
-                <input type="radio" name="sort" value="date_desc"> Newest first
-                <input type="radio" name="sort" value="date_asc"> Oldest first
-            </div>
-
-            <div class="form-group">
-                <label><b>Amount</b></label>
-                <input type="radio" name="sort" value="amount_desc"> Highest first
-                <input type="radio" name="sort" value="amount_asc"> Lowest first
-            </div>
-
-            <div class="form-group">
-                <label><b>Category</b></label>
-                <input type="radio" name="sort" value="category_asc"> A–Z
-                <input type="radio" name="sort" value="category_desc"> Z–A
-            </div>
-
-            <div class="form-group">
-                <label><b>Description</b></label>
-                <input type="radio" name="sort" value="desc_asc"> A–Z
-                <input type="radio" name="sort" value="desc_desc"> Z–A
-            </div>
-
-            <div class="button-group">
-                <button type="submit">Apply</button>
-                <button type="button" onclick="closeSortModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- ================= SEARCH MODAL ================= -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <h2>Search Expenses</h2>
-
-        <form method="GET" action="/dashboard">
-
-            <div class="form-group">
-                <label>Date From:</label>
-                <input type="date" name="date_from">
-            </div>
-
-            <div class="form-group">
-                <label>Date To:</label>
-                <input type="date" name="date_to">
-            </div>
-
-            <div class="form-group">
-                <label>Min Amount:</label>
-                <input type="number" step="0.01" name="min_amount">
-            </div>
-
-            <div class="form-group">
-                <label>Max Amount:</label>
-                <input type="number" step="0.01" name="max_amount">
-            </div>
-
-            <div class="form-group">
-                <label>Description:</label>
-                <input type="text" name="description">
-            </div>
-
-            <div class="button-group">
-                <button type="submit">Apply Search</button>
-                <button type="button" onclick="closeSearchModal()">Cancel</button>
-            </div>
-
-        </form>
-    </div>
-</div>
 
 </body>
 </html>

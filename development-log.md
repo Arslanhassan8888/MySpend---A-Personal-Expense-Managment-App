@@ -98,3 +98,10 @@ Initially, the search feature did not work correctly, as all expenses were still
 I resolved this by modifying the query to dynamically add conditions only when input values were provided, using request arguments and parameterised queries.
 
 I also added a clear button to reset all filters and restore the full list. 
+
+## 20/03/2026 – Budget and Progress Bar
+I implemented a monthly budget feature with a progress bar to show spending visually. Users can set a budget, and the system calculates remaining balance and percentage used.
+
+Initially, the progress calculation was incorrect, but I fixed it by using the monthly total divided by the budget. I also added colour indicators (green, yellow, red) to improve usability.
+
+Additionally, I introduced summary cards to display total, monthly, and daily spending more clearly.

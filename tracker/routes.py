@@ -280,7 +280,23 @@ def dashboard():
         """,
         (session["user_id"],)
     ).fetchone()[0]
+    
+    month = datetime.now().strftime("%Y-%m")
 
+    budget = cursor.execute("""
+        SELECT amount FROM budgets
+        WHERE user_id = ? AND month = ?
+    """, (session["user_id"], month)).fetchone()
+
+    budget_amount = budget[0] if budget else 0
+
+    remaining = budget_amount - monthly_total
+    # Calculate progress percentage for the budget. If the budget amount is greater than 0, calculate the percentage of the budget that has been used based on the monthly total. If the budget amount is 0 or less, set progress to 0 to avoid division by zero.
+    if budget_amount > 0:
+        progress = (monthly_total/ budget_amount) * 100
+    else:
+        progress = 0
+        
     # DAILY TOTAL
     daily_total = cursor.execute(
         """
@@ -300,7 +316,10 @@ def dashboard():
         expenses=expenses,
         total=total,
         monthly_total=monthly_total,
-        daily_total=daily_total
+        daily_total=daily_total,
+        budget_amount=budget_amount,
+        remaining=remaining,
+        progress=progress
     )
 
 @main.route("/add-expense", methods=["POST"])
@@ -413,3 +432,38 @@ def update_expense():
 
     return redirect(url_for("main.dashboard"))
 
+@main.route("/set-budget", methods=["POST"])
+def set_budget():
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    amount = request.form["budget_amount"]
+
+    from datetime import datetime
+    month = datetime.now().strftime("%Y-%m")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    existing = cursor.execute("""
+        SELECT * FROM budgets
+        WHERE user_id = ? AND month = ?
+    """, (session["user_id"], month)).fetchone()
+
+    if existing:
+        cursor.execute("""
+            UPDATE budgets
+            SET amount = ?
+            WHERE user_id = ? AND month = ?
+        """, (amount, session["user_id"], month))
+    else:
+        cursor.execute("""
+            INSERT INTO budgets (user_id, amount, month)
+            VALUES (?, ?, ?)
+        """, (session["user_id"], amount, month))
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("main.dashboard"))
