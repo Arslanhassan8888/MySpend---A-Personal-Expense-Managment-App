@@ -150,6 +150,7 @@ def login():
                 conn.close()
 
                 session["user_id"] = user["user_id"]
+                session["name"] = user["name"]
 
                 return redirect(url_for("main.dashboard"))
 

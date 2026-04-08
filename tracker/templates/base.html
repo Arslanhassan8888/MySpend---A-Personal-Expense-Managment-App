@@ -2,30 +2,51 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}MySpend{% endblock %}</title>
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <!-- PAGE CSS -->
         {% block css %}{% endblock %}
     </head>
     <body>
-        <!-- HEADER -->
+        <!-- ================= HEADER ================= -->
         <header>
             <nav>
-                <section>
-                    <h1>MySpend</h1>
-                    <p>Expense Tracker</p>
+                <!-- LEFT -->
+                <section class="nav-left">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
+                    <section>
+                        <h1>MySpend</h1>
+                        <small class="tagline">Expense Tracker</small>
+                    </section>
                 </section>
-                <ul>
+                <!-- MOBILE BUTTON -->
+                <button id="menu-toggle">☰</button>
+                <!-- CENTER NAV -->
+                <ul id="nav-menu">
                     <li>
-                        <a href="/">Home</a>
+                        <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
                     </li>
                     <li>
-                        <a href="/dashboard">Dashboard</a>
+                        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#">Overview</a>
+                    </li>
+                    <li>
+                        <a href="#">Reviews</a>
+                    </li>
+                    <li>
+                        <a href="#">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact Us</a>
                     </li>
                 </ul>
-                <section>
+                <!-- RIGHT -->
+                <section class="nav-right">
                     {% if session.get("user_id") %}
+                    <span class="user">{{ session.get("name") }}</span>
                     <a href="/logout">Logout</a>
                     {% else %}
                     <a href="/login">Login</a>
@@ -34,25 +55,80 @@
                 </section>
             </nav>
         </header>
-        <!-- MAIN -->
+        <!-- ================= FLASH MESSAGE ================= -->
+        {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <section>
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </section>
+        {% endif %}
+{% endwith %}
+        <!-- ================= MAIN CONTENT ================= -->
         <main>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <section>
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                    </section>
-                {% endif %}
-            {% endwith %}
-
             {% block content %}{% endblock %}
         </main>
-        <!-- FOOTER -->
-        <footer>
-            <section>
-                <p>© MySpend</p>
+        <!-- ================= FOOTER ================= -->
+        <footer class="footer">
+            <section class="footer-top">
+                <!-- LEFT -->
+                <section class="footer-col">
+                    <h2>MySpend</h2>
+                    <p class="sub">Financial Dashboard</p>
+                    <p class="desc">
+                        Take control of your finances with our intuitive expense tracking platform.
+                    </p>
+                </section>
+                <!-- MIDDLE -->
+                <section class="footer-col">
+                    <!-- TITLE -->
+                    <h3 class="quick-title">Quick Links</h3>
+                    <!-- LINKS BLOCK -->
+                    <section class="quick-links-block">
+                        <ul class="footer-links">
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a href="/dashboard">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="#">Overview</a>
+                            </li>
+                            <li>
+                                <a href="#">Reviews</a>
+                            </li>
+                            <li>
+                                <a href="#">FAQ</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact Us</a>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <!-- RIGHT -->
+                <section class="footer-col">
+                    <h3>Contact Us</h3>
+                    <p>support@myspend.com</p>
+                    <p>
+                        Manchester, England
+                        <br>
+                        United Kingdom
+                    </p>
+                </section>
+            </section>
+            <!-- BOTTOM -->
+            <section class="footer-bottom">
+                <p>© 2026 MySpend. Made in Manchester</p>
+                <section class="footer-policy">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </section>
             </section>
         </footer>
+        <!-- ================= JS ================= -->
+        <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     </body>
 </html>
