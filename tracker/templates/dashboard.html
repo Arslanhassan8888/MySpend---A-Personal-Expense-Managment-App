@@ -1,265 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MySpend Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}Dashboard{% endblock %}
 
-<main class="dashboard">
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
 
-<!-- NAVBAR -->
-<header class="navbar">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MySpend Logo">
-        <div class="logo-text">
-            <h2>MySpend</h2>
-            <span>Financial Dashboard</span>
-        </div>
-    </div>
-
-    <nav>
-        <a class="active">Dashboard</a>
-        <a href="#">Overview</a>
-        <a href="/logout">Logout</a>
-    </nav>
-</header>
-
-<!-- HERO -->
-<section class="hero">
-    <h1>Welcome back, {{ name }} 👋</h1>
-    <p>Here's your financial overview for {{ current_month }}</p>
+{% block content %}
+<section>
+    <h2>Dashboard</h2>
+    <p>Welcome {{ name }}</p>
+    <p>{{ current_month }}</p>
 </section>
-
-<!-- SUMMARY CARDS -->
-<section class="summary-cards">
-
-    <div class="card red">
-        <div class="card-top">
-            <span>📈</span>
-            <small>78%</small>
-        </div>
-        <h4>Total Spent</h4>
-        <h2>£{{ total }}</h2>
-    </div>
-
-    <div class="card blue">
-        <div class="card-top">
-            <span>📅</span>
-            <small>Monthly</small>
-        </div>
-        <h4>Monthly Spent</h4>
-        <h2>£{{ monthly_total }}</h2>
-    </div>
-
-    <div class="card green">
-        <div class="card-top">
-            <span>💲</span>
-            <small>Today</small>
-        </div>
-        <h4>Daily Spent</h4>
-        <h2>£{{ daily_total }}</h2>
-    </div>
-
-    <div class="card orange">
-        <div class="card-top">
-            <span>💳</span>
-            <small>Available</small>
-        </div>
-        <h4>Remaining</h4>
-        <h2>£{{ remaining }}</h2>
-    </div>
-
+<!-- SUMMARY -->
+<section>
+    <h3>Summary</h3>
+    <p>Total: £{{ total }}</p>
+    <p>Monthly: £{{ monthly_total }}</p>
+    <p>Weekly: £{{ weekly_total }}</p>
+    <p>Daily: £{{ daily_total }}</p>
+    <p>Remaining: £{{ remaining }}</p>
 </section>
-
-<!-- GRID -->
-<div class="dashboard-grid">
-
-    <!-- LEFT: BUDGET -->
-    <section class="budget-section">
-
-        <div class="budget-wrapper">
-
-            <!-- HEADER (inside card) -->
-            <div class="section-header">
-                <div class="section-icon purple">📈</div>
-                <h3>Monthly Budget Overview</h3>
-            </div>
-
-            <!-- INNER PURPLE CARD -->
-            <div class="budget-card">
-
-                <form method="POST" action="/set-budget">
-                    <input type="number" step="0.01" name="budget_amount"
-                           value="{{ budget_amount }}" required>
-                    <button type="submit">Save Budget</button>
-                </form>
-
-                <!-- TOP -->
-                <div class="budget-top">
-
-                    <div class="left">
-                        <span>Budget Limit</span>
-                        <h2>£{{ budget_amount }}</h2>
-                    </div>
-
-                    <div class="right">
-                        <span>Remaining Balance</span>
-                        <h2>£{{ remaining }}</h2>
-                    </div>
-
-                </div>
-
-                <!-- PROGRESS -->
-                <div class="progress-container">
-                    <div class="progress-bar
-                        {% if progress >= 100 %}
-                            danger
-                        {% elif progress >= 80 %}
-                            warning
-                        {% else %}
-                            safe
-                        {% endif %}
-                    "
-                    style="width: {{ progress if progress <= 100 else 100 }}%;">
-                        {{ progress|round(0) }}%
-                    </div>
-                </div>
-
-                <!-- BOTTOM -->
-                <div class="budget-bottom">
-
-                    <div class="left">
-                        {% if progress >= 100 %}
-                            <span class="danger">🚨 You exceeded your budget!</span>
-                        {% elif progress >= 80 %}
-                            <span class="warning">⚠ Less than 20% remaining</span>
-                        {% else %}
-                            <span class="safe">✔ Budget under control</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="right">
-                        <span><strong>{{ expenses|length }}</strong> transactions</span>
-                    </div>
-
-                </div>
-
-            </div> <!-- END budget-card -->
-
-        </div> <!-- END budget-wrapper -->
-
+<!-- BUDGET -->
+<section id="budget">
+    <h3>Budget</h3>
+    <form method="POST" action="/set-budget#budget">
+        <label for="budget_amount">Budget</label>
+        <input
+            id="budget_amount"
+            type="number"
+            step="0.01"
+            name="budget_amount"
+            value="{{ budget_amount }}"
+            min="0"
+            required
+        >
+        <button type="submit">Save Budget</button>
+    </form>
+    <section>
+        <h4>Budget Status</h4>
+        <progress value="{{ progress }}" max="100"></progress>
+        <p>{{ progress|round(0) }}%</p>
+        {% if progress >= 100 %}
+        <p style="color:red;">🚨 Budget exceeded</p>
+        {% elif progress >= 80 %}
+        <p style="color:orange;">⚠ Warning (20% left)</p>
+        {% else %}
+        <p style="color:green;">✔ On track</p>
+        {% endif %}
     </section>
-
-    <!-- RIGHT: CATEGORY -->
-    <section class="category-section">
-
-        <div class="budget-wrapper">
-
-            <div class="section-header">
-                <div class="section-icon pink">⏱</div>
-                <h3>Category Split</h3>
-            </div>
-
-            <div class="category-card">
-                <!-- Chart goes here -->
-            </div>
-
-        </div>
-
-    </section>
-
-</div>
-
+</section>
 <!-- ADD EXPENSE -->
-<section class="add-expense">
-
-    <h3>Add New Expense</h3>
-
-    <form method="POST" action="/add-expense" class="add-expense-form">
-        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+<section>
+    <h3>Add Expense</h3>
+    <form method="POST" action="/add-expense#expenses">
+        <label>Amount</label>
+        <input
+            type="number"
+            step="0.01"
+            name="amount"
+            min="0"
+            required
+        >
+        <label>Date</label>
         <input type="date" name="date" required>
-
+        <label>Category</label>
         <select name="category_id">
-            <option value="1">Food</option>
-            <option value="2">Transport</option>
-            <option value="3">Entertainment</option>
-            <option value="4">Rent</option>
-            <option value="5">Utilities</option>
-            <option value="6">Shopping</option>
-            <option value="7">Health</option>
-            <option value="8">Education</option>
-            <option value="9">Other</option>
-        </select>
-
-        <input type="text" name="description" placeholder="Description">
-
-        <button type="submit">+ Add Expense</button>
-    </form>
-
-</section>
-
-<!-- EXPENSE TABLE -->
-<section class="expenses">
-
-    <h3>Expense History</h3>
-
-    <form method="POST" action="/delete-selected-expenses">
-
-        <table>
-            <tr>
-                <th><input type="checkbox" id="select-all"></th>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-
-            {% for expense in expenses %}
-            <tr>
-                <td>
-                    <input type="checkbox" class="expense-checkbox"
-                           name="expense_ids"
-                           value="{{ expense.expense_id }}">
-                </td>
-
-                <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
-                <td><span class="tag">{{ expense.name }}</span></td>
-                <td>£{{ expense.amount }}</td>
-                <td>{{ expense.description }}</td>
-
-                <td>
-                    <a href="#" onclick="openEditModal(
-                        '{{ expense.expense_id }}',
-                        '{{ expense.amount }}',
-                        '{{ expense.category_id }}',
-                        '{{ expense.date }}',
-                        '{{ expense.description | e }}'
-                    ); return false;">
-                        ✏ Edit
-                    </a>
-                </td>
-            </tr>
+            {% for c in categories %}
+            <option value="{{ c.category_id }}">{{ c.name }}</option>
             {% endfor %}
-        </table>
-
-        <div class="action-bar">
-            <button id="delete-button" type="submit">Delete Selected</button>
-            <button type="button" onclick="openSortModal()">Sort</button>
-            <button type="button" onclick="openSearchModal()">Search</button>
-            <button type="button" onclick="window.location.href='/dashboard'">Clear</button>
-        </div>
-
+        </select>
+        <label>Description</label>
+        <input type="text" name="description">
+        <button type="submit">Add Expense</button>
     </form>
-
 </section>
+<!-- ACTIVE FILTERS -->
+<section>
+    <h4>Active Filters</h4>
+    {% if request.args %}
+    <p>
+        {% if request.args.get("description") %}
+            Description: "{{ request.args.get('description') }}"
+        {% endif %}
 
-</main>
+        {% if request.args.get("min_amount") %}
+            Min: £{{ request.args.get("min_amount") }}
+        {% endif %}
 
+        {% if request.args.get("max_amount") %}
+            Max: £{{ request.args.get("max_amount") }}
+        {% endif %}
+
+        {% if request.args.get("category_id") %}
+            Category selected
+        {% endif %}
+
+        {% if request.args.get("sort") %}
+            Sort: {{ request.args.get("sort") }}
+        {% endif %}
+    </p>
+    {% else %}
+    <p>No filters applied</p>
+    {% endif %}
+</section>
+<!-- TABLE -->
+<section id="expenses">
+    <h3>Expenses ({{ expenses|length }})</h3>
+    <form method="POST" action="/delete-selected-expenses#expenses" onsubmit="return confirmDelete()">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select-all">
+                    </th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount (£)</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if expenses|length == 0 %}
+                <tr>
+                    <td colspan="6">No expenses found</td>
+                </tr>
+                {% else %}
+
+                {% for expense in expenses %}
+                <tr>
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="expense-checkbox"
+                            name="expense_ids"
+                            value="{{ expense.expense_id }}"
+                        >
+                    </td>
+                    <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+                    <td>{{ expense.name }}</td>
+                    <td>£{{ expense.amount }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>
+                        <button type="button" onclick="openEditModal(
+                                '{{ expense.expense_id }}',
+                                '{{ expense.amount }}',
+                                '{{ expense.category_id }}',
+                                '{{ expense.date }}',
+                                '{{ expense.description | e }}'
+                            )">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% endif %}
+            </tbody>
+        </table>
+        <button id="delete-button" type="submit">Delete Selected</button>
+        <button type="button" onclick="openSortModal()">Sort</button>
+        <button type="button" onclick="openSearchModal()">Search</button>
+        <a href="/dashboard#expenses">
+            <button type="button">Clear</button>
+        </a>
+    </form>
+</section>
+<!-- MODALS  -->
+<!-- EDIT MODAL -->
+<section id="editModal" hidden>
+    <h3>Edit Expense</h3>
+    <form id="editForm" method="POST">
+        <input type="hidden" id="edit_id" name="expense_id">
+        <label for="edit_amount">Amount</label>
+        <input
+            id="edit_amount"
+            type="number"
+            step="0.01"
+            name="amount"
+            required
+        >
+        <label for="edit_category">Category</label>
+        <select id="edit_category" name="category_id">
+            {% for c in categories %}
+            <option value="{{ c.category_id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="edit_date">Date</label>
+        <input
+            id="edit_date"
+            type="date"
+            name="date"
+            required
+        >
+        <label for="edit_description">Description</label>
+        <input id="edit_description" type="text" name="description">
+        <button type="submit">Save</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+</section>
+<!-- SORT MODAL -->
+<section id="sortModal" hidden>
+    <h3>Sort Expenses</h3>
+    <form method="GET" action="/dashboard#expenses">
+        <label>
+            <input type="radio" name="sort" value="date_desc"> Newest to Oldest
+        </label>
+        <label>
+            <input type="radio" name="sort" value="date_asc"> Oldest to Newest
+        </label>
+        <label>
+            <input type="radio" name="sort" value="amount_asc"> Low to High
+        </label>
+        <label>
+            <input type="radio" name="sort" value="amount_desc"> High to Low
+        </label>
+        <label>Category</label>
+        <select name="category_id">
+            <option value="">All</option>
+            {% for c in categories %}
+            <option value="{{ c.category_id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Apply</button>
+        <button type="button" onclick="closeSortModal()">Cancel</button>
+    </form>
+</section>
+<!-- SEARCH MODAL -->
+<section id="searchModal" hidden>
+    <h3>Search Expenses</h3>
+    <form method="GET" action="/dashboard#expenses">
+        <label>Description</label>
+        <input type="text" name="description">
+        <label>Min Amount</label>
+        <input type="number" name="min_amount">
+        <label>Max Amount</label>
+        <input type="number" name="max_amount">
+        <label>Date From</label>
+        <input type="date" name="date_from">
+        <label>Date To</label>
+        <input type="date" name="date_to">
+        <button type="submit">Apply</button>
+        <button type="button" onclick="closeSearchModal()">Cancel</button>
+    </form>
+</section>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
-</body>
-</html>
+{% endblock %}

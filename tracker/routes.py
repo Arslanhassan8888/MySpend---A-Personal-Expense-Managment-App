@@ -28,6 +28,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from  flask import session
 # Import datetime and timedelta for handling date and time operations, such as calculating date ranges for expense tracking.
 from datetime import datetime, timedelta
+from flask import flash  # Import flash for displaying messages to users (e.g., success or error messages)
 
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
@@ -225,6 +226,7 @@ def dashboard():
     min_amount = request.args.get("min_amount")
     max_amount = request.args.get("max_amount")
     description = request.args.get("description")
+    category_id = request.args.get("category_id")
 
     # BASE QUERY
     query = f"""
@@ -257,6 +259,10 @@ def dashboard():
     if description and description != "":
         query += " AND expenses.description LIKE ?"
         params.append(f"%{description}%")
+        
+    if category_id and category_id != "":
+        query += " AND expenses.category_id = ?"
+        params.append(category_id)
 
     # SORT
     query += f" ORDER BY {order_clause}"
@@ -308,6 +314,19 @@ def dashboard():
         (session["user_id"],)
     ).fetchone()[0]
 
+    weekly_total = cursor.execute(
+        """
+        SELECT COALESCE(SUM(amount), 0)
+        FROM expenses
+        WHERE user_id = ?
+         AND date BETWEEN DATE('now', 'weekday 1', '-7 days')
+                  AND DATE('now', 'weekday 0')
+        """,
+        (session["user_id"],)
+    ).fetchone()[0]
+    categories = cursor.execute(
+    "SELECT * FROM categories"
+).fetchall()
     conn.close()
 
     return render_template(
@@ -317,6 +336,8 @@ def dashboard():
         total=total,
         monthly_total=monthly_total,
         daily_total=daily_total,
+        weekly_total=weekly_total,
+        categories=categories,
         budget_amount=budget_amount,
         remaining=remaining,
         progress=progress,
@@ -332,10 +353,18 @@ def add_expense():
 
     if request.method == "POST":
 
-        amount = request.form["amount"]
+        try:
+            amount = float(request.form["amount"])
+            if amount <= 0:
+                flash("Amount must be greater than zero.")
+                return redirect(url_for("main.dashboard") + "#expenses")
+        except ValueError:
+            flash("Invalid amount. Please enter a valid number.")
+            return redirect(url_for("main.dashboard") + "#expenses")
+
         category_id = request.form["category_id"]
         date = request.form["date"]
-        description = request.form["description"]
+        description = request.form["description"].strip()
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -352,7 +381,8 @@ def add_expense():
         conn.commit()
         conn.close()
 
-        return redirect(url_for("main.dashboard"))
+        flash("Expense added successfully!")  # Flash a success message to the user
+        return redirect(url_for("main.dashboard")+ "#expenses")  # Redirect to the dashboard and scroll to the expenses section
 
 
 @main.route("/delete-expense/<int:expense_id>")
@@ -372,7 +402,8 @@ def delete_expense(expense_id):
     conn.commit()
     conn.close()
 
-    return redirect(url_for("main.dashboard"))
+    flash("Expense deleted successfully!")  # Flash a success message to the user
+    return redirect(url_for("main.dashboard") + "#expenses")  # Redirect to the dashboard and scroll to the expenses section    
 
 @main.route("/delete-selected-expenses", methods=["POST"])
 def delete_selected_expenses():
@@ -381,6 +412,10 @@ def delete_selected_expenses():
         return redirect(url_for("main.login"))
 
     expense_ids = request.form.getlist("expense_ids")
+
+    if not expense_ids:
+        flash("No expenses selected")
+        return redirect(url_for("main.dashboard") + "#expenses")
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -394,7 +429,8 @@ def delete_selected_expenses():
     conn.commit()
     conn.close()
 
-    return redirect(url_for("main.dashboard"))
+    flash(f"{len(expense_ids)} expenses deleted successfully!")  # Flash a success message indicating how many expenses were deleted
+    return redirect(url_for("main.dashboard") + "#expenses")  # Redirect to the dashboard and scroll to the expenses section
 
 @main.route("/logout")
 def logout():
@@ -415,7 +451,7 @@ def update_expense():
     amount = request.form["amount"]
     category_id = request.form["category_id"]
     date = request.form["date"]
-    description = request.form["description"]
+    description = request.form["description"].strip()
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -432,7 +468,8 @@ def update_expense():
     conn.commit()
     conn.close()
 
-    return redirect(url_for("main.dashboard"))
+    flash("Expense updated successfully!")  # Flash a success message to the user
+    return redirect(url_for("main.dashboard") + "#expenses")
 
 @main.route("/set-budget", methods=["POST"])
 def set_budget():
@@ -442,7 +479,7 @@ def set_budget():
 
     amount = request.form["budget_amount"]
 
-    from datetime import datetime
+   
     month = datetime.now().strftime("%Y-%m")
 
     conn = get_db_connection()
@@ -468,4 +505,5 @@ def set_budget():
     conn.commit()
     conn.close()
 
-    return redirect(url_for("main.dashboard"))
+    flash("Budget set successfully!")  # Flash a success message to the user
+    return redirect(url_for("main.dashboard")+ "#budget")  # Redirect to the dashboard and scroll to the budget section

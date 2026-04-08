@@ -1,3 +1,4 @@
+// ================= SELECT + DELETE =================
 document.addEventListener("DOMContentLoaded", function () {
 
     const selectAll = document.getElementById("select-all");
@@ -6,46 +7,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateDeleteButton() {
         let checked = document.querySelectorAll(".expense-checkbox:checked").length;
-        deleteButton.disabled = checked === 0;
+
+        if (deleteButton) {
+            deleteButton.disabled = checked === 0;
+        }
     }
 
-    selectAll.addEventListener("change", function () {
+    if (selectAll) {
+        selectAll.addEventListener("change", function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAll.checked;
 
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = selectAll.checked;
+                if (checkbox.closest("tr")) {
+                    if (selectAll.checked) {
+                        checkbox.closest("tr").classList.add("selected-row");
+                    } else {
+                        checkbox.closest("tr").classList.remove("selected-row");
+                    }
+                }
+            });
 
-            if (selectAll.checked) {
-                checkbox.closest("tr").classList.add("selected-row");
-            } else {
-                checkbox.closest("tr").classList.remove("selected-row");
-            }
+            updateDeleteButton();
         });
-
-        updateDeleteButton();
-    });
+    }
 
     checkboxes.forEach(function (checkbox) {
-
         checkbox.addEventListener("change", function () {
 
-            if (checkbox.checked) {
-                checkbox.closest("tr").classList.add("selected-row");
-            } else {
-                checkbox.closest("tr").classList.remove("selected-row");
+            if (checkbox.closest("tr")) {
+                if (checkbox.checked) {
+                    checkbox.closest("tr").classList.add("selected-row");
+                } else {
+                    checkbox.closest("tr").classList.remove("selected-row");
+                }
             }
 
             updateDeleteButton();
         });
-
     });
 
     updateDeleteButton();
-
 });
 
+
+// ================= DELETE CONFIRM =================
+function confirmDelete() {
+    const checked = document.querySelectorAll(".expense-checkbox:checked").length;
+
+    if (checked === 0) {
+        alert("Please select at least one expense.");
+        return false;
+    }
+
+    return confirm("Are you sure you want to delete selected expenses?");
+}
+
+
+// ================= EDIT MODAL =================
 function openEditModal(id, amount, category, date, description) {
 
-    document.getElementById("editModal").style.display = "block";
+    const modal = document.getElementById("editModal");
+
+    if (modal) {
+        modal.hidden = false;   
+    }
 
     document.getElementById("edit_id").value = id;
     document.getElementById("edit_amount").value = amount;
@@ -57,22 +82,60 @@ function openEditModal(id, amount, category, date, description) {
 }
 
 function closeModal() {
-    document.getElementById("editModal").style.display = "none";
+    const modal = document.getElementById("editModal");
+
+    if (modal) {
+        modal.hidden = true;   
+    }
 }
+
 
 // ================= SORT MODAL =================
 function openSortModal() {
-    document.getElementById("sortModal").style.display = "block";
+    const modal = document.getElementById("sortModal");
+
+    if (modal) {
+        modal.hidden = false;   
+    }
 }
 
 function closeSortModal() {
-    document.getElementById("sortModal").style.display = "none";
+    const modal = document.getElementById("sortModal");
+
+    if (modal) {
+        modal.hidden = true;   
+    }
 }
+
+
 // ================= SEARCH MODAL =================
 function openSearchModal() {
-    document.getElementById("searchModal").style.display = "block";
+    const modal = document.getElementById("searchModal");
+
+    if (modal) {
+        modal.hidden = false;   
+    }
 }
 
 function closeSearchModal() {
-    document.getElementById("searchModal").style.display = "none";
+    const modal = document.getElementById("searchModal");
+
+    if (modal) {
+        modal.hidden = true;  
+    }
 }
+
+
+// ================= CLICK OUTSIDE CLOSE =================
+window.onclick = function(event) {
+
+    const modals = ["editModal", "sortModal", "searchModal"];
+
+    modals.forEach(id => {
+        const modal = document.getElementById(id);
+
+        if (modal && event.target === modal) {
+            modal.hidden = true;   // ✅ changed
+        }
+    });
+};

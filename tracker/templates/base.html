@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}MySpend{% endblock %}</title>
+        <!-- GLOBAL CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% block css %}{% endblock %}
+    </head>
+    <body>
+        <!-- HEADER -->
+        <header>
+            <nav>
+                <section>
+                    <h1>MySpend</h1>
+                    <p>Expense Tracker</p>
+                </section>
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard">Dashboard</a>
+                    </li>
+                </ul>
+                <section>
+                    {% if session.get("user_id") %}
+                    <a href="/logout">Logout</a>
+                    {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    {% endif %}
+                </section>
+            </nav>
+        </header>
+        <!-- MAIN -->
+        <main>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <section>
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </section>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+        <!-- FOOTER -->
+        <footer>
+            <section>
+                <p>© MySpend</p>
+            </section>
+        </footer>
+    </body>
+</html>

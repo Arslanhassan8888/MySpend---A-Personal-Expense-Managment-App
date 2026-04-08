@@ -133,7 +133,6 @@ def create_tables():
     # Close the connection
     conn.close()
 
-
 # Function to insert default categories
 def insert_default_categories():
 

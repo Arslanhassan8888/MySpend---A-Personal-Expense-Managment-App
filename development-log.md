@@ -105,3 +105,9 @@ I implemented a monthly budget feature with a progress bar to show spending visu
 Initially, the progress calculation was incorrect, but I fixed it by using the monthly total divided by the budget. I also added colour indicators (green, yellow, red) to improve usability.
 
 Additionally, I introduced summary cards to display total, monthly, and daily spending more clearly.
+
+## 01/04/2026 – Dashboard Completion and UX Refinement
+
+Today I completed the dashboard by integrating expense creation, editing, deletion, sorting, and filtering into a single page. I implemented modal-based interactions to improve usability and keep the workflow clean without page navigation.
+
+I also refined the user experience by adding anchor-based redirects and flash messages, ensuring actions provide clear feedback and maintain context within the dashbo

@@ -1,62 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add Expense</title>
-    </head>
-    <body>
-        <header>
-            <h1>Add Expense</h1>
-        </header>
-        <main>
-            <section>
-                <form method="POST">
-                    <div>
-                        <label for="amount">Amount</label>
-                        <input
-                            id="amount"
-                            type="number"
-                            step="0.01"
-                            name="amount"
-                            required
-                        >
-                    </div>
-                    <div>
-                        <label for="category">Category</label>
-                        <select id="category" name="category_id">
-                            <option value="1">Food</option>
-                            <option value="2">Transport</option>
-                            <option value="3">Entertainment</option>
-                            <option value="4">Rent</option>
-                            <option value="5">Utilities</option>
-                            <option value="6">Shopping</option>
-                            <option value="7">Health</option>
-                            <option value="8">Education</option>
-                            <option value="9">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="date">Date</label>
-                        <input
-                            id="date"
-                            type="date"
-                            name="date"
-                            required
-                        >
-                    </div>
-                    <div>
-                        <label for="description">Description</label>
-                        <input id="description" type="text" name="description">
-                    </div>
-                    <div>
-                        <button type="submit">Save Expense</button>
-                    </div>
-                </form>
-            </section>
-        </main>
-        <footer>
-            <p>MySpend Expense Tracker</p>
-        </footer>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Add Expense{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Add Expense</h2>
+    <form method="POST" action="/add-expense">
+        <label for="amount">Amount</label>
+        <input
+            id="amount"
+            type="number"
+            step="0.01"
+            name="amount"
+            min="0"
+            required
+        >
+        <label for="category">Category</label>
+        <select id="category" name="category_id" required>
+            {% for c in categories %}
+            <option value="{{ c.category_id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="date">Date</label>
+        <input
+            id="date"
+            type="date"
+            name="date"
+            required
+        >
+        <label for="description">Description</label>
+        <input
+            id="description"
+            type="text"
+            name="description"
+            placeholder="Optional note"
+        >
+        <button type="submit">Save Expense</button>
+    </form>
+</section>
+{% endblock %}
