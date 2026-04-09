@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (deleteButton) {
             deleteButton.disabled = checked === 0;
+            deleteButton.textContent = `Delete Selected (${checked})`;
         }
     }
 
@@ -69,7 +70,7 @@ function openEditModal(id, amount, category, date, description) {
     const modal = document.getElementById("editModal");
 
     if (modal) {
-        modal.hidden = false;   
+        modal.hidden = false;
     }
 
     document.getElementById("edit_id").value = id;
@@ -78,14 +79,14 @@ function openEditModal(id, amount, category, date, description) {
     document.getElementById("edit_date").value = date;
     document.getElementById("edit_description").value = description;
 
-    document.getElementById("editForm").action = "/update-expense";
+    document.getElementById("editForm").action = "/update-expense#expenses";
 }
 
 function closeModal() {
     const modal = document.getElementById("editModal");
 
     if (modal) {
-        modal.hidden = true;   
+        modal.hidden = true;
     }
 }
 
@@ -95,7 +96,7 @@ function openSortModal() {
     const modal = document.getElementById("sortModal");
 
     if (modal) {
-        modal.hidden = false;   
+        modal.hidden = false;
     }
 }
 
@@ -103,7 +104,7 @@ function closeSortModal() {
     const modal = document.getElementById("sortModal");
 
     if (modal) {
-        modal.hidden = true;   
+        modal.hidden = true;
     }
 }
 
@@ -113,7 +114,7 @@ function openSearchModal() {
     const modal = document.getElementById("searchModal");
 
     if (modal) {
-        modal.hidden = false;   
+        modal.hidden = false;
     }
 }
 
@@ -121,7 +122,7 @@ function closeSearchModal() {
     const modal = document.getElementById("searchModal");
 
     if (modal) {
-        modal.hidden = true;  
+        modal.hidden = true;
     }
 }
 
@@ -131,14 +132,171 @@ window.onclick = function(event) {
 
     const modals = ["editModal", "sortModal", "searchModal"];
 
-    modals.forEach(id => {
+    modals.forEach(function (id) {
         const modal = document.getElementById(id);
 
         if (modal && event.target === modal) {
-            modal.hidden = true;   // ✅ changed
+            modal.hidden = true;
         }
     });
 };
+
+
+// ================= FORM FEEDBACK + VALIDATION =================
+document.addEventListener("DOMContentLoaded", function () {
+    const sortForm = document.getElementById("sortForm");
+    const searchForm = document.getElementById("searchForm");
+    const editForm = document.getElementById("editForm");
+
+    const sortFeedback = document.getElementById("sort-feedback");
+    const searchFeedback = document.getElementById("search-feedback");
+    const editFeedback = document.getElementById("edit-feedback");
+
+    function showFeedback(element, type, message) {
+        if (!element) {
+            return;
+        }
+
+        element.hidden = false;
+        element.classList.remove("success", "error");
+        element.classList.add(type);
+        element.textContent = message;
+    }
+
+    function clearFeedback(element) {
+        if (!element) {
+            return;
+        }
+
+        element.hidden = true;
+        element.classList.remove("success", "error");
+        element.textContent = "";
+    }
+
+    if (sortForm) {
+        sortForm.addEventListener("submit", function (event) {
+            clearFeedback(sortFeedback);
+
+            const selectedSort = sortForm.querySelector('input[name="sort"]:checked');
+
+            if (!selectedSort) {
+                event.preventDefault();
+                showFeedback(sortFeedback, "error", "Please choose one sort option before applying.");
+                return;
+            }
+        });
+    }
+
+    if (searchForm) {
+        searchForm.addEventListener("submit", function (event) {
+            clearFeedback(searchFeedback);
+
+            const description = document.getElementById("search_description");
+            const minAmount = document.getElementById("search_min_amount");
+            const maxAmount = document.getElementById("search_max_amount");
+            const dateFrom = document.getElementById("search_date_from");
+            const dateTo = document.getElementById("search_date_to");
+
+            const hasValue =
+                description.value.trim() !== "" ||
+                minAmount.value.trim() !== "" ||
+                maxAmount.value.trim() !== "" ||
+                dateFrom.value.trim() !== "" ||
+                dateTo.value.trim() !== "";
+
+            if (!hasValue) {
+                event.preventDefault();
+                showFeedback(searchFeedback, "error", "Please fill at least one field before applying search.");
+                return;
+            }
+
+            if (minAmount.value !== "" && Number(minAmount.value) < 0) {
+                event.preventDefault();
+                showFeedback(searchFeedback, "error", "Minimum amount must be a positive number.");
+                return;
+            }
+
+            if (maxAmount.value !== "" && Number(maxAmount.value) < 0) {
+                event.preventDefault();
+                showFeedback(searchFeedback, "error", "Maximum amount must be a positive number.");
+                return;
+            }
+
+            if (
+                minAmount.value !== "" &&
+                maxAmount.value !== "" &&
+                Number(minAmount.value) > Number(maxAmount.value)
+            ) {
+                event.preventDefault();
+                showFeedback(searchFeedback, "error", "Minimum amount cannot be greater than maximum amount.");
+                return;
+            }
+
+            if (
+                dateFrom.value !== "" &&
+                dateTo.value !== "" &&
+                dateFrom.value > dateTo.value
+            ) {
+                event.preventDefault();
+                showFeedback(searchFeedback, "error", "Date From cannot be later than Date To.");
+            }
+        });
+    }
+
+    if (editForm) {
+        editForm.addEventListener("submit", function (event) {
+            clearFeedback(editFeedback);
+
+            const editAmount = document.getElementById("edit_amount");
+            const editDate = document.getElementById("edit_date");
+            const editCategory = document.getElementById("edit_category");
+
+            if (editAmount.value.trim() === "") {
+                event.preventDefault();
+                showFeedback(editFeedback, "error", "Please enter an amount.");
+                return;
+            }
+
+            if (Number(editAmount.value) <= 0) {
+                event.preventDefault();
+                showFeedback(editFeedback, "error", "Amount must be greater than zero.");
+                return;
+            }
+
+            if (editDate.value.trim() === "") {
+                event.preventDefault();
+                showFeedback(editFeedback, "error", "Please choose a date.");
+                return;
+            }
+
+            if (editCategory.value.trim() === "") {
+                event.preventDefault();
+                showFeedback(editFeedback, "error", "Please choose a category.");
+                return;
+            }
+        });
+    }
+});
+
+
+// ================= SUCCESS MESSAGE AUTO HIDE =================
+document.addEventListener("DOMContentLoaded", function () {
+    const timedMessages = document.querySelectorAll(".form-messages li, .table-messages li");
+
+    timedMessages.forEach(function (message) {
+        setTimeout(function () {
+            message.style.transition = "opacity 0.4s ease";
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+                message.style.display = "none";
+            }, 400);
+        }, 5000);
+    });
+});
+
+
+// ================= UI EFFECTS =================
 document.addEventListener("DOMContentLoaded", () => {
 
     /* MOBILE MENU */
@@ -152,13 +310,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* HEADER SCROLL EFFECT */
-    const header = document.getElementById("header");
-
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 40) {
-            header.classList.add("scrolled");
-        } else {
-            header.classList.remove("scrolled");
+        const header = document.querySelector("header");
+
+        if (header) {
+            if (window.scrollY > 50) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
         }
     });
 
@@ -166,16 +326,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("a, button").forEach(el => {
         el.style.cursor = "pointer";
     });
-    
-    window.addEventListener("scroll", () => {
-    const header = document.querySelector("header");
-
-    if (window.scrollY > 50) {
-        header.classList.add("scrolled");
-    } else {
-        header.classList.remove("scrolled");
-    }
-});
 
 });
-

@@ -112,6 +112,9 @@ Today I completed the dashboard by integrating expense creation, editing, deleti
 
 I also refined the user experience by adding anchor-based redirects and flash messages, ensuring actions provide clear feedback and maintain context within the dashboard
 
-## 09/04/2026 – UI Styling and Visual Enhancement
+## 02/04/2026 – UI Styling and Visual Enhancement
 
 I implemented responsive header navigation with JavaScript-controlled mobile menu and scroll-based transparency effect. Enhanced footer design with structured layout, smooth hover interactions, and consistent styling across all links including policy sections. Applied a refined light purple background theme to improve visual hierarchy and overall user interface quality.
+
+## 04/04/2026 Full style applied on Dasboard page and improved UI and UX
+Encountered layout breaking issues on smaller screens due to grid overflow and improper spacing, resolved by applying box-sizing and restructuring responsive CSS. Also faced inconsistent form feedback display, fixed by standardising flash message styling and positioning for better user experience.

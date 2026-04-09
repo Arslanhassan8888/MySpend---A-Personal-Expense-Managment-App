@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block content %}
+
+{% set flashed_messages = get_flashed_messages(with_categories=true) %}
 <header class="dashboard-hero">
     <h1>Welcome back, {{ name }}</h1>
     <p>Here's your financial overview for {{ current_month }}</p>
@@ -47,15 +49,20 @@
         </section>
         <form method="POST" action="/set-budget#budget" class="budget-input">
             <label for="budget_amount">Set Monthly Budget</label>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="form-messages">
-                {% for category, message in messages %}
+            {% set budget_messages = [] %}
+            {% for category, message in flashed_messages %}
+                {% if "budget" in message|lower %}
+                    {% set _ = budget_messages.append((category, message)) %}
+                {% endif %}
+            {% endfor %}
+
+            {% if budget_messages %}
+            <ul class="form-messages budget-form-messages">
+                {% for category, message in budget_messages %}
                 <li class="{{ category }}">{{ message }}</li>
                 {% endfor %}
             </ul>
             {% endif %}
-    {% endwith %}
             <input
                 id="budget_amount"
                 type="number"
@@ -75,10 +82,11 @@
                 <section class="remaining">
                     <p>Remaining Balance</p>
                     <strong class="
-                            {% if progress >= 100 %}danger
-                            {% elif progress >= 80 %}warning
-                            {% else %}success
-                            {% endif %}">
+                        {% if progress >= 100 %}danger
+                        {% elif progress >= 80 %}warning
+                        {% else %}success
+                        {% endif %}
+                    ">
                         £{{ remaining }}
                     </strong>
                 </section>
@@ -113,20 +121,25 @@
 </section>
 <!-- ADD EXPENSE -->
 <section id="add-expense" class="expense-card">
-    <header class="expense-header">
+    <section class="expense-header">
         <h2>Add New Expense</h2>
-    </header>
+    </section>
     <form method="POST" action="/add-expense#add-expense" class="expense-form">
         <!-- FLASH MESSAGE -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-        <ul class="form-messages">
-            {% for category, message in messages %}
+        {% set add_expense_messages = [] %}
+        {% for category, message in flashed_messages %}
+            {% if "expense added" in message|lower or "amount must" in message|lower or "invalid amount" in message|lower %}
+                {% set _ = add_expense_messages.append((category, message)) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if add_expense_messages %}
+        <ul class="form-messages expense-form-messages">
+            {% for category, message in add_expense_messages %}
             <li class="{{ category }}">{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
-        {% endwith %}
         <!-- AMOUNT -->
         <section>
             <label for="amount">Amount (£)</label>
@@ -153,7 +166,7 @@
         <!-- CATEGORY -->
         <section>
             <label for="category">Category</label>
-            <select id="category" name="category_id">
+            <select id="category" name="category_id" required>
                 {% for c in categories %}
                 <option value="{{ c.category_id }}">{{ c.name }}</option>
                 {% endfor %}
@@ -175,180 +188,337 @@
         </section>
     </form>
 </section>
-
-<!-- ACTIVE FILTERS -->
-<section>
-    <h4>Active Filters</h4>
-    {% if request.args %}
-    <p>
-        {% if request.args.get("description") %}
-            Description: "{{ request.args.get('description') }}"
-        {% endif %}
-
-        {% if request.args.get("min_amount") %}
-            Min: £{{ request.args.get("min_amount") }}
-        {% endif %}
-
-        {% if request.args.get("max_amount") %}
-            Max: £{{ request.args.get("max_amount") }}
-        {% endif %}
-
-        {% if request.args.get("category_id") %}
-            Category selected
-        {% endif %}
-
-        {% if request.args.get("sort") %}
-            Sort: {{ request.args.get("sort") }}
-        {% endif %}
-    </p>
-    {% else %}
-    <p>No filters applied</p>
-    {% endif %}
-</section>
 <!-- TABLE -->
-<section id="expenses">
-    <h3>Expenses ({{ expenses|length }})</h3>
-    <form method="POST" action="/delete-selected-expenses#expenses" onsubmit="return confirmDelete()">
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" id="select-all">
-                    </th>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Amount (£)</th>
-                    <th>Description</th>
-                    <th>Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if expenses|length == 0 %}
-                <tr>
-                    <td colspan="6">No expenses found</td>
-                </tr>
-                {% else %}
+<section id="expenses" class="history-card">
+    <section class="history-top">
+        <section class="history-title">
+            <h2>Expense History</h2>
+        </section>
+        <p class="history-total">
+            {{ expenses|length }} Total
+        </p>
+    </section>
+    <section class="history-table-wrap">
+        <p id="table-status-message" class="table-status-success" hidden></p>
+        {% if request.args.get("sort") %}
+        <p class="table-status-success">Sort applied successfully.</p>
+        {% endif %}
 
-                {% for expense in expenses %}
-                <tr>
-                    <td>
+    {% if request.args.get("description") or request.args.get("min_amount") or request.args.get("max_amount") or request.args.get("date_from") or request.args.get("date_to") or request.args.get("category_id") %}
+        <p class="table-status-success">Search applied successfully.</p>
+        {% endif %}
+        {% set table_messages = [] %}
+        {% for category, message in flashed_messages %}
+            {% if "updated" in message|lower or "deleted" in message|lower or "no expenses selected" in message|lower %}
+                {% set _ = table_messages.append((category, message)) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if table_messages %}
+        <ul class="table-messages">
+            {% for category, message in table_messages %}
+            <li class="
+        {% if category == 'success' %}
+            success
+        {% elif category == 'error' %}
+            error
+        {% elif 'deleted successfully' in message|lower or 'updated successfully' in message|lower %}
+            success
+        {% elif 'no expenses selected' in message|lower %}
+            error
+        {% else %}
+            success
+        {% endif %}
+    ">
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form
+            method="POST"
+            action="/delete-selected-expenses#expenses"
+            class="history-form"
+            onsubmit="return confirmDelete()"
+        >
+            
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <label for="select-all" class="sr-only">Select all expenses</label>
+                                <input type="checkbox" id="select-all">
+                            </th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if expenses|length == 0 %}
+                        <tr>
+                            <td colspan="6" class="history-empty">No expenses found</td>
+                        </tr>
+                        {% else %}
+                    {% for expense in expenses %}
+                        <tr>
+                            <td>
+                                <label for="expense_{{ expense.expense_id }}" class="sr-only">
+                                    Select expense {{ expense.expense_id }}
+                                </label>
+                                <input
+                                    id="expense_{{ expense.expense_id }}"
+                                    type="checkbox"
+                                    class="expense-checkbox"
+                                    name="expense_ids"
+                                    value="{{ expense.expense_id }}"
+                                >
+                            </td>
+                            <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+                            <td>{{ expense.name }}</td>
+                            <td class="history-amount">£{{ expense.amount }}</td>
+                            <td class="{% if not expense.description %}history-empty-description{% endif %}">
+                                {% if expense.description %}
+                                {{ expense.description }}
+                            {% else %}
+                                No description
+                            {% endif %}
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    onclick="openEditModal(
+                                    '{{ expense.expense_id }}',
+                                    '{{ expense.amount }}',
+                                    '{{ expense.category_id }}',
+                                    '{{ expense.date }}',
+                                    '{{ expense.description | e }}'
+                                )"
+                                    aria-label="Edit expense {{ expense.expense_id }}"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+        
+
+                <section class="history-actions">
+                    <button id="delete-button" type="submit" class="history-danger-button">
+                        Delete Selected (0)
+                    </button>
+                    <button type="button" class="history-secondary-button" onclick="openSortModal()">
+                        Sort
+                    </button>
+                    <button type="button" class="history-secondary-button" onclick="openSearchModal()">
+                        Search
+                    </button>
+                    <a href="/dashboard#expenses" class="history-link-button" id="clear-expenses-link">
+                        Clear
+                    </a>
+                </section>
+            </form>
+        </section>
+    </section>
+    <!-- EDIT MODAL -->
+    <section
+        id="editModal"
+        class="history-modal"
+        hidden
+        aria-labelledby="edit-title"
+    >
+        <section class="history-modal-card">
+            <h3 id="edit-title">Edit Expense</h3>
+            <p id="edit-feedback" class="modal-feedback" hidden></p>
+            <form
+                id="editForm"
+                method="POST"
+                action="/update-expense#expenses"
+                novalidate
+            >
+                <input type="hidden" id="edit_id" name="expense_id">
+                <section class="modal-field">
+                    <label for="edit_amount">Amount</label>
+                    <input
+                        id="edit_amount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        name="amount"
+                        required
+                        aria-describedby="edit-amount-hint"
+                    >
+                    <p id="edit-amount-hint" class="field-hint">Enter a positive number greater than zero.</p>
+                </section>
+                <section class="modal-field">
+                    <label for="edit_category">Category</label>
+                    <select id="edit_category" name="category_id" required>
+                        {% for c in categories %}
+                        <option value="{{ c.category_id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </section>
+                <section class="modal-field">
+                    <label for="edit_date">Date</label>
+                    <input
+                        id="edit_date"
+                        type="date"
+                        name="date"
+                        required
+                    >
+                </section>
+                <section class="modal-field">
+                    <label for="edit_description">Description</label>
+                    <input
+                        id="edit_description"
+                        type="text"
+                        name="description"
+                        aria-describedby="edit-description-hint"
+                    >
+                    <p id="edit-description-hint" class="field-hint">Optional note for this expense.</p>
+                </section>
+                <section class="modal-actions">
+                    <button type="submit" class="history-primary-button">Save Changes</button>
+                    <button type="button" class="history-secondary-button" onclick="closeModal()">Cancel</button>
+                </section>
+            </form>
+        </section>
+    </section>
+    <!-- SORT MODAL -->
+    <section
+        id="sortModal"
+        class="history-modal"
+        hidden
+        aria-labelledby="sort-title"
+    >
+        <section class="history-modal-card">
+            <h3 id="sort-title">Sort Expenses</h3>
+            <p id="sort-feedback" class="modal-feedback" hidden></p>
+            <form
+                id="sortForm"
+                method="GET"
+                action="/dashboard#expenses"
+                novalidate
+            >
+                <section class="modal-field">
+                    <p class="modal-label">Choose one sort option</p>
+                    <label for="sort_date_desc" class="radio-option">
                         <input
-                            type="checkbox"
-                            class="expense-checkbox"
-                            name="expense_ids"
-                            value="{{ expense.expense_id }}"
+                            id="sort_date_desc"
+                            type="radio"
+                            name="sort"
+                            value="date_desc"
                         >
-                    </td>
-                    <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
-                    <td>{{ expense.name }}</td>
-                    <td>£{{ expense.amount }}</td>
-                    <td>{{ expense.description }}</td>
-                    <td>
-                        <button type="button" onclick="openEditModal(
-                                '{{ expense.expense_id }}',
-                                '{{ expense.amount }}',
-                                '{{ expense.category_id }}',
-                                '{{ expense.date }}',
-                                '{{ expense.description | e }}'
-                            )">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-
-                {% endif %}
-            </tbody>
-        </table>
-        <button id="delete-button" type="submit">Delete Selected</button>
-        <button type="button" onclick="openSortModal()">Sort</button>
-        <button type="button" onclick="openSearchModal()">Search</button>
-        <a href="/dashboard#expenses">
-            <button type="button">Clear</button>
-        </a>
-    </form>
-</section>
-<!-- MODALS  -->
-<!-- EDIT MODAL -->
-<section id="editModal" hidden>
-    <h3>Edit Expense</h3>
-    <form id="editForm" method="POST">
-        <input type="hidden" id="edit_id" name="expense_id">
-        <label for="edit_amount">Amount</label>
-        <input
-            id="edit_amount"
-            type="number"
-            step="0.01"
-            name="amount"
-            required
-        >
-        <label for="edit_category">Category</label>
-        <select id="edit_category" name="category_id">
-            {% for c in categories %}
-            <option value="{{ c.category_id }}">{{ c.name }}</option>
-            {% endfor %}
-        </select>
-        <label for="edit_date">Date</label>
-        <input
-            id="edit_date"
-            type="date"
-            name="date"
-            required
-        >
-        <label for="edit_description">Description</label>
-        <input id="edit_description" type="text" name="description">
-        <button type="submit">Save</button>
-        <button type="button" onclick="closeModal()">Cancel</button>
-    </form>
-</section>
-<!-- SORT MODAL -->
-<section id="sortModal" hidden>
-    <h3>Sort Expenses</h3>
-    <form method="GET" action="/dashboard#expenses">
-        <label>
-            <input type="radio" name="sort" value="date_desc">
-            Newest to Oldest
-        </label>
-        <label>
-            <input type="radio" name="sort" value="date_asc">
-            Oldest to Newest
-        </label>
-        <label>
-            <input type="radio" name="sort" value="amount_asc">
-            Low to High
-        </label>
-        <label>
-            <input type="radio" name="sort" value="amount_desc">
-            High to Low
-        </label>
-        <label>Category</label>
-        <select name="category_id">
-            <option value="">All</option>
-            {% for c in categories %}
-            <option value="{{ c.category_id }}">{{ c.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Apply</button>
-        <button type="button" onclick="closeSortModal()">Cancel</button>
-    </form>
-</section>
-<!-- SEARCH MODAL -->
-<section id="searchModal" hidden>
-    <h3>Search Expenses</h3>
-    <form method="GET" action="/dashboard#expenses">
-        <label>Description</label>
-        <input type="text" name="description">
-        <label>Min Amount</label>
-        <input type="number" name="min_amount">
-        <label>Max Amount</label>
-        <input type="number" name="max_amount">
-        <label>Date From</label>
-        <input type="date" name="date_from">
-        <label>Date To</label>
-        <input type="date" name="date_to">
-        <button type="submit">Apply</button>
-        <button type="button" onclick="closeSearchModal()">Cancel</button>
-    </form>
-</section>
-<script src="{{ url_for('static', filename='js/general.js') }}"></script>
-{% endblock %}
+                        Newest to Oldest
+                    </label>
+                    <label for="sort_date_asc" class="radio-option">
+                        <input
+                            id="sort_date_asc"
+                            type="radio"
+                            name="sort"
+                            value="date_asc"
+                        >
+                        Oldest to Newest
+                    </label>
+                    <label for="sort_amount_asc" class="radio-option">
+                        <input
+                            id="sort_amount_asc"
+                            type="radio"
+                            name="sort"
+                            value="amount_asc"
+                        >
+                        Low to High Price
+                    </label>
+                    <label for="sort_amount_desc" class="radio-option">
+                        <input
+                            id="sort_amount_desc"
+                            type="radio"
+                            name="sort"
+                            value="amount_desc"
+                        >
+                        High to Low Price
+                    </label>
+                </section>
+                <section class="modal-field">
+                    <label for="sort_category_id">Category</label>
+                    <select id="sort_category_id" name="category_id">
+                        <option value="">All</option>
+                        {% for c in categories %}
+                        <option value="{{ c.category_id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </section>
+                <section class="modal-actions">
+                    <button type="submit" class="history-primary-button">Apply</button>
+                    <button type="button" class="history-secondary-button" onclick="closeSortModal()">Cancel</button>
+                </section>
+            </form>
+        </section>
+    </section>
+    <!-- SEARCH MODAL -->
+    <section
+        id="searchModal"
+        class="history-modal"
+        hidden
+        aria-labelledby="search-title"
+    >
+        <section class="history-modal-card">
+            <h3 id="search-title">Search Expenses</h3>
+            <p id="search-feedback" class="modal-feedback" hidden></p>
+            <form
+                id="searchForm"
+                method="GET"
+                action="/dashboard#expenses"
+                novalidate
+            >
+                <section class="modal-field">
+                    <label for="search_description">Description</label>
+                    <input id="search_description" type="text" name="description">
+                </section>
+                <section class="modal-field">
+                    <label for="search_min_amount">Min Amount</label>
+                    <input
+                        id="search_min_amount"
+                        type="number"
+                        name="min_amount"
+                        min="0"
+                        step="0.01"
+                        aria-describedby="search-min-hint"
+                    >
+                    <p id="search-min-hint" class="field-hint">Use positive numbers only.</p>
+                </section>
+                <section class="modal-field">
+                    <label for="search_max_amount">Max Amount</label>
+                    <input
+                        id="search_max_amount"
+                        type="number"
+                        name="max_amount"
+                        min="0"
+                        step="0.01"
+                        aria-describedby="search-max-hint"
+                    >
+                    <p id="search-max-hint" class="field-hint">Use positive numbers only.</p>
+                </section>
+                <section class="modal-field">
+                    <label for="search_date_from">Date From</label>
+                    <input id="search_date_from" type="date" name="date_from">
+                </section>
+                <section class="modal-field">
+                    <label for="search_date_to">Date To</label>
+                    <input id="search_date_to" type="date" name="date_to">
+                </section>
+                <section class="modal-actions">
+                    <button type="submit" class="history-primary-button">Apply</button>
+                    <button type="button" class="history-secondary-button" onclick="closeSearchModal()">Cancel</button>
+                </section>
+            </form>
+        </section>
+    </section>
+    <script src="{{ url_for('static', filename='js/general.js') }}"></script>
+    {% endblock %}
