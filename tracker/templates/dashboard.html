@@ -7,11 +7,10 @@
 {% endblock %}
 
 {% block content %}
-<section>
-    <h2>Dashboard</h2>
-    <p>Welcome {{ name }}</p>
-    <p>{{ current_month }}</p>
-</section>
+<header class="dashboard-hero">
+    <h1>Welcome back, {{ name }}</h1>
+    <p>Here's your financial overview for {{ current_month }}</p>
+</header>
 <!-- SUMMARY -->
 <section>
     <h3>Summary</h3>
@@ -205,16 +204,20 @@
     <h3>Sort Expenses</h3>
     <form method="GET" action="/dashboard#expenses">
         <label>
-            <input type="radio" name="sort" value="date_desc"> Newest to Oldest
+            <input type="radio" name="sort" value="date_desc">
+            Newest to Oldest
         </label>
         <label>
-            <input type="radio" name="sort" value="date_asc"> Oldest to Newest
+            <input type="radio" name="sort" value="date_asc">
+            Oldest to Newest
         </label>
         <label>
-            <input type="radio" name="sort" value="amount_asc"> Low to High
+            <input type="radio" name="sort" value="amount_asc">
+            Low to High
         </label>
         <label>
-            <input type="radio" name="sort" value="amount_desc"> High to Low
+            <input type="radio" name="sort" value="amount_desc">
+            High to Low
         </label>
         <label>Category</label>
         <select name="category_id">
