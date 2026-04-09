@@ -12,13 +12,32 @@
     <p>Here's your financial overview for {{ current_month }}</p>
 </header>
 <!-- SUMMARY -->
-<section>
-    <h3>Summary</h3>
-    <p>Total: £{{ total }}</p>
-    <p>Monthly: £{{ monthly_total }}</p>
-    <p>Weekly: £{{ weekly_total }}</p>
-    <p>Daily: £{{ daily_total }}</p>
-    <p>Remaining: £{{ remaining }}</p>
+<section class="summary">
+    <article class="card red">
+        <h3>Total Spent</h3>
+        <p class="amount">£{{ total }}</p>
+        <small>All time expenses</small>
+    </article>
+    <article class="card blue">
+        <h3>Monthly Spent</h3>
+        <p class="amount">£{{ monthly_total }}</p>
+        <small>Current month</small>
+    </article>
+    <article class="card purple">
+        <h3>Weekly Spent</h3>
+        <p class="amount">£{{ weekly_total }}</p>
+        <small>Last 7 days</small>
+    </article>
+    <article class="card green">
+        <h3>Daily Spent</h3>
+        <p class="amount">£{{ daily_total }}</p>
+        <small>Today only</small>
+    </article>
+    <article class="card orange">
+        <h3>Remaining</h3>
+        <p class="amount">£{{ remaining }}</p>
+        <small>Budget left</small>
+    </article>
 </section>
 <!-- BUDGET -->
 <section id="budget">

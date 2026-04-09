@@ -64,7 +64,7 @@
 
 section {
     position: relative;
-    z-index: 1; /* 🔥 BELOW hero */
+    z-index: 1; 
     margin-bottom: 20px;
 }
 
@@ -80,6 +80,101 @@ table {
 th, td {
     border: 1px solid #ccc;
     padding: 8px;
+}
+
+/* =========================
+   SUMMARY GRID
+========================= */
+
+.summary {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+/* =========================
+   CARD BASE
+========================= */
+
+.card {
+    background: #f9fafb;
+    padding: 34px 36px;
+    border-radius: 18px;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+
+    position: relative;
+    overflow: hidden;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* hover = lift only (no color change) */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   LEFT COLOR BORDER AND BACKGROUND
+========================= */
+.card.red {
+    background: linear-gradient(145deg, #fdf2f2, #f8eaea);
+    border-left: 5px solid #ef4444;
+}
+
+.card.blue {
+    background: linear-gradient(145deg, #eff6ff, #e6f0ff);
+    border-left: 5px solid #3b82f6;
+}
+
+.card.purple {
+    background: linear-gradient(145deg, #f5f3ff, #ede9fe);
+    border-left: 5px solid #8b5cf6;
+}
+
+.card.green {
+    background: linear-gradient(145deg, #ecfdf5, #e6f9ef);
+    border-left: 5px solid #22c55e;
+}
+
+.card.orange {
+    background: linear-gradient(145deg, #fff7ed, #ffedd5);
+    border-left: 5px solid #f97316;
+}
+
+/* =========================
+   BADGE
+========================= */
+
+.badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.05);
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.card h3 {
+    margin: 15px 0 5px;
+    font-size: 18px;
+    color: #555;
+}
+
+.amount {
+    font-size: 34px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.card small {
+    color: #777;
+    font-size: 14px;
 }
 
 /* =========================
@@ -116,5 +211,19 @@ th, td {
 
     .dashboard-hero p {
         font-size: 14px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+    .summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .summary {
+        grid-template-columns: 1fr;
     }
 }

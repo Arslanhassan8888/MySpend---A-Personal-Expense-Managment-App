@@ -1,12 +1,14 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f5f3ff;  /* base purple */
 
+    
+    background-color: #fafafa;
+
+    /* subtle premium texture */
     background-image: 
-        radial-gradient(circle at 20% 20%, rgba(124,58,237,0.08), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(124,58,237,0.06), transparent 40%);
-
+        radial-gradient(circle at 20% 20%, rgba(124,58,237,0.04), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(124,58,237,0.03), transparent 50%);
 }
 /* HEADER */
 header {
@@ -14,7 +16,10 @@ header {
     width: 100%;
     top: 0;
     background: white;
-    border-bottom: 1px solid #eee;
+    box-shadow: 
+        0 1px 0 rgba(0,0,0,0.04),
+        0 2px 0 rgba(124,58,237,0.6);
+
     transition: 0.3s;
     z-index: 1000;
     margin-bottom: -20px;
