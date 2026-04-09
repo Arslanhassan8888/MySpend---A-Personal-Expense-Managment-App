@@ -382,8 +382,8 @@ def add_expense():
         conn.commit()
         conn.close()
 
-        flash("Expense added successfully!")  # Flash a success message to the user
-        return redirect(url_for("main.dashboard")+ "#expenses")  # Redirect to the dashboard and scroll to the expenses section
+        flash("Expense added successfully!", "success")  # Flash a success message to the user
+        return redirect(url_for("main.dashboard")+ "#add-expense")  # Redirect to the dashboard and scroll to the expenses section
 
 
 @main.route("/delete-expense/<int:expense_id>")
