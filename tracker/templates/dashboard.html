@@ -39,34 +39,77 @@
         <small>Budget left</small>
     </article>
 </section>
-<!-- BUDGET -->
-<section id="budget">
-    <h3>Budget</h3>
-    <form method="POST" action="/set-budget#budget">
-        <label for="budget_amount">Budget</label>
-        <input
-            id="budget_amount"
-            type="number"
-            step="0.01"
-            name="budget_amount"
-            value="{{ budget_amount }}"
-            min="0"
-            required
-        >
-        <button type="submit">Save Budget</button>
-    </form>
-    <section>
-        <h4>Budget Status</h4>
-        <progress value="{{ progress }}" max="100"></progress>
-        <p>{{ progress|round(0) }}%</p>
-        {% if progress >= 100 %}
-        <p style="color:red;">🚨 Budget exceeded</p>
-        {% elif progress >= 80 %}
-        <p style="color:orange;">⚠ Warning (20% left)</p>
-        {% else %}
-        <p style="color:green;">✔ On track</p>
-        {% endif %}
-    </section>
+<!-- Budget-->
+<section id="budget" class="budget-grid">
+    <article class="budget-card">
+        <section class="budget-title">
+            <h2>Monthly Budget Overview</h2>
+        </section>
+        <form method="POST" action="/set-budget#budget" class="budget-input">
+            <label for="budget_amount">Set Monthly Budget</label>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="form-messages">
+                {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+    {% endwith %}
+            <input
+                id="budget_amount"
+                type="number"
+                name="budget_amount"
+                value="0.00"
+                step="0.01"
+                min="0"
+            >
+            <button type="submit">Save Budget</button>
+        </form>
+        <section class="budget-box">
+            <section class="budget-values">
+                <section class="budget-limit">
+                    <p>Budget Limit</p>
+                    <strong>£{{ budget_amount }}</strong>
+                </section>
+                <section class="remaining">
+                    <p>Remaining Balance</p>
+                    <strong class="
+                            {% if progress >= 100 %}danger
+                            {% elif progress >= 80 %}warning
+                            {% else %}success
+                            {% endif %}">
+                        £{{ remaining }}
+                    </strong>
+                </section>
+            </section>
+            <section class="progress-wrapper">
+                <progress value="{{ progress }}" max="100" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
+                <span class="progress-label">
+                    {{ progress|round(1) }}% Used
+                </span>
+            </section>
+            <section class="budget-status-row">
+                <p class="budget-status {% if progress >= 100 %}danger{% elif progress >= 80 %}warning{% else %}success{% endif %}">
+                    {% if progress >= 100 %}
+                        Budget exceeded
+                    {% elif progress >= 80 %}
+                        Warning: limit nearly reached
+                    {% else %}
+                        Budget is under control
+                    {% endif %}
+                </p>
+                <p class="transactions">
+                    {{ expenses|length }} transactions
+                </p>
+            </section>
+        </section>
+    </article>
+    <aside class="category-card">
+        <section class="category-title">
+            <h2>Category Split</h2>
+        </section>
+    </aside>
 </section>
 <!-- ADD EXPENSE -->
 <section>

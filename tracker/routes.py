@@ -478,9 +478,25 @@ def set_budget():
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
-    amount = request.form["budget_amount"]
+    raw_amount = request.form.get("budget_amount", "").strip()
 
-   
+    # EMPTY INPUT
+    if raw_amount == "":
+        flash("Please enter a budget amount.", "error")
+        return redirect(url_for("main.dashboard") + "#budget")
+
+    # NOT A NUMBER
+    try:
+        amount = float(raw_amount)
+    except ValueError:
+        flash("Please enter a valid number.", "error")
+        return redirect(url_for("main.dashboard") + "#budget")
+
+    # NEGATIVE OR ZERO
+    if amount <= 0:
+        flash("Budget must be greater than zero.", "error")
+        return redirect(url_for("main.dashboard") + "#budget")
+
     month = datetime.now().strftime("%Y-%m")
 
     conn = get_db_connection()
@@ -506,5 +522,5 @@ def set_budget():
     conn.commit()
     conn.close()
 
-    flash("Budget set successfully!")  # Flash a success message to the user
-    return redirect(url_for("main.dashboard")+ "#budget")  # Redirect to the dashboard and scroll to the budget section
+    flash("Budget set successfully!", "success")
+    return redirect(url_for("main.dashboard") + "#budget")
