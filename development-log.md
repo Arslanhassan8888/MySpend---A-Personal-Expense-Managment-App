@@ -118,3 +118,6 @@ I implemented responsive header navigation with JavaScript-controlled mobile men
 
 ## 04/04/2026 Full style applied on Dasboard page and improved UI and UX
 Encountered layout breaking issues on smaller screens due to grid overflow and improper spacing, resolved by applying box-sizing and restructuring responsive CSS. Also faced inconsistent form feedback display, fixed by standardising flash message styling and positioning for better user experience.
+
+## 06/04/2026 Budget Chart Integration
+I added a doughnut chart using Chart.js to show monthly spending progress alongside the budget section. I adjusted the styling and layout to match the dashboard design and ensured it updates correctly after any expense or budget change.

@@ -328,3 +328,61 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+// ================= BUDGET SPLIT CHART =================
+// ================= BUDGET SPLIT CHART =================
+document.addEventListener("DOMContentLoaded", function () {
+    const chartCard = document.querySelector(".budget-chart-card");
+    const chartCanvas = document.getElementById("budgetSplitChart");
+
+    if (!chartCard || !chartCanvas || typeof Chart === "undefined") {
+        return;
+    }
+
+    const usedAmount = Number(chartCard.dataset.used || 0);
+    const leftAmount = Number(chartCard.dataset.left || 0);
+    const progressValue = Number(chartCard.dataset.progress || 0);
+
+    let usedColor = "#16a34a";
+
+    if (progressValue >= 100) {
+        usedColor = "#dc2626";
+    } else if (progressValue >= 80) {
+        usedColor = "#f59e0b";
+    } else {
+        usedColor = "#16a34a";
+    }
+
+    new Chart(chartCanvas, {
+        type: "doughnut",
+        data: {
+            labels: ["Used", "Remaining"],
+            datasets: [
+                {
+                    data: [usedAmount, leftAmount],
+                    backgroundColor: [usedColor, "#d1d5db"],
+                    borderColor: "#ffffff",
+                    borderWidth: 4,
+                    hoverOffset: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "74%",
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.label + ": £" + Number(context.raw).toFixed(2);
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
