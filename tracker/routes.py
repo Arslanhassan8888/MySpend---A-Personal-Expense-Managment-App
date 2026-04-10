@@ -112,82 +112,101 @@ def register():
 def login():
 
     error = None
+    entered_email = ""
 
     if request.method == "POST":
 
-        email = request.form["email"].strip().lower()
-        password = request.form["password"]
+        entered_email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+
+        # REQUIRED FIELDS
+        if entered_email == "" or password == "":
+            error = "Please fill in all fields."
+            return render_template(
+                "login.html",
+                error=error,
+                entered_email=entered_email
+            )
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
         user = cursor.execute(
             "SELECT * FROM users WHERE email = ?",
-            (email,)
+            (entered_email,)
         ).fetchone()
 
-        if user:
+        # EMAIL NOT REGISTERED
+        if not user:
+            conn.close()
+            error = "Unregistered email."
+            return render_template(
+                "login.html",
+                error=error,
+                entered_email=entered_email
+            )
 
-            # Check if account is locked
-            if user["lockout_until"] is not None:
-                lock_time = datetime.fromisoformat(user["lockout_until"])
+        # CHECK LOCK FOR THIS ACCOUNT ONLY
+        if user["lockout_until"] is not None:
+            lock_time = datetime.fromisoformat(user["lockout_until"])
 
-                if datetime.now() < lock_time:
-                    error = "Account locked. Try again later."
-                    conn.close()
-                    return render_template("login.html", error=error)
-
-            # Check password
-            if check_password_hash(user["password_hash"], password):
-
-                # Reset failed attempts
-                cursor.execute(
-                    "UPDATE users SET failed_attempts = 0, lockout_until = NULL WHERE user_id = ?",
-                    (user["user_id"],)
+            if datetime.now() < lock_time:
+                conn.close()
+                error = "Account temporarily locked for 5 minutes. Please try again later."
+                return render_template(
+                    "login.html",
+                    error=error,
+                    entered_email=entered_email
                 )
 
-                conn.commit()
-                conn.close()
+        # CORRECT PASSWORD
+        if check_password_hash(user["password_hash"], password):
 
-                session["user_id"] = user["user_id"]
-                session["name"] = user["name"]
+            cursor.execute(
+                "UPDATE users SET failed_attempts = 0, lockout_until = NULL WHERE user_id = ?",
+                (user["user_id"],)
+            )
 
-                return redirect(url_for("main.dashboard"))
+            conn.commit()
+            conn.close()
 
-            else:
+            session.clear()
+            session["user_id"] = user["user_id"]
+            session["name"] = user["name"]
 
-                attempts = user["failed_attempts"] + 1
+            flash("Login successful!", "success")
+            return redirect(url_for("main.dashboard"))
 
-                if attempts >= 3:
+        # WRONG PASSWORD FOR A REGISTERED EMAIL
+        attempts = user["failed_attempts"] + 1
 
-                    lock_time = datetime.now() + timedelta(minutes=15)
+        if attempts >= 3:
+            lock_time = datetime.now() + timedelta(minutes=5)
 
-                    cursor.execute(
-                        "UPDATE users SET failed_attempts = ?, lockout_until = ? WHERE user_id = ?",
-                        (attempts, lock_time.isoformat(), user["user_id"])
-                    )
+            cursor.execute(
+                "UPDATE users SET failed_attempts = ?, lockout_until = ? WHERE user_id = ?",
+                (attempts, lock_time.isoformat(), user["user_id"])
+            )
 
-                    error = "Too many failed attempts. Account locked for 15 minutes."
-
-                else:
-
-                    cursor.execute(
-                        "UPDATE users SET failed_attempts = ? WHERE user_id = ?",
-                        (attempts, user["user_id"])
-                    )
-
-                    remaining = 3 - attempts
-                    error = f"Invalid login. {remaining} attempts remaining."
-
-                conn.commit()
+            error = "Too many wrong password attempts. Your account is locked for 5 minutes."
 
         else:
-            error = "Invalid email or password"
+            cursor.execute(
+                "UPDATE users SET failed_attempts = ? WHERE user_id = ?",
+                (attempts, user["user_id"])
+            )
 
+            remaining = 3 - attempts
+            error = f"Incorrect password. You have {remaining} attempt(s) remaining."
+
+        conn.commit()
         conn.close()
 
-    return render_template("login.html", error=error)
-
+    return render_template(
+        "login.html",
+        error=error,
+        entered_email=entered_email
+    )
 # Dashboard route - shows user-specific information after login
 @main.route("/dashboard")
 def dashboard():
@@ -436,10 +455,7 @@ def delete_selected_expenses():
 @main.route("/logout")
 def logout():
 
-    # Remove the user_id from the session
-    session.pop("user_id", None)
-
-    # Redirect user to the home page
+    session.clear()
     return redirect(url_for("main.home"))
 
 @main.route("/update-expense", methods=["POST"])
@@ -524,3 +540,11 @@ def set_budget():
 
     flash("Budget set successfully!", "success")
     return redirect(url_for("main.dashboard") + "#budget")
+
+@main.route("/overview")
+def overview():
+
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    return render_template("overview.html")

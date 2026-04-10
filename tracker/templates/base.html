@@ -31,7 +31,7 @@
                         <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
                     </li>
                     <li>
-                        <a href="#">Overview</a>
+                        <a href="/overview" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
                     </li>
                     <li>
                         <a href="#">Reviews</a>
@@ -94,7 +94,7 @@
                                 <a href="/dashboard">Dashboard</a>
                             </li>
                             <li>
-                                <a href="#">Overview</a>
+                                <a href="/overview" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
                             </li>
                             <li>
                                 <a href="#">Reviews</a>
