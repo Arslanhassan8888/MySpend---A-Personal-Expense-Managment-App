@@ -1,0 +1,332 @@
+/* =========================
+   HOME PAGE
+========================= */
+
+.home-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.home-hero {
+    max-width: 1000px;
+    margin: 10px auto 28px;
+    padding: 42px 20px 30px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.home-hero::before {
+    content: "";
+    position: absolute;
+    left: -120px;
+    top: 90px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.14), transparent 68%);
+    pointer-events: none;
+}
+
+.home-hero::after {
+    content: "";
+    position: absolute;
+    right: -120px;
+    bottom: -50px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.10), transparent 68%);
+    pointer-events: none;
+}
+
+.home-hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.home-title {
+    margin: 0;
+    font-size: 56px;
+    line-height: 1.08;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.03em;
+}
+
+.home-title-accent {
+    color: #7c3aed;
+}
+
+.home-subtitle {
+    max-width: 760px;
+    margin: 20px auto 0;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #4b5563;
+}
+
+.home-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 26px;
+}
+
+.home-primary-button,
+.home-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 210px;
+    padding: 16px 24px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 800;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.home-primary-button {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    color: #ffffff;
+    box-shadow: 0 14px 24px rgba(99, 82, 255, 0.18);
+}
+
+.home-primary-button:hover,
+.home-secondary-button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    box-shadow: 0 14px 24px rgba(99, 82, 255, 0.18);
+    color: #ffffff;
+    filter: brightness(1.02);
+ 
+    
+}
+
+.home-button-arrow {
+    font-size: 18px;
+    line-height: 1;
+}
+
+
+/* =========================
+   QUOTE / API CARD
+========================= */
+
+.home-quote-card {
+    max-width: 760px;
+    margin: 0 auto 42px;
+    padding: 26px 22px 24px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e9ddff;
+    border-radius: 22px;
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.08);
+    backdrop-filter: blur(4px);
+}
+
+.home-quote-mark {
+    margin: 0 0 4px;
+    font-size: 42px;
+    line-height: 1;
+    color: #8b5cf6;
+    font-weight: 800;
+}
+
+.home-quote-text {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #374151;
+    font-style: italic;
+    border: none;
+}
+
+.home-quote-author {
+    margin: 14px 0 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+}
+
+.home-quote-source {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* =========================
+   BOTTOM CTA
+========================= */
+
+.home-cta {
+    max-width: 1020px;
+    margin: 0 auto 40px;
+    padding: 48px 24px;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 26px;
+    background: linear-gradient(135deg, #8b2cf5, #4f46e5);
+    box-shadow: 0 16px 28px rgba(99, 82, 255, 0.18);
+}
+
+.home-cta h2 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.12;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.home-cta p {
+    max-width: 700px;
+    margin: 16px auto 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.96);
+}
+
+.home-cta .home-secondary-button {
+    margin-top: 24px;
+    background: #ffffff;
+    color: #7c3aed;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.14);
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+    .home-hero {
+        padding: 34px 16px 24px;
+        margin-bottom: 24px;
+    }
+
+    .home-title {
+        font-size: 42px;
+    }
+
+    .home-subtitle {
+        font-size: 17px;
+    }
+
+    .home-quote-card {
+        max-width: 90%;
+        margin-bottom: 34px;
+        padding: 22px 18px;
+    }
+
+    .home-quote-text {
+        font-size: 17px;
+    }
+
+    .home-cta {
+        width: 92%;
+        padding: 38px 20px;
+        border-radius: 22px;
+    }
+
+    .home-cta h2 {
+        font-size: 34px;
+    }
+
+    .home-cta p {
+        font-size: 17px;
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+    .home-page {
+        max-width: 100%;
+    }
+
+    .home-hero {
+        padding: 28px 10px 18px;
+        margin-bottom: 18px;
+    }
+
+    .home-title {
+        font-size: 31px;
+    }
+
+    .home-subtitle {
+        margin-top: 14px;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .home-actions {
+        margin-top: 20px;
+    }
+
+    .home-primary-button,
+    .home-secondary-button {
+        width: 100%;
+        min-width: 0;
+        padding: 14px 18px;
+        font-size: 15px;
+        border-radius: 16px;
+    }
+
+    .home-button-arrow {
+        font-size: 16px;
+    }
+
+    .home-quote-card {
+        width: 92%;
+        margin-bottom: 28px;
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+
+    .home-quote-mark {
+        font-size: 34px;
+    }
+
+    .home-quote-text {
+        font-size: 15px;
+    }
+
+    .home-quote-author {
+        font-size: 14px;
+    }
+
+    .home-quote-source {
+        font-size: 12px;
+    }
+
+    .home-cta {
+        width: 92%;
+        margin-bottom: 28px;
+        padding: 28px 16px;
+        border-radius: 20px;
+    }
+
+    .home-cta h2 {
+        font-size: 28px;
+    }
+
+    .home-cta p {
+        font-size: 15px;
+        margin-top: 12px;
+    }
+
+    .home-cta .home-secondary-button {
+        margin-top: 18px;
+    }
+}

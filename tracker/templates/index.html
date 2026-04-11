@@ -2,11 +2,74 @@
 
 {% block title %}Home{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
 {% block content %}
+<section class="home-page">
 
-<section>
-    <h2>Welcome</h2>
-    <p>This is your expense tracker</p>
+    <!-- HERO -->
+    <section class="home-hero" aria-labelledby="home-hero-title">
+        <section class="home-hero-inner">
+
+            <h1 id="home-hero-title" class="home-title">
+                Your Money.
+                <span class="home-title-accent">Your Way</span>
+            </h1>
+
+            <p class="home-subtitle">
+                Experience the easiest way to track expenses, set budgets, and reach your
+                financial goals. Join users building smarter spending habits every day.
+            </p>
+
+            <section class="home-actions">
+                <a href="/dashboard" class="home-primary-button">
+                    Start Tracking Free
+                    <span class="home-button-arrow"></span>
+                </a>
+            </section>
+
+        </section>
+    </section>
+
+    <!-- QUOTE / API SECTION -->
+    <article class="home-quote-card" aria-labelledby="home-quote-title">
+        <p class="home-quote-mark">”</p>
+
+        <h2 id="home-quote-title" class="sr-only">
+            Motivational finance quote
+        </h2>
+
+        <blockquote class="home-quote-text">
+            "{{ quote_text or 'A budget is telling your money where to go instead of wondering where it went.' }}"
+        </blockquote>
+
+        <p class="home-quote-author">
+            — {{ quote_author or 'Dave Ramsey' }}
+        </p>
+
+        <small class="home-quote-source">
+            Source:
+            {{ quote_source or 'ZenQuotes' }}
+        </small>
+    </article>
+
+    <!-- BOTTOM CTA -->
+    <section class="home-cta" aria-labelledby="home-cta-title">
+        <h2 id="home-cta-title">Ready to Take Control?</h2>
+
+        <p>
+            Join users who are already managing their finances smarter with simple
+            tracking, better budgeting, and clearer financial habits.
+        </p>
+
+        <a href="/dashboard" class="home-secondary-button">
+            Get Started Now
+            <span class="home-button-arrow"></span>
+        </a>
+    </section>
+
 </section>
-
 {% endblock %}
