@@ -157,3 +157,7 @@ Previously, all functionality was inside a single large HTML file, which made it
 During this process, I ensured that all existing functionality remained unchanged, including routes, form actions, CSRF protection, and JavaScript behaviour.
 
 This improvement makes the code easier to read, organise, and extend in the future.
+
+## 12/04/2026 Home Page API Integration (ZenQuotes)
+
+Implemented a dynamic quote system using the ZenQuotes API to display a random motivational message on each visit to the homepage. Created a helper function to handle the API request and added a fallback mechanism to ensure the page always shows a quote if the API fails. Integrated the quote data into the home route and passed it to the template for rendering. Improved reliability by using default values when API fields are missing. Updated the UI to display the quote, author, and source, and enhanced the visual design with a yellow glow border around the quote card.

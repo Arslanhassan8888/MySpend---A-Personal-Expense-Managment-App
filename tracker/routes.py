@@ -30,6 +30,16 @@ from  flask import session
 from datetime import datetime, timedelta
 from flask import flash  # Import flash for displaying messages to users (e.g., success or error messages)
 
+# jason used to convert API resonse to a Python dictionary
+import json
+# used to call external APIs, Requests is a popular library for making HTTP requests in Python. It simplifies the process of sending HTTP requests and handling responses.
+from urllib.request import urlopen, Request
+# used to handle URL errors when calling external APIs, such as network issues or invalid URLs. URLError is raised when there is a problem with the network connection or the URL is invalid, 
+# while HTTPError is raised when the server returns an HTTP error status code (e.g., 404 Not Found, 500 Internal Server Error).
+from urllib.error import URLError, HTTPError
+#we use it for fallback qoutes if API is not working, it allows us to select a random quote from a predefined list of quotes.
+import random
+
 # "main" is the name of this Blueprint.
 # __name__ helps Flask locate resources correctly.
 main = Blueprint("main", __name__)
@@ -47,13 +57,20 @@ def home():
     
     user_id = session.get("user_id")  # Get the user_id from the session, if it exists.
     
+    # Get a random motivational quote (API or fallback)
+    quote = get_home_quote()
+    
     # Render the index.html template when the root URL is accessed.
-    return render_template("index.html", user_id=user_id)  # Pass user_id to the template for conditional display.
-
-# Register route
-# This route handles BOTH:
-# - displaying the registration page
-# - processing the registration form
+    # Pass the quote and user_id to the template for dynamic content rendering.
+    # send quote text, author, and source to the template to display on the homepage. Also send user_id to conditionally show different content for logged-in users vs guests.
+    return render_template(
+        "index.html",
+        user_id=user_id,  # Pass user_id to the template for conditional display.
+        quote_text=quote["text"],
+        quote_author=quote["author"],
+        quote_source=quote["source"]
+    )
+    
 @main.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -645,3 +662,45 @@ def overview():
         "overview.html",
         name=user["name"]
     )
+    
+# This function calls an external API to get a random quote for the homepage. If the API call fails for any reason (network issues, API downtime, etc.), 
+# it falls back to a predefined list of quotes to ensure that the homepage always has a quote to display. 
+# The function returns a dictionary containing the quote text, author, and source (either "ZenQuotes" for API or "MySpend" for fallback).
+#zenquotes.io is a free API that provides random inspirational quotes. But since it's a free service, it can sometimes be unreliable or slow. Also has no key and limited requests per hour. So we need a fallback mechanism to ensure that our app can still provide value to users even when the API is not working.
+
+def get_home_quote():
+    url = "https://zenquotes.io/api/random"
+
+    fallback_quotes = [
+        ("A budget is telling your money where to go instead of wondering where it went.", "Dave Ramsey"),
+        ("Do not save what is left after spending, but spend what is left after saving.", "Warren Buffett"),
+        ("Small daily money habits create long-term financial success.", "Arslan Hassan"),
+        
+    ]
+
+    try:
+        request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        response = urlopen(request, timeout=5)
+
+        data = json.loads(response.read().decode("utf-8"))
+
+        if isinstance(data, list) and len(data) > 0:
+            quote = data[0]
+
+            return {
+                "text": quote.get("q", "Stay consistent with your money habits!"),
+                "author": quote.get("a", "Arslan Hassan"),
+                "source": "ZenQuotes"
+            }
+
+    except (URLError, HTTPError, TimeoutError, json.JSONDecodeError):
+        pass
+
+    # fallback if API fails
+    text, author = random.choice(fallback_quotes)
+
+    return {
+        "text": text,
+        "author": author,
+        "source": "MySpend"
+    }

@@ -127,7 +127,10 @@
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid #e9ddff;
     border-radius: 22px;
-    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.08);
+     box-shadow:
+        0 0 0 2px rgba(255, 221, 87, 0.15),
+        0 10px 24px rgba(124, 58, 237, 0.08),
+        0 0 25px rgba(255, 221, 87, 0.25);
     backdrop-filter: blur(4px);
 }
 
@@ -141,7 +144,7 @@
 
 .home-quote-text {
     margin: 0;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.65;
     color: #374151;
     font-style: italic;
