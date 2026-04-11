@@ -139,7 +139,7 @@ def login():
         # EMAIL NOT REGISTERED
         if not user:
             conn.close()
-            error = "Unregistered email."
+            error = "Invalid email or password."
             return render_template(
                 "login.html",
                 error=error,
@@ -152,7 +152,7 @@ def login():
 
             if datetime.now() < lock_time:
                 conn.close()
-                error = "Account temporarily locked for 5 minutes. Please try again later."
+                error =  "Too many failed login attempts. Please try again in 5 minutes."
                 return render_template(
                     "login.html",
                     error=error,
@@ -188,7 +188,7 @@ def login():
                 (attempts, lock_time.isoformat(), user["user_id"])
             )
 
-            error = "Too many wrong password attempts. Your account is locked for 5 minutes."
+            error = "Too many failed login attempts. Please try again in 5 minutes."
 
         else:
             cursor.execute(
@@ -456,7 +456,8 @@ def delete_selected_expenses():
 def logout():
 
     session.clear()
-    return redirect(url_for("main.home"))
+    flash("You have been logged out successfully.", "success")
+    return redirect(url_for("main.login"))
 
 @main.route("/update-expense", methods=["POST"])
 def update_expense():
@@ -547,4 +548,17 @@ def overview():
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
-    return render_template("overview.html")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    user = cursor.execute(
+        "SELECT name FROM users WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template(
+        "overview.html",
+        name=user["name"]
+    )

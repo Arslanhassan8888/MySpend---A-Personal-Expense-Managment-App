@@ -178,10 +178,19 @@ document.addEventListener("DOMContentLoaded", function () {
             clearFeedback(sortFeedback);
 
             const selectedSort = sortForm.querySelector('input[name="sort"]:checked');
+            const selectedCategory = document.getElementById("sort_category_id").value;
+
+            const hasSortOption = selectedSort !== null;
+            const hasCategory = selectedCategory && selectedCategory.value.trim() !== "";
 
             if (!selectedSort) {
                 event.preventDefault();
-                showFeedback(sortFeedback, "error", "Please choose one sort option before applying.");
+                showFeedback(
+                    sortFeedback, 
+                    "error",
+                     "Please choose a sort option or select a category before applying."
+                );
+
                 return;
             }
         });
@@ -386,3 +395,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+/* ================= PASSWORD TOGGLE in LOGIN FORM ================== */
+
+const toggleBtn = document.getElementById("toggle-password");
+const passwordInput = document.getElementById("password");
+
+if (toggleBtn && passwordInput) {
+    toggleBtn.addEventListener("click", function () {
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleBtn.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            toggleBtn.textContent = "Show";
+        }
+
+    });
+}

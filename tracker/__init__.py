@@ -14,6 +14,7 @@ Using the Application Factory pattern improves:
 """
 
 from flask import Flask
+from flask_wtf import CSRFProtect
 
 # Import the get_db_connection function from models.py.
 # This allows us to test the database connection when the app starts.
@@ -32,6 +33,12 @@ def create_app():
     app = Flask(__name__)
     
     app.secret_key = "ciao_bello"  # Set a secret key for session management and security features.
+    
+    app.config["SESSION_COOKIE_HTTPONLY"] = True  # Mitigate XSS attacks by making cookies inaccessible to JavaScript.
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"  # Mitigate CSRF attacks by restricting cross-site cookie sending.
+    app.config["SESSION_COOKIE_SECURE"] = False  # Set to True in production to ensure cookies are only sent over HTTPS.
+    
+    CSRFProtect(app)  # Enable CSRF protection for all forms in the application.
     
     
     # Import the Blueprint named "main" from routes.py.

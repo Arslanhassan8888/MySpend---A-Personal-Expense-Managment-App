@@ -1,52 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | MySpend</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<header>
-    <nav>
-        <a href="/">Home Page</a>
-        <a href="/register">Create Account</a>
-    </nav>
-    <h1>MySpend</h1>
-</header>
+{% block title %}Login{% endblock %}
 
-<main>
-    <section>
-        <h2>Login</h2>
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
 
-        <!-- Show error message -->
+{% block content %}
+<section class="login-shell">
+    <article class="login-form-card" aria-labelledby="login-form-title">
+        <section class="login-form-header">
+            <h1 id="login-form-title">Welcome Back!</h1>
+            <p>Login to access your financial dashboard</p>
+        </section>
         {% if error %}
-        <p style="color:red;" role="alert">{{ error }}</p>
+        <p class="login-message login-message-error" role="alert">{{ error }}</p>
         {% endif %}
 
-        <form method="POST">
-            <fieldset>
-                <legend>Login</legend>
-
-                <div>
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-
-                <div>
-                    <label>Password</label>
-                    <input type="password" name="password" required>
-                </div>
-
-                <div>
-                    <button type="submit">Login</button>
-                </div>
-
-            </fieldset>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == "success" %}
+        <p class="login-message login-message-success" role="status">{{ message }}</p>
+        {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form
+            method="POST"
+            action="/login"
+            class="login-form"
+            novalidate
+        >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <section class="login-field">
+                <label for="email">Email Address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="Enter your email"
+                    value="{{ entered_email or '' }}"
+                >
+            </section>
+            <section class="login-field">
+                <label for="password">Password</label>
+                <section class="login-password-wrap">
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                    >
+                    <button type="button" id="toggle-password">
+                        Show
+                    </button>
+                </section>
+            </section>
+            <button type="submit" class="login-submit">Login to Dashboard</button>
         </form>
-
-    </section>
-</main>
-
-</body>
-</html>
+        <section class="login-register">
+            <p>
+                Don't have an account?
+                <a href="/register">Register here</a>
+            </p>
+        </section>
+        <section class="login-terms">
+            <p>
+                By continuing, you agree to our Terms of Service and Privacy Policy
+            </p>
+        </section>
+    </article>
+</section>
+{% endblock %}

@@ -11,14 +11,14 @@ This approach follows separation of concerns principles and aligns with Flask be
 
 The structure was chosen to ensure scalability, maintainability, and professional development standards.
 
-## 24/03/2026 – Environment Setup
+## 24/02/2026 – Environment Setup
 I installed the core backend dependencies for the MySpend project.
 
 Flask was installed as the main web framework, and Flask-SQLAlchemy was added to manage database interactions using an ORM approach.
 
 All dependencies were documented in requirements.txt to ensure reproducibility and professional project structure.
 
-## 27/03/2026 – Database Approach Revision
+## 27/02/2026 – Database Approach Revision
 After reviewing project complexity and personal skill level, I decided to simplify the backend by removing SQLAlchemy and implementing direct SQLite queries using Python’s sqlite3 module.
 
 This decision was made to improve clarity, maintain control over database logic, and strengthen foundational SQL understanding. The project dependencies were updated accordingly, and the repository was synchronised with GitHub.
@@ -121,3 +121,25 @@ Encountered layout breaking issues on smaller screens due to grid overflow and i
 
 ## 06/04/2026 Budget Chart Integration
 I added a doughnut chart using Chart.js to show monthly spending progress alongside the budget section. I adjusted the styling and layout to match the dashboard design and ensured it updates correctly after any expense or budget change.
+
+## 08/04/2026 Login Page Redesign and UX Improvement
+
+I redesigned the login page with a responsive layout and accessible HTML structure, improving clarity and overall user experience. I implemented clear feedback messages for login errors and successful actions to guide the user more effectively. I also added a show/hide password feature using JavaScript to improve usability during login
+
+## 09/04/2026 Session Protection
+"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = False
+"
+HTTPONLY helps stop JavaScript reading the session cookie
+SAMESITE="Lax" helps reduce CSRF risk
+SECURE=False is correct for local development using normal HTTP
+
+when in future we will deploy in HTTPS we should change to TRUE
+
+## 10/04/2026 – CSRF Protection Implementation
+
+I implemented CSRF protection by installing Flask-WTF and enabling CSRFProtect in the application factory to secure all POST requests. I then updated all active forms to include a hidden CSRF token, ensuring each request is validated before processing.
+
+This improves security by preventing malicious external requests from submitting forms on behalf of authenticated users, protecting sensitive actions such as login, expense management, and budget updates.

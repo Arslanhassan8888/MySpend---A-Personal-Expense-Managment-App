@@ -48,6 +48,7 @@
             <h2>Monthly Budget Overview</h2>
         </section>
         <form method="POST" action="/set-budget#budget" class="budget-input">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <label for="budget_amount">Set Monthly Budget</label>
             {% set budget_messages = [] %}
             {% for category, message in flashed_messages %}
@@ -164,6 +165,7 @@
         <h2>Add New Expense</h2>
     </section>
     <form method="POST" action="/add-expense#add-expense" class="expense-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <!-- FLASH MESSAGE -->
         {% set add_expense_messages = [] %}
         {% for category, message in flashed_messages %}
@@ -280,6 +282,8 @@
             class="history-form"
             onsubmit="return confirmDelete()"
         >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <table class="history-table">
                 <thead>
                     <tr>
@@ -378,6 +382,7 @@
             action="/update-expense#expenses"
             novalidate
         >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" id="edit_id" name="expense_id">
             <section class="modal-field">
                 <label for="edit_amount">Amount</label>
