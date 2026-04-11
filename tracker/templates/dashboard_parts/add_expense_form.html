@@ -1,0 +1,70 @@
+<section id="add-expense" class="expense-card">
+    <section class="expense-header">
+        <h2>Add New Expense</h2>
+    </section>
+
+    <form method="POST" action="/add-expense#add-expense" class="expense-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        {% set add_expense_messages = [] %}
+        {% for category, message in flashed_messages %}
+            {% if "expense added" in message|lower or "amount must" in message|lower or "invalid amount" in message|lower %}
+                {% set _ = add_expense_messages.append((category, message)) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if add_expense_messages %}
+        <ul class="form-messages expense-form-messages">
+            {% for category, message in add_expense_messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <section>
+            <label for="amount">Amount (£)</label>
+            <input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                required
+            >
+        </section>
+
+        <section>
+            <label for="date">Date</label>
+            <input
+                id="date"
+                name="date"
+                type="date"
+                required
+            >
+        </section>
+
+        <section>
+            <label for="category">Category</label>
+            <select id="category" name="category_id" required>
+                {% for c in categories %}
+                <option value="{{ c.category_id }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </section>
+
+        <section>
+            <label for="description">Description</label>
+            <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Optional note"
+            >
+        </section>
+
+        <section class="expense-button">
+            <button type="submit">Add Expense</button>
+        </section>
+    </form>
+</section>

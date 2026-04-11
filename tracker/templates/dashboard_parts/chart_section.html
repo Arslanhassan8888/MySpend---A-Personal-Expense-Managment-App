@@ -1,0 +1,46 @@
+<aside
+    class="budget-chart-card"
+    aria-labelledby="budget-chart-title"
+    data-used="{{ monthly_total }}"
+    data-left="{{ remaining if remaining > 0 else 0 }}"
+    data-progress="{{ progress|round(1) }}"
+>
+    <section class="budget-chart-heading">
+        <h2 id="budget-chart-title">Monthly Spending Progress</h2>
+        <p class="budget-chart-subtitle">{{ current_month }}</p>
+    </section>
+
+    <figure class="budget-chart-figure">
+        <canvas id="budgetSplitChart" aria-label="Monthly budget chart showing used amount and remaining amount"></canvas>
+        <figcaption class="budget-chart-center" aria-hidden="true">
+            <strong>{{ progress|round(1) }}%</strong>
+            <span>Used</span>
+        </figcaption>
+    </figure>
+
+    <table class="budget-chart-table">
+        <caption class="sr-only">Budget progress summary</caption>
+        <thead>
+            <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <span class="chart-dot chart-dot-used"></span>
+                    Used this month
+                </th>
+                <td>£{{ monthly_total }}</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <span class="chart-dot chart-dot-left"></span>
+                    Remaining budget
+                </th>
+                <td>£{{ remaining if remaining > 0 else 0 }}</td>
+            </tr>
+        </tbody>
+    </table>
+</aside>

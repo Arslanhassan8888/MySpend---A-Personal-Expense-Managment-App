@@ -1,0 +1,77 @@
+<section
+    id="sortModal"
+    class="history-modal"
+    hidden
+    aria-labelledby="sort-title"
+>
+    <section class="history-modal-card">
+        <h3 id="sort-title">Sort Expenses</h3>
+        <p id="sort-feedback" class="modal-feedback" hidden></p>
+
+        <form
+            id="sortForm"
+            method="GET"
+            action="/dashboard#expenses"
+            novalidate
+        >
+            <section class="modal-field">
+                <p class="modal-label">Choose one sort option</p>
+
+                <label for="sort_date_desc" class="radio-option">
+                    <input
+                        id="sort_date_desc"
+                        type="radio"
+                        name="sort"
+                        value="date_desc"
+                    >
+                    Newest to Oldest
+                </label>
+
+                <label for="sort_date_asc" class="radio-option">
+                    <input
+                        id="sort_date_asc"
+                        type="radio"
+                        name="sort"
+                        value="date_asc"
+                    >
+                    Oldest to Newest
+                </label>
+
+                <label for="sort_amount_asc" class="radio-option">
+                    <input
+                        id="sort_amount_asc"
+                        type="radio"
+                        name="sort"
+                        value="amount_asc"
+                    >
+                    Low to High Price
+                </label>
+
+                <label for="sort_amount_desc" class="radio-option">
+                    <input
+                        id="sort_amount_desc"
+                        type="radio"
+                        name="sort"
+                        value="amount_desc"
+                    >
+                    High to Low Price
+                </label>
+            </section>
+
+            <section class="modal-field">
+                <label for="sort_category_id">Category</label>
+                <select id="sort_category_id" name="category_id">
+                    <option value="">All</option>
+                    {% for c in categories %}
+                    <option value="{{ c.category_id }}">{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </section>
+
+            <section class="modal-actions">
+                <button type="submit" class="history-primary-button">Apply</button>
+                <button type="button" class="history-secondary-button" onclick="closeSortModal()">Cancel</button>
+            </section>
+        </form>
+    </section>
+</section>

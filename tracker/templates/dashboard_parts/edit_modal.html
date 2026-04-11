@@ -1,0 +1,70 @@
+<section
+    id="editModal"
+    class="history-modal"
+    hidden
+    aria-labelledby="edit-title"
+>
+    <section class="history-modal-card">
+        <h3 id="edit-title">Edit Expense</h3>
+        <p id="edit-feedback" class="modal-feedback" hidden></p>
+
+        <form
+            id="editForm"
+            method="POST"
+            action="/update-expense#expenses"
+            novalidate
+        >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" id="edit_id" name="expense_id">
+
+            <section class="modal-field">
+                <label for="edit_amount">Amount</label>
+                <input
+                    id="edit_amount"
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    name="amount"
+                    required
+                    aria-describedby="edit-amount-hint"
+                >
+                <p id="edit-amount-hint" class="field-hint">Enter a positive number greater than zero.</p>
+            </section>
+
+            <section class="modal-field">
+                <label for="edit_category">Category</label>
+                <select id="edit_category" name="category_id" required>
+                    {% for c in categories %}
+                    <option value="{{ c.category_id }}">{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </section>
+
+            <section class="modal-field">
+                <label for="edit_date">Date</label>
+                <input
+                    id="edit_date"
+                    type="date"
+                    name="date"
+                    required
+                >
+            </section>
+
+            <section class="modal-field">
+                <label for="edit_description">Description</label>
+                <input
+                    id="edit_description"
+                    type="text"
+                    name="description"
+                    aria-describedby="edit-description-hint"
+                >
+                <p id="edit-description-hint" class="field-hint">Optional note for this expense.</p>
+            </section>
+
+            <section class="modal-actions">
+                <button type="submit" class="history-primary-button">Save Changes</button>
+                <button type="button" class="history-secondary-button" onclick="closeModal()">Cancel</button>
+            </section>
+        </form>
+    </section>
+</section>

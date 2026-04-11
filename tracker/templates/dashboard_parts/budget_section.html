@@ -1,0 +1,76 @@
+<article class="budget-card">
+    <section class="budget-title">
+        <h2>Monthly Budget Overview</h2>
+    </section>
+    <form method="POST" action="/set-budget#budget" class="budget-input">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="budget_amount">Set Monthly Budget</label>
+
+        {% set budget_messages = [] %}
+        {% for category, message in flashed_messages %}
+            {% if "budget" in message|lower %}
+                {% set _ = budget_messages.append((category, message)) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if budget_messages %}
+        <ul class="form-messages budget-form-messages">
+            {% for category, message in budget_messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <input
+            id="budget_amount"
+            type="number"
+            name="budget_amount"
+            value="0.00"
+            step="0.01"
+            min="0"
+        >
+        <button type="submit">Save Budget</button>
+    </form>
+
+    <section class="budget-box">
+        <section class="budget-values">
+            <section class="budget-limit">
+                <p>Budget Limit</p>
+                <strong>£{{ budget_amount }}</strong>
+            </section>
+            <section class="remaining">
+                <p>Remaining Balance</p>
+                <strong class="
+                    {% if progress >= 100 %}danger
+                    {% elif progress >= 80 %}warning
+                    {% else %}success
+                    {% endif %}
+                ">
+                    £{{ remaining }}
+                </strong>
+            </section>
+        </section>
+
+        <section class="progress-wrapper">
+            <progress value="{{ progress }}" max="100" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
+            <span class="progress-label">
+                {{ progress|round(1) }}% Used
+            </span>
+        </section>
+
+        <section class="budget-status-row">
+            <p class="budget-status {% if progress >= 100 %}danger{% elif progress >= 80 %}warning{% else %}success{% endif %}">
+                {% if progress >= 100 %}
+                    Budget exceeded
+                {% elif progress >= 80 %}
+                    Warning: limit nearly reached
+                {% else %}
+                    Budget is under control
+                {% endif %}
+            </p>
+            <p class="transactions">
+                {{ expenses|length }} transactions
+            </p>
+        </section>
+    </section>
+</article>

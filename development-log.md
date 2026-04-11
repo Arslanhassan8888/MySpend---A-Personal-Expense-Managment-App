@@ -147,3 +147,13 @@ This improves security by preventing malicious external requests from submitting
 ## 11/04/2026 Registration Security and UX Improvement
 
 I completed the registration system by applying stronger validation rules, including password confirmation, email formatting, duplicate email checks, and secure password requirements. I also aligned the register page with the login page design and added a delayed success message that redirects the user to the login page after five seconds, improving both usability and consistency.
+
+## 11/04/2026 – Dashboard Modularisation
+
+I refactored the dashboard page to improve structure and maintainability by splitting it into smaller template components.
+
+Previously, all functionality was inside a single large HTML file, which made it difficult to manage and update. I extracted key sections such as the budget, chart, add expense form, expense history, and modals into separate template files using Jinja includes.
+
+During this process, I ensured that all existing functionality remained unchanged, including routes, form actions, CSRF protection, and JavaScript behaviour.
+
+This improvement makes the code easier to read, organise, and extend in the future.

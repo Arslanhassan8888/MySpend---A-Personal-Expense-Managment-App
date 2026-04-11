@@ -420,3 +420,19 @@ function setupPasswordToggle(buttonId, inputId) {
 
 setupPasswordToggle("toggle-password", "password");
 setupPasswordToggle("toggle-confirm-password", "confirm_password");
+
+/* ================= REGISTER SUCCESS REDIRECT ================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const registerSuccessMessage = document.getElementById("register-success-message");
+
+    if (!registerSuccessMessage) {
+        return;
+    }
+
+    const redirectUrl = registerSuccessMessage.dataset.redirectUrl;
+
+    setTimeout(function () {
+        window.location.href = redirectUrl;
+    }, 5000);
+});
