@@ -1,68 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register | MySpend</title>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <a href="/">Main menu</a>
-                <a href="/login">Login</a>
-            </nav>
-            <h1>MySpend</h1>
-            <p>Create an account</p>
-        </header>
-        <main>
-            <section>
-                <h2>Register</h2>
-                <!-- Show error message if one exists 
-                jinja2  template -->
-                {% if error %}
-                <p role="alert" style="color: red;">{{ error }}</p>
-                {% endif %}
-                <!-- Registration form -->
-                <form method="POST">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    
-                    <fieldset>
-                        <legend>Create Account</legend>
-                        <!-- Name field -->
-                        <div>
-                            <label>Name</label>
-                            <input type="text" name="name" required>
-                        </div>
-                        <!-- Email field -->
-                        <div>
-                            <label for="email">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                required
-                                autocomplete="email"
-                                placeholder="example@email.com"
-                            >
-                        </div>
-                        <!-- Password field -->
-                        <div>
-                            <label for="password">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                required
-                                placeholder="Create a password"
-                            >
-                        </div>
-                        <!-- Submit button -->
-                        <div>
-                            <button type="submit"> Register</button>
-                        </div>
-                    </fieldset>
-                </form>
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="login-shell">
+    <article class="login-form-card" aria-labelledby="register-form-title">
+        <section class="login-form-header">
+            <h1 id="register-form-title">Create Your Account</h1>
+            <p>Sign up now and start managing your finances like a pro</p>
+        </section>
+
+        {% if error %}
+        <p class="login-message login-message-error" role="alert">{{ error }}</p>
+        {% endif %}
+
+        {% if success %}
+        <p class="login-message login-message-success" role="status">{{ success }}</p>
+        {% endif %}
+
+        <form
+            method="POST"
+            action="/register"
+            class="login-form"
+            novalidate
+        >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <section class="login-field">
+                <label for="name">Full Name</label>
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    autocomplete="name"
+                    placeholder="Enter your full name"
+                    value="{{ entered_name or '' }}"
+                >
             </section>
-        </main>
-    </body>
-</html>
+
+            <section class="login-field">
+                <label for="email">Email Address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="Enter your email"
+                    value="{{ entered_email or '' }}"
+                >
+            </section>
+
+            <section class="login-field">
+                <label for="password">Password</label>
+                <section class="login-password-wrap">
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        autocomplete="new-password"
+                        placeholder="Create a password"
+                    >
+                    <button type="button" id="toggle-password">
+                        Show
+                    </button>
+                </section>
+                <p class="register-hint">
+                    Use at least 12 characters, including one number and one special character.
+                </p>
+            </section>
+
+            <section class="login-field">
+                <label for="confirm_password">Confirm Password</label>
+                <section class="login-password-wrap">
+                    <input
+                        id="confirm_password"
+                        name="confirm_password"
+                        type="password"
+                        required
+                        autocomplete="new-password"
+                        placeholder="Confirm your password"
+                    >
+                    <button type="button" id="toggle-confirm-password">
+                        Show
+                    </button>
+                </section>
+            </section>
+
+            <section class="register-check-row">
+                <label class="register-check" for="agree_terms">
+                    <input id="agree_terms" name="agree_terms" type="checkbox" required>
+                    <span>
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </span>
+                </label>
+            </section>
+
+            <button type="submit" class="login-submit">Create Account</button>
+        </form>
+
+        <section class="login-register">
+            <p>
+                Already have an account?
+                <a href="/login">Login here</a>
+            </p>
+        </section>
+    </article>
+</section>
+
+{% if success %}
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ url_for('main.login') }}";
+    }, 5000);
+</script>
+{% endif %}
+
+{% endblock %}

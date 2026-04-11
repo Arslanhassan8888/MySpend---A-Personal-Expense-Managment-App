@@ -396,21 +396,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-/* ================= PASSWORD TOGGLE in LOGIN FORM ================== */
+/* ================= PASSWORD TOGGLE in LOGIN  and REGISTER FORM ================== */
 
-const toggleBtn = document.getElementById("toggle-password");
-const passwordInput = document.getElementById("password");
 
-if (toggleBtn && passwordInput) {
-    toggleBtn.addEventListener("click", function () {
+function setupPasswordToggle(buttonId, inputId) {
+    const button = document.getElementById(buttonId);
+    const input = document.getElementById(inputId);
 
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            toggleBtn.textContent = "Hide";
+    if (!button || !input) {
+        return;
+    }
+
+    button.addEventListener("click", function () {
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "Hide";
         } else {
-            passwordInput.type = "password";
-            toggleBtn.textContent = "Show";
+            input.type = "password";
+            button.textContent = "Show";
         }
-
     });
 }
+
+setupPasswordToggle("toggle-password", "password");
+setupPasswordToggle("toggle-confirm-password", "confirm_password");

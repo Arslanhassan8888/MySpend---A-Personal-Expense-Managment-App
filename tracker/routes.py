@@ -56,55 +56,138 @@ def home():
 # - processing the registration form
 @main.route("/register", methods=["GET", "POST"])
 def register():
-    
-    error = None  # Initialize error variable to None
-    # If the user submitted the form
+
+    error = None
+    entered_name = ""
+    entered_email = ""
+
     if request.method == "POST":
 
-        # Get form data from the registration form
-        name = request.form["name"].strip()  # Remove leading/trailing whitespace from name input
-        email = request.form["email"].strip().lower()  # Remove leading/trailing whitespace and convert to lowercase
-        password = request.form["password"]
+        entered_name = request.form.get("name", "").strip()
+        entered_email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+        agree_terms = request.form.get("agree_terms")
 
-        # Connect to database
+        # REQUIRED FIELDS
+        if entered_name == "" or entered_email == "" or password == "" or confirm_password == "":
+            error = "Please fill in all fields."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
+        # TERMS CHECKBOX
+        if not agree_terms:
+            error = "You must agree to the Terms of Service and Privacy Policy."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
+        # SIMPLE EMAIL VALIDATION
+        if "@" not in entered_email or "." not in entered_email:
+            error = "Please enter a valid email address."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
-       # Check if the email already exists "? mean parameterized query to prevent SQL injection" means that the value of email will be safely inserted into the SQL query,
-       # preventing malicious input from breaking the query or accessing unauthorized data. The actual value of email is passed as a tuple (email,) to the execute method, 
-       # which ensures that it is treated as a parameter rather than part of the SQL command.
+        # CHECK IF EMAIL ALREADY EXISTS
         existing_user = cursor.execute(
             "SELECT * FROM users WHERE email = ?",
-            (email,) # Note the comma to make it a tuple
-        ).fetchone() # fetchone() retrieves the first row of the result, or None if there are no results.
+            (entered_email,)
+        ).fetchone()
 
-        # If email exists, show error message
         if existing_user:
-            conn.close()  # Close the database connection
-            error = "Email already registered"
-            return render_template("register.html", error=error)   # Render the registration page with the error message    
-
-        else:
-            # Hash the password
-            password_hash = generate_password_hash(password)
-
-            # Insert new user into database
-            cursor.execute(
-                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
-                (name, email, password_hash)
+            conn.close()
+            error = "Email already registered."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
             )
 
-        # Save changes
-        conn.commit()
+        # PASSWORD MATCH
+        if password != confirm_password:
+            conn.close()
+            error = "Passwords do not match."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
 
-        # Close connection
+        # PASSWORD RULES
+        has_number = any(char.isdigit() for char in password)
+        has_special = any(not char.isalnum() for char in password)
+
+        if len(password) < 12:
+            conn.close()
+            error = "Password must be at least 12 characters long."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
+        if not has_number:
+            conn.close()
+            error = "Password must contain at least one number."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
+        if not has_special:
+            conn.close()
+            error = "Password must contain at least one special character."
+            return render_template(
+                "register.html",
+                error=error,
+                entered_name=entered_name,
+                entered_email=entered_email
+            )
+
+        password_hash = generate_password_hash(password)
+
+        cursor.execute(
+            "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+            (entered_name, entered_email, password_hash)
+        )
+
+        conn.commit()
         conn.close()
 
-       # After successful registration, redirect to a success page or login page
-        return render_template("register_success.html")
+        success = "Registration completed successfully. Redirecting to login page..."
 
-    # If user simply opened /register page
-    return render_template("register.html", error=error)
+        return render_template(
+            "register.html",
+            success=success,
+            entered_name="",
+            entered_email=""
+        )
+
+    return render_template(
+        "register.html",
+        error=error,
+        entered_name=entered_name,
+        entered_email=entered_email
+    )
 
 # Login route handles both:
 # - displaying the login page

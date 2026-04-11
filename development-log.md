@@ -143,3 +143,7 @@ when in future we will deploy in HTTPS we should change to TRUE
 I implemented CSRF protection by installing Flask-WTF and enabling CSRFProtect in the application factory to secure all POST requests. I then updated all active forms to include a hidden CSRF token, ensuring each request is validated before processing.
 
 This improves security by preventing malicious external requests from submitting forms on behalf of authenticated users, protecting sensitive actions such as login, expense management, and budget updates.
+
+## 11/04/2026 Registration Security and UX Improvement
+
+I completed the registration system by applying stronger validation rules, including password confirmation, email formatting, duplicate email checks, and secure password requirements. I also aligned the register page with the login page design and added a delayed success message that redirects the user to the login page after five seconds, improving both usability and consistency.
