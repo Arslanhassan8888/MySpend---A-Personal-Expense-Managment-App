@@ -161,3 +161,11 @@ This improvement makes the code easier to read, organise, and extend in the futu
 ## 12/04/2026 Home Page API Integration (ZenQuotes)
 
 Implemented a dynamic quote system using the ZenQuotes API to display a random motivational message on each visit to the homepage. Created a helper function to handle the API request and added a fallback mechanism to ensure the page always shows a quote if the API fails. Integrated the quote data into the home route and passed it to the template for rendering. Improved reliability by using default values when API fields are missing. Updated the UI to display the quote, author, and source, and enhanced the visual design with a yellow glow border around the quote card.
+
+## 13/04/2026 – Overview Charts Implementation
+
+I implemented dynamic overview charts by extending the /overview route and preparing separate label and value lists for daily, weekly, monthly, and category-based spending data. This required several new SQL aggregation techniques including SUM, BETWEEN, strftime, GROUP BY, COALESCE, and LEFT JOIN to calculate totals correctly and include all categories where needed.
+
+On the frontend, I passed the chart data from Flask into HTML using Jinja tojson inside custom data-* attributes on each canvas. In JavaScript, I used DOMContentLoaded, getElementById, getAttribute, and JSON.parse to retrieve and convert the data before rendering the charts with Chart.js.
+
+I also added chart-specific configuration such as legends, tooltip formatting, axis titles, responsive behaviour, and custom colours. For the category pie chart, I implemented additional JavaScript logic using reduce() and a custom Chart.js plugin to calculate and display percentage labels directly on the chart.

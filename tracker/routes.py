@@ -693,14 +693,194 @@ def overview():
         daily_labels.append(day_name)
         # Convert the result to a float and append it to daily_values. This ensures that the values are in a consistent format for chart rendering, even if the database returns them as integers or None (which we already handled by setting it to 0).
         daily_values.append(float(result))
+        
+    
+    # WEEKLY CHART DATA
+    # -----------------------------
+       # -----------------------------
+    # WEEKLY CHART DATA
+    # -----------------------------
+    # This section prepares the weekly spending chart data using the same simple
+    # Method A structure as the daily chart. We create two separate lists:
+    # weekly_labels and weekly_values. The labels will be used on the x-axis of
+    # the chart, while the values will be used for the height of the bars.
+    # This keeps the code beginner friendly and makes the flow easy to understand:
+    # Python prepares the data, the template stores it in HTML data attributes,
+    # and JavaScript reads those values to build the chart.
+    
+    # Create two temporary lists to hold the weekly chart labels and values.
+    # The labels will be simple names such as Week 1, Week 2, Week 3, and Week 4.
+    # The values will store the total amount spent during each of those weeks.
+    weekly_labels = []
+    weekly_values = []
+
+    # Get today's date again so we can work backwards through the last 4 weeks.
+    # Each week in this chart is a 7 day block, and we will compare the total
+    # spending for each of those blocks.
+    today = datetime.now().date()
+
+    # Loop through the last 4 weeks, starting from the oldest week and ending
+    # with the most recent week. This allows the chart to display in a natural
+    # left-to-right order for easier reading.
+    for i in range(3, -1, -1):
+
+        # Calculate how many days back the current week starts and ends.
+        # Example:
+        # i = 3 means the oldest week in the last 4 weeks
+        # i = 0 means the most recent week
+        days_back_start = (i * 7) + 6
+        days_back_end = i * 7
+
+        # Calculate the date range for this 7 day period.
+        week_start = today - timedelta(days=days_back_start)
+        week_end = today - timedelta(days=days_back_end)
+
+        # Create a simple label for the chart.
+        # This keeps the output beginner friendly and easy for the user to read.
+        week_number = 4 - i
+        week_label = f"Week {week_number}"
+
+        # Query the database to find the total spending during this week range.
+        # The BETWEEN clause includes both the start date and end date.
+        result = cursor.execute(
+            """
+            SELECT SUM(amount)
+            FROM expenses
+            WHERE user_id = ?
+            AND date BETWEEN ? AND ?
+            """,
+            (session["user_id"], week_start.isoformat(), week_end.isoformat())
+        ).fetchone()[0]
+
+        # If there are no expenses in that week, SQLite returns None.
+        # Change it to 0 so the chart can still display correctly.
+        if result is None:
+            result = 0
+
+        # Add the label and value to the temporary weekly lists.
+        weekly_labels.append(week_label)
+        weekly_values.append(float(result))
+
+        # -----------------------------
+    # MONTHLY CHART DATA
+    # -----------------------------
+    # This section prepares the monthly spending chart data using the same simple
+    # Method A structure as the daily and weekly charts. We create two separate
+    # lists called monthly_labels and monthly_values. The labels will be the month
+    # names from January to December, and the values will be the total spending
+    # for each month in the current year. This keeps the flow clear and easy to
+    # follow: Python prepares the data, the template stores it in HTML data
+    # attributes, and JavaScript reads the values to build the chart.
+
+    # Create two empty lists to hold the month names and the matching totals.
+    monthly_labels = []
+    monthly_values = []
+
+    # Get the current year so the chart only shows data for this year.
+    # For example, if the current year is 2026, the chart will compare
+    # spending from January 2026 to December 2026.
+    current_year = datetime.now().year
+
+    # Loop through all 12 months of the year.
+    # The loop starts at 1 for January and ends at 12 for December.
+    for month_number in range(1, 13):
+
+        # Create a date object for the first day of the current month in the loop.
+        # This is used to create a short month label such as Jan, Feb, Mar, and so on.
+        month_date = datetime(current_year, month_number, 1)
+        month_label = month_date.strftime("%b")
+
+        # Create a year-month string in the format YYYY-MM.
+        # This matches the format used by SQLite with strftime('%Y-%m', date).
+        # Example: "2026-01" for January 2026.
+        year_month = month_date.strftime("%Y-%m")
+
+        # Query the database to find the total amount spent during this month.
+        # The query adds together all expense amounts for the logged-in user
+        # where the expense date falls inside the current month of the current year.
+        result = cursor.execute(
+            """
+            SELECT SUM(amount)
+            FROM expenses
+            WHERE user_id = ?
+            AND strftime('%Y-%m', date) = ?
+            """,
+            (session["user_id"], year_month)
+        ).fetchone()[0]
+
+        # If there are no expenses for that month, SQLite returns None.
+        # Change it to 0 so the chart can still display an empty month correctly.
+        if result is None:
+            result = 0
+
+        # Add the short month label and the total amount to the two lists.
+        # The month label will be used on the x-axis, and the total value
+        # will be used on the y-axis of the monthly chart.
+        monthly_labels.append(month_label)
+        monthly_values.append(float(result))
+    
+        # -----------------------------
+    # CATEGORY PIE CHART DATA
+    # -----------------------------
+    # This section prepares the category pie chart data using the same simple
+    # Method A structure as the other charts. We create two separate lists:
+    # category_labels and category_values. The labels will contain the category
+    # names, and the values will contain the total amount spent in each category
+    # for the current month. This allows the pie chart to show how the user's
+    # spending is divided across categories during the current month.
+
+    # Create two empty lists to hold the category names and the matching totals.
+    category_labels = []
+    category_values = []
+
+    # Create a year-month value for the current month.
+    # This allows us to only include expenses from the current month
+    # when building the category breakdown.
+    current_year_month = datetime.now().strftime("%Y-%m")
+
+       # Query the database to get all categories, even if some categories have
+    # no expenses in the current month. We use a LEFT JOIN so every category
+    # from the categories table is still returned. If a category has no matching
+    # expense in the current month, its total will become 0.
+    category_rows = cursor.execute(
+        """
+        SELECT categories.name, COALESCE(SUM(expenses.amount), 0) AS total_amount
+        FROM categories
+        LEFT JOIN expenses
+            ON expenses.category_id = categories.category_id
+            AND expenses.user_id = ?
+            AND strftime('%Y-%m', expenses.date) = ?
+        GROUP BY categories.category_id, categories.name
+        ORDER BY categories.name ASC
+        """,
+        (session["user_id"], current_year_month)
+    ).fetchall()
+
+    # Loop through the query results and place each category name and total
+    # into the matching lists. These lists will later be passed into the
+    # overview template and used by JavaScript to build the pie chart.
+    for row in category_rows:
+        category_labels.append(row["name"])
+        category_values.append(float(row["total_amount"]))
 
     conn.close()
-    # Send data to the overview.html template to render the daily expenses chart. The template will use the daily_labels for the x-axis and daily_values for the y-axis to create a visual representation of the user's spending over the past week. Additionally, the user's name is passed to personalize the page with a greeting or header.
+    # Send the chart data to the overview.html template.
+    # The template will use daily_labels and daily_values for the daily line chart,
+    # weekly_labels and weekly_values for the weekly bar chart,
+    # monthly_labels and monthly_values for the monthly line chart,
+    # and category_labels and category_values for the category pie chart.
+    # The user's name is also passed so the page can remain personalised.
     return render_template(
         "overview.html",
         name=user["name"],
         daily_labels=daily_labels,
-        daily_values=daily_values
+        daily_values=daily_values,
+        weekly_labels=weekly_labels,
+        weekly_values=weekly_values,
+        monthly_labels=monthly_labels,
+        monthly_values=monthly_values,
+        category_labels=category_labels,
+        category_values=category_values
     )
     
     

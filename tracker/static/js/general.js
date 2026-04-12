@@ -520,3 +520,342 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+// ================= WEEKLY OVERVIEW CHART =================
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element for the weekly chart. If it does not exist,
+    // stop here safely so the script does not cause errors on other pages.
+    const weeklyChartCanvas = document.getElementById("weeklyChart");
+
+    // Check if the canvas exists on the page.
+    // If it does not exist, return immediately.
+    if (!weeklyChartCanvas) {
+        return;
+    }
+
+    // Check if Chart.js is loaded.
+    // If it is missing, stop here to avoid JavaScript errors.
+    if (typeof Chart === "undefined") {
+        return;
+    }
+
+    // Read the weekly labels and values from the HTML data attributes.
+    // These values were prepared in the Flask route and passed into the template.
+    const labelsText = weeklyChartCanvas.getAttribute("data-labels") || "[]";
+    const valuesText = weeklyChartCanvas.getAttribute("data-values") || "[]";
+
+    // Convert the JSON text into normal JavaScript arrays.
+    // The labels array will be used on the x-axis and the values array
+    // will be used to control the height of the bars.
+    const labels = JSON.parse(labelsText);
+    const values = JSON.parse(valuesText);
+
+    // Show the data in the browser console so it is easy to test
+    // whether the weekly values are reaching JavaScript correctly.
+    console.log("Weekly chart labels:", labels);
+    console.log("Weekly chart values:", values);
+
+    // Create a new bar chart using Chart.js.
+    // This chart compares the user's total spending across the last 4 weeks.
+    new Chart(weeklyChartCanvas, {
+        // Use the bar chart type so each week is shown as a separate bar.
+        type: "bar",
+        data: {
+            // Use the weekly labels on the x-axis.
+            labels: labels,
+            datasets: [
+                // The dataset contains the weekly spending values and
+                // the basic styling options for the bars.
+                {
+                    label: "Weekly Spending",
+                    data: values,
+                    backgroundColor: "#8b5cf6",
+                    borderColor: "#7c3aed",
+                    borderWidth: 1,
+                    borderRadius: 10
+                }
+            ]
+        },
+        options: {
+            // Make the chart responsive so it adapts to different screen sizes.
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "bottom"
+                },
+                tooltip: {
+                    callbacks: {
+                        // Format the tooltip values in pounds with two decimal places.
+                        label: function (context) {
+                            return "£" + Number(context.raw).toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                // Configure both axes for clarity.
+                x: {
+                    title: {
+                        display: true,
+                        text: "Weeks"
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Amount (£)"
+                    },
+                    ticks: {
+                        // Add the pound sign to the y-axis values.
+                        callback: function (value) {
+                            return "£" + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+// ================= MONTHLY OVERVIEW CHART =================
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element for the monthly chart. If it does not exist,
+    // stop here safely so the script does not cause errors on pages that
+    // do not include the monthly chart.
+    const monthlyChartCanvas = document.getElementById("monthlyChart");
+
+    // Check if the canvas exists on the page.
+    // If it does not exist, return immediately.
+    if (!monthlyChartCanvas) {
+        return;
+    }
+
+    // Check if Chart.js is loaded.
+    // If it is missing, stop here to avoid JavaScript errors.
+    if (typeof Chart === "undefined") {
+        return;
+    }
+
+    // Read the monthly labels and values from the HTML data attributes.
+    // These values were prepared in the Flask route and passed into the template.
+    const labelsText = monthlyChartCanvas.getAttribute("data-labels") || "[]";
+    const valuesText = monthlyChartCanvas.getAttribute("data-values") || "[]";
+
+    // Convert the JSON text into normal JavaScript arrays.
+    // The labels array will be used on the x-axis and the values array
+    // will be used as the monthly spending totals on the y-axis.
+    const labels = JSON.parse(labelsText);
+    const values = JSON.parse(valuesText);
+
+    // Show the monthly data in the browser console so it is easy to test
+    // whether the monthly values are reaching JavaScript correctly.
+    console.log("Monthly chart labels:", labels);
+    console.log("Monthly chart values:", values);
+
+    // Create a new line chart using Chart.js.
+    // This chart compares the user's spending totals across all 12 months
+    // of the current year.
+    new Chart(monthlyChartCanvas, {
+        // Use the line chart type so the user can easily see the overall
+        // trend rising or falling across the year.
+        type: "line",
+        data: {
+            // Use the month names on the x-axis.
+            labels: labels,
+            datasets: [
+                // The dataset contains the monthly spending totals and
+                // the styling options for the line and points.
+                {
+                    label: "Monthly Spending",
+                    data: values,
+                    borderColor: "#3b82f6",
+                    backgroundColor: "rgba(59, 130, 246, 0.10)",
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 4,
+                    pointRadius: 5,
+                    pointHoverRadius: 6
+                }
+            ]
+        },
+        options: {
+            // Make the chart responsive so it adapts well to different screen sizes.
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "bottom"
+                },
+                tooltip: {
+                    callbacks: {
+                        // Format the tooltip values in pounds with two decimal places.
+                        label: function (context) {
+                            return "£" + Number(context.raw).toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                // Configure both axes for clarity.
+                x: {
+                    title: {
+                        display: true,
+                        text: "Months"
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Amount (£)"
+                    },
+                    ticks: {
+                        // Add the pound sign to the y-axis values.
+                        callback: function (value) {
+                            return "£" + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+// ================= CATEGORY PIE CHART =================
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element for the category pie chart. If it does not exist,
+    // stop here safely so the script does not cause errors on pages that do
+    // not include the category chart.
+    const categoryPieChartCanvas = document.getElementById("categoryPieChart");
+
+    // Check if the canvas exists on the page.
+    // If it does not exist, return immediately.
+    if (!categoryPieChartCanvas) {
+        return;
+    }
+
+    // Check if Chart.js is loaded.
+    // If it is missing, stop here to avoid JavaScript errors.
+    if (typeof Chart === "undefined") {
+        return;
+    }
+
+    // Read the category labels and values from the HTML data attributes.
+    // These values were prepared in the Flask route and passed into the template.
+    const labelsText = categoryPieChartCanvas.getAttribute("data-labels") || "[]";
+    const valuesText = categoryPieChartCanvas.getAttribute("data-values") || "[]";
+
+    // Convert the JSON text into normal JavaScript arrays.
+    // The labels array will contain category names, and the values array
+    // will contain the total amount spent in each category.
+    const labels = JSON.parse(labelsText);
+    const values = JSON.parse(valuesText);
+
+    // Show the category data in the browser console so it is easy to test
+    // whether the pie chart values are reaching JavaScript correctly.
+    console.log("Category chart labels:", labels);
+    console.log("Category chart values:", values);
+
+    // Calculate the full total of all category values.
+    // This is needed so we can work out the percentage share of each slice.
+    const total = values.reduce(function (sum, value) {
+        return sum + Number(value);
+    }, 0);
+
+    // Create a custom plugin to draw the percentage text directly
+    // on each visible slice of the pie chart.
+    const piePercentagePlugin = {
+        id: "piePercentagePlugin",
+        afterDatasetsDraw(chart) {
+            const { ctx } = chart;
+            const dataset = chart.data.datasets[0];
+            const meta = chart.getDatasetMeta(0);
+
+            ctx.save();
+            ctx.font = "bold 12px Arial";
+            ctx.fillStyle = "#070707";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            meta.data.forEach(function (slice, index) {
+                const value = Number(dataset.data[index]);
+
+                // Skip slices with zero values because they have no visible area.
+                if (value <= 0 || total <= 0) {
+                    return;
+                }
+
+                const percentage = ((value / total) * 100).toFixed(1) + "%";
+                const position = slice.tooltipPosition();
+
+                ctx.fillText(percentage, position.x, position.y);
+            });
+
+            ctx.restore();
+        }
+    };
+
+    // Create a new pie chart using Chart.js.
+    // Each slice of the pie will represent one category and its share
+    // of the user's spending for the current month.
+    new Chart(categoryPieChartCanvas, {
+        // Use the pie chart type so the user can easily see how spending
+        // is divided between categories.
+        type: "pie",
+        data: {
+            // Use category names as the chart labels.
+            labels: labels,
+            datasets: [
+                // The dataset contains the category totals and the colours
+                // used for the pie slices.
+                {
+                    label: "Category Spending",
+                    data: values,
+                    backgroundColor: [
+                        "#8b5cf6",
+                        "#3b82f6",
+                        "#10b981",
+                        "#f59e0b",
+                        "#ef4444",
+                        "#06b6d4",
+                        "#ec4899",
+                        "#84cc16",
+                        "#6366f1",
+                        "#f97316"
+                    ],
+                    borderColor: "#ffffff",
+                    borderWidth: 3
+                }
+            ]
+        },
+        options: {
+            // Make the chart responsive so it adapts to different screen sizes.
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "bottom"
+                },
+                tooltip: {
+                    callbacks: {
+                        // Show both the amount and percentage in the tooltip.
+                        label: function (context) {
+                            const value = Number(context.raw);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0";
+                            return context.label + ": £" + value.toFixed(2) + " (" + percentage + "%)";
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [piePercentagePlugin]
+    });
+});
