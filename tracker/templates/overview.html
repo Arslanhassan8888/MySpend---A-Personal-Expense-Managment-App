@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Overview{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/overview.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-hero overview-page-hero" aria-labelledby="overview-title">
+    <h1 id="overview-title">Financial Overview</h1>
+    <p>
+        View your daily, weekly, and monthly spending trends,
+        with a category breakdown for the current month.
+    </p>
+</section>
+<section class="overview-chart-grid" aria-label="Overview charts">
+    <article class="overview-chart-card" aria-labelledby="daily-chart-title">
+        <section class="overview-chart-top">
+            <h2 id="daily-chart-title">Daily Spending Trend</h2>
+            <p class="overview-chart-badge">Last 7 Days</p>
+        </section>
+        <figure class="overview-chart-figure">
+            <canvas
+                id="dailyChart"
+                data-labels='{{ daily_labels | default([]) | tojson }}'
+                data-values='{{ daily_values | default([]) | tojson }}'
+                aria-label="Line chart showing daily spending for the last 7 days"
+                role="img"
+            ></canvas>
+            <figcaption class="overview-chart-caption">
+                Track how your spending changes each day over the last 7 days.
+            </figcaption>
+        </figure>
+    </article>
+    <article class="overview-chart-card" aria-labelledby="weekly-chart-title">
+        <section class="overview-chart-top">
+            <h2 id="weekly-chart-title">Weekly Spending Trend</h2>
+            <p class="overview-chart-badge">Last 4 Weeks</p>
+        </section>
+        <figure class="overview-chart-figure">
+            <canvas id="weeklyChart" aria-label="Bar chart showing spending totals for the last 4 weeks" role="img"></canvas>
+            <figcaption class="overview-chart-caption">
+                Compare your total spending across the last 4 weeks.
+            </figcaption>
+        </figure>
+    </article>
+    <article class="overview-chart-card" aria-labelledby="monthly-chart-title">
+        <section class="overview-chart-top">
+            <h2 id="monthly-chart-title">Monthly Spending Trend</h2>
+            <p class="overview-chart-badge">12 Months</p>
+        </section>
+        <figure class="overview-chart-figure">
+            <canvas id="monthlyChart" aria-label="Line chart showing monthly spending across 12 months" role="img"></canvas>
+            <figcaption class="overview-chart-caption">
+                Compare spending totals across all 12 months of the year.
+            </figcaption>
+        </figure>
+    </article>
+    <article class="overview-chart-card" aria-labelledby="category-chart-title">
+        <section class="overview-chart-top">
+            <h2 id="category-chart-title">Category Distribution</h2>
+            <p class="overview-chart-badge">Current Month</p>
+        </section>
+        <figure class="overview-chart-figure overview-chart-figure-pie">
+            <canvas id="categoryPieChart" aria-label="Pie chart showing spending distribution by category" role="img"></canvas>
+            <figcaption class="overview-chart-caption">
+                See how your current month spending is divided by category.
+            </figcaption>
+        </figure>
+    </article>
+</section>
+{% endblock %}

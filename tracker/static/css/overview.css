@@ -1,0 +1,169 @@
+/* =========================
+   OVERVIEW HERO
+========================= */
+
+.overview-page-hero {
+    max-width: 1300px;
+    margin: 30px auto 34px;
+}
+
+/* =========================
+   CHART GRID
+========================= */
+
+.overview-chart-grid {
+    max-width: 1450px;
+    width: 98%;
+    margin: 0 auto 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* =========================
+   CHART CARD
+========================= */
+
+.overview-chart-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fcfcff 100%);
+    border: 1px solid #ececf2;
+    border-radius: 24px;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.10);
+    overflow: hidden;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.overview-chart-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 30px;
+    border-bottom: 1px solid #ececf2;
+}
+
+.overview-chart-top h2 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+}
+
+.overview-chart-badge {
+    margin: 0;
+    padding: 9px 16px;
+    border-radius: 14px;
+    border: 1px solid #d9ddff;
+    background: #f5f7ff;
+    color: #4f46e5;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* =========================
+   FIGURE / CANVAS
+========================= */
+
+.overview-chart-figure {
+    margin: 0;
+    padding: 24px 28px 20px;
+}
+
+.overview-chart-figure canvas {
+    display: block;
+    width: 100% !important;
+    height: 320px !important;
+}
+
+.overview-chart-figure-pie canvas {
+    height: 320px !important;
+}
+
+.overview-chart-caption {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1000px) {
+    .overview-chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-chart-top {
+        padding: 22px;
+    }
+
+    .overview-chart-top h2 {
+        font-size: 21px;
+    }
+
+    .overview-chart-figure {
+        padding: 20px 22px 18px;
+    }
+
+    .overview-chart-figure canvas,
+    .overview-chart-figure-pie canvas {
+        height: 300px !important;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+    .overview-page-hero {
+        max-width: 94%;
+        margin: 20px auto 24px;
+    }
+
+    .overview-chart-grid {
+        width: 94%;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .overview-chart-card {
+        border-radius: 20px;
+    }
+
+    .overview-chart-top {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px 16px;
+    }
+
+    .overview-chart-top h2 {
+        font-size: 18px;
+    }
+
+    .overview-chart-badge {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .overview-chart-figure {
+        padding: 16px 16px 14px;
+    }
+
+    .overview-chart-figure canvas,
+    .overview-chart-figure-pie canvas {
+        height: 240px !important;
+    }
+
+    .overview-chart-caption {
+        font-size: 13px;
+    }
+}

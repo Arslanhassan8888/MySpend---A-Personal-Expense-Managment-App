@@ -436,3 +436,87 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = redirectUrl;
     }, 5000);
 });
+
+// ================= DAILY OVERVIEW CHART =================
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element for the daily chart. If it doesn't exist, we simply return and do not attempt to render the chart. This allows us to safely include this JavaScript file on pages that do not have the daily chart without causing errors.
+    const dailyChartCanvas = document.getElementById("dailyChart");
+
+    // Check if the Chart.js library is loaded. If it's not available, we return early to avoid any errors when trying to create a new chart instance. This ensures that the rest of the page can function properly even if the chart cannot be rendered.
+    if (!dailyChartCanvas) {
+        return;
+    }
+    // Check if the Chart object is defined, which indicates that the Chart.js library is loaded. If it's not defined, we return early to prevent any errors when trying to create a new chart instance. This allows the page to work without the chart if the library is missing or fails to load.
+    if (typeof Chart === "undefined") {
+        return;
+    }
+    // read data from HTML data attributes on the canvas element. The labels and values are expected to be JSON strings, so we parse them into JavaScript arrays. These arrays will be used as the x-axis labels and y-axis data points for the daily spending chart, allowing us to visualize the user's spending trends over the past week.
+    const labelsText = dailyChartCanvas.getAttribute("data-labels") || "[]";
+    const valuesText = dailyChartCanvas.getAttribute("data-values") || "[]";
+
+    const labels = JSON.parse(labelsText);
+    const values = JSON.parse(valuesText);
+
+    console.log("Daily chart labels:", labels);
+    console.log("Daily chart values:", values);
+
+    // Create a new line chart using Chart.js to display daily spending. The chart is configured with various options for styling, responsiveness, and tooltips. The x-axis represents the days of the week, while the y-axis shows the amount spent in pounds. The chart also includes a legend and custom tooltip formatting to enhance the user experience when viewing their spending trends.
+    new Chart(dailyChartCanvas, {
+        //cerate line chart with the provided labels and values. The chart is styled with a green line and a light green fill area, and it includes smooth curves between data points for a more visually appealing look. The chart options also specify how the axes should be displayed and how tooltips should format the data when hovering over points on the chart.
+        type: "line",
+        data: {  //show simple legend with "Daily Spending" label and the data points from the values array. The line is styled with a green color and a light green fill, and the chart is configured to be responsive and maintain its aspect ratio across different screen sizes.
+            labels: labels,
+            datasets: [ // The dataset for the daily spending chart includes a label, the data points from the values array, and styling options such as border color, background color, fill, tension for smooth curves, border width, and point radius. This configuration creates a visually appealing line chart that represents the user's daily spending over the past week.
+                {
+                    label: "Daily Spending",
+                    data: values,
+                    borderColor: "#10b981",
+                    backgroundColor: "rgba(16, 185, 129, 0.10)",
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 4,
+                    pointRadius: 5,
+                    pointHoverRadius: 6
+                }
+            ]
+        },
+        options: { // The chart options specify that the chart should be responsive, maintain its aspect ratio, and include custom legend and tooltip configurations.
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "bottom"
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return "£" + Number(context.raw).toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: { // The scales configuration defines the appearance and behavior of the x and y axes. The x-axis is labeled "Days", while the y-axis starts at zero, is labeled "Amount (£)", and formats the tick values with a pound sign for better readability.
+                x: {
+                    title: {
+                        display: true,
+                        text: "Days"
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Amount (£)"
+                    },
+                    ticks: { // The ticks configuration for the y-axis includes a callback function that formats the tick values by adding a pound sign (£) in front of the value. This enhances the readability of the chart by clearly indicating that the values represent amounts in pounds.
+                        callback: function (value) {
+                            return "£" + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});

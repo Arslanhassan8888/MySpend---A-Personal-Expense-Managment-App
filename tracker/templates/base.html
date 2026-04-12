@@ -91,10 +91,10 @@
                                 <a href="/">Home</a>
                             </li>
                             <li>
-                                <a href="/dashboard">Dashboard</a>
+                                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
                             </li>
                             <li>
-                                <a href="/overview" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
+                                 <a href="{{ url_for('main.overview') }}">Overview</a>
                             </li>
                             <li>
                                 <a href="#">Reviews</a>

@@ -644,24 +644,66 @@ def set_budget():
 
 @main.route("/overview")
 def overview():
-
+    # This route provides an overview of the user's expenses, including daily totals for the past week. It checks if the user is logged in, retrieves the user's name, and then calculates the total expenses for each of the last 7 days. The data is then passed to the overview.html template to be displayed in a chart format.
+    # The route first checks if the user is logged in by verifying if "user_id" exists in the session. If not, it redirects the user to the login page. Then it establishes a connection to the database and retrieves the user's name using their user_id from the session. Next, it initializes two lists, daily_labels and daily_values, to store the labels (day names) and corresponding expense totals for each of the last 7 days. It calculates the date for each of the last 7 days, retrieves the total expenses for that day from the database, and appends the results to the respective lists. Finally, it closes the database connection and renders the overview.html template, passing the user's name and the daily labels and values for chart rendering.
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
+    #open database connection and get user's name to display on the overview page
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    #get the user's name from the database using their user_id stored in the session. This is used to personalize the overview page with a greeting or display the user's name in the header.
     user = cursor.execute(
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
 
-    conn.close()
+    # -----------------------------
+    # DAILY CHART DATA
+    # -----------------------------
+    daily_labels = []
+    daily_values = []
 
+    #get the current date and then loop through the last 7 days to calculate the total expenses for each day. For each day, it retrieves the sum of expenses from the database for that specific date and appends the day name (e.g., "Mon", "Tue") to daily_labels and the corresponding total amount to daily_values. This data is then used to render a chart on the overview page that shows the user's spending trends over the past week.
+    today = datetime.now().date()
+
+    # Loop through the last 7 days (including today) to get daily totals. The loop starts from 6 and goes down to 0, which allows us to calculate the date for each of the last 7 days by subtracting the appropriate number of days from today's date. For each day, it retrieves the total expenses for that day from the database and appends the results to the daily_labels and daily_values lists.
+    for i in range(6, -1, -1):
+        # Calculate the date for the current day in the loop by subtracting i days from today's date. This allows us to get the date for each of the last 7 days, starting from 6 days ago up to today. The day_name variable is then set to the abbreviated name of the day (e.g., "Mon", "Tue") using strftime, which is used as a label for the chart.
+        day = today - timedelta(days=i)
+        #thse labels will be used on the x-axis of the daily expenses chart to indicate which day each data point corresponds to. For example, if today is Wednesday, the labels for the last 7 days would be ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"].
+        day_name = day.strftime("%a")
+
+        # Retrieve the total expenses for the current day from the database
+        result = cursor.execute(
+            """
+            SELECT SUM(amount)
+            FROM expenses
+            WHERE user_id = ? AND date = ?
+            """,
+            (session["user_id"], day.isoformat())
+        ).fetchone()[0]
+
+        # If there are no expenses for that day, the result will be None. In that case, we set it to 0 to ensure that the chart displays a value of 0 instead of being empty or showing an error.
+        if result is None:
+            result = 0
+
+        # Append the day name and total expenses to the respective lists. The day_name is added to daily_labels, which will be used as labels on the x-axis of the chart, while the total expenses (converted to a float) are added to daily_values, which will be used as data points on the y-axis of the chart.
+        daily_labels.append(day_name)
+        # Convert the result to a float and append it to daily_values. This ensures that the values are in a consistent format for chart rendering, even if the database returns them as integers or None (which we already handled by setting it to 0).
+        daily_values.append(float(result))
+
+    conn.close()
+    # Send data to the overview.html template to render the daily expenses chart. The template will use the daily_labels for the x-axis and daily_values for the y-axis to create a visual representation of the user's spending over the past week. Additionally, the user's name is passed to personalize the page with a greeting or header.
     return render_template(
         "overview.html",
-        name=user["name"]
+        name=user["name"],
+        daily_labels=daily_labels,
+        daily_values=daily_values
     )
+    
+    
     
 # This function calls an external API to get a random quote for the homepage. If the API call fails for any reason (network issues, API downtime, etc.), 
 # it falls back to a predefined list of quotes to ensure that the homepage always has a quote to display. 
