@@ -8,11 +8,125 @@
 
 {% block content %}
 <main class="contact-page">
-    <section class="contact-shell">
-        <article class="contact-card">
-            <p>Contact page coming next.</p>
-        </article>
+    <section class="contact-shell" aria-labelledby="contact-title">
+        <section class="about-hero" aria-labelledby="contact-title">
+            <h1 id="contact-title">Contact Us</h1>
+            <p class="about-hero-text">
+                Get in touch with the MySpend team. We are here to help with questions, feedback, or support.
+            </p>
+        </section>
+        <section class="contact-layout">
+            <article class="contact-form-card" aria-labelledby="contact-form-title">
+                <section class="contact-form-intro">
+                    <h2 id="contact-form-title">Send Us a Message</h2>
+                </section>
+                {% if error %}
+                <p class="contact-message contact-message-error" role="alert">
+                    {{ error }}
+                </p>
+                {% endif %}
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == "success" %}
+                <p class="contact-message contact-message-success" role="status">
+                    {{ message }}
+                </p>
+                {% elif category == "error" %}
+                <p class="contact-message contact-message-error" role="alert">
+                    {{ message }}
+                </p>
+                {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form
+                    method="POST"
+                    action="{{ url_for('main.contact') }}"
+                    class="contact-form"
+                    novalidate
+                    aria-describedby="contact-help-text"
+                >
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <p id="contact-help-text" class="contact-help-text">
+                        Please enter your details and message clearly so we can respond properly.
+                    </p>
+                    <section class="contact-field">
+                        <label for="full_name">Full Name</label>
+                        <input
+                            id="full_name"
+                            name="full_name"
+                            type="text"
+                            required
+                            autocomplete="name"
+                            placeholder="Enter your full name"
+                            value="{{ entered_name or '' }}"
+                        >
+                    </section>
+                    <section class="contact-field">
+                        <label for="email">Email Address</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            autocomplete="email"
+                            placeholder="Enter your email"
+                            value="{{ entered_email or '' }}"
+                        >
+                    </section>
+                    <section class="contact-field">
+                        <label for="subject">Subject</label>
+                        <input
+                            id="subject"
+                            name="subject"
+                            type="text"
+                            required
+                            placeholder="Enter the subject"
+                            value="{{ entered_subject or '' }}"
+                        >
+                    </section>
+                    <section class="contact-field">
+                        <label for="message">Message</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="7"
+                            required
+                            placeholder="Write your message here"
+                        >{{ entered_message or '' }}</textarea>
+                    </section>
+                    <button type="submit" class="contact-submit">Send Message</button>
+                </form>
+            </article>
+            <aside class="contact-info" aria-labelledby="contact-info-title">
+                <h2 id="contact-info-title" class="contact-info-title">Get in Touch</h2>
+                <p class="contact-info-text">Our team is here to help you anytime.</p>
+                <section class="contact-info-grid">
+                    <article class="contact-info-card">
+                        <h3>Email</h3>
+                        <p>support@myspend.com</p>
+                        <p>help@myspend.com</p>
+                    </article>
+                    <article class="contact-info-card">
+                        <h3>Phone</h3>
+                        <p>+44 161 123 4567</p>
+                        <p>+44 074 5466 8005</p>
+                    </article>
+                    <article class="contact-info-card">
+                        <h3>Address</h3>
+                        <p>45 Market Street</p>
+                        <p>Manchester, M1 1AA</p>
+                    </article>
+                    <article class="contact-info-card">
+                        <h3>Hours</h3>
+                        <p>Mon - Fri: 9am - 6pm</p>
+                        <p>Sat: 10am - 4pm</p>
+                    </article>
+                </section>
+            </aside>
+        </section>
     </section>
 </main>
 {% endblock %}
-
