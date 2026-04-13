@@ -931,3 +931,24 @@ def get_home_quote():
 @main.route("/about")
 def about():
     return render_template("about.html")
+
+# Route for the reviews page, which displays user reviews and testimonials about the MySpend app. This page is accessible from the navigation menu and serves to provide social proof and feedback from users who have used the app. The route connects to the database, retrieves all reviews ordered from newest to oldest, and then renders the reviews.html template, passing the retrieved reviews to be displayed on the page.
+@main.route("/reviews") # this create the page at the URL /reviews and defines the function that will be called when a user visits that URL. The function connects to the database, retrieves all reviews ordered by the most recently inserted first, and then renders the reviews.html template, passing the reviews data to be displayed on the page.
+def reviews():
+
+    # Connect to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Get all reviews from newest inserted to oldest inserted
+    reviews = cursor.execute("""
+        SELECT reviewer_name, location, rating, review_text
+        FROM reviews
+        ORDER BY review_id DESC 
+    """).fetchall()
+
+    # Close the connection
+    conn.close()
+
+    # Show the Reviews page
+    return render_template("reviews.html", reviews=reviews)
