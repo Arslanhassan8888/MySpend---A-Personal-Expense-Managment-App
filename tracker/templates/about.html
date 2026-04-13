@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}About Us{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="about-page">
+
+    <section class="about-hero" aria-labelledby="about-title">
+        <h1 id="about-title">Your Financial Partner for Success</h1>
+        <p class="about-hero-text">
+            We're on a mission to make personal finance management simple, intuitive,
+            and accessible for everyone. Based in Manchester, England, we're building
+            tools that help you take control of your financial future.
+        </p>
+    </section>
+
+    <section class="about-story" aria-labelledby="story-title">
+        <article class="about-story-text">
+            <h2 id="story-title">Our Story</h2>
+            <p>
+                MySpend was born from a simple observation: managing personal
+                finances should not be complicated. Too many people struggle with
+                budgeting, not because they lack discipline, but because the tools
+                available are either too complex or too simplistic.
+            </p>
+            <p>
+                We set out to create something different - a finance tracker that is
+                powerful enough for serious budgeters, yet simple enough for anyone
+                to use from day one. Every feature we build is designed with one goal
+                in mind: helping you make better financial decisions.
+            </p>
+            <p>
+                Today, MySpend serves users across the UK and beyond, helping them
+                track expenses, set budgets, and achieve their financial goals with confidence.
+            </p>
+        </article>
+
+        <aside class="about-story-box" aria-label="Mission vision and values">
+            <section class="about-info-row">
+                <h3>Our Mission</h3>
+                <p>
+                    Empower individuals to achieve financial freedom through
+                    smart budgeting and spending insights.
+                </p>
+            </section>
+
+            <section class="about-info-row">
+                <h3>Our Vision</h3>
+                <p>
+                    A world where everyone has the tools and knowledge to make
+                    confident financial decisions.
+                </p>
+            </section>
+
+            <section class="about-info-row">
+                <h3>Our Values</h3>
+                <p>
+                    Transparency, simplicity, and user-first design in everything we create.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <section class="about-difference" aria-labelledby="difference-title">
+        <h2 id="difference-title">What Makes Us Different</h2>
+        <p class="about-difference-text">
+            We're not just another finance app. Here's what sets us apart.
+        </p>
+
+        <section class="about-cards" aria-label="Key features">
+            <article class="about-card">
+                <h3>User-Centric</h3>
+                <p>
+                    Built based on real user feedback and needs, not what we think you should want.
+                </p>
+            </article>
+
+            <article class="about-card">
+                <h3>Secure &amp; Private</h3>
+                <p>
+                    Your financial data is yours alone. We never sell or share your information.
+                </p>
+            </article>
+
+            <article class="about-card">
+                <h3>Lightning Fast</h3>
+                <p>
+                    Optimised for speed so you can track expenses in seconds, not minutes.
+                </p>
+            </article>
+
+            <article class="about-card">
+                <h3>Premium Quality</h3>
+                <p>
+                    Professional-grade features with a beautiful, modern interface you'll love using.
+                </p>
+            </article>
+        </section>
+    </section>
+
+    <section class="about-stats" aria-labelledby="stats-title">
+        <section class="about-stats-inner">
+            <h2 id="stats-title">MySpend by the Numbers</h2>
+            <p class="about-stats-text">Making an impact, one budget at a time</p>
+
+            <section class="about-stats-grid" aria-label="Statistics">
+                <article class="about-stat-item">
+                    <h3>10K+</h3>
+                    <p>Active Users</p>
+                </article>
+
+                <article class="about-stat-item">
+                    <h3>£5M+</h3>
+                    <p>Budgets Managed</p>
+                </article>
+
+                <article class="about-stat-item">
+                    <h3>50K+</h3>
+                    <p>Expenses Tracked</p>
+                </article>
+
+                <article class="about-stat-item">
+                    <h3>99%</h3>
+                    <p>Satisfaction Rate</p>
+                </article>
+            </section>
+        </section>
+    </section>
+
+</main>
+{% endblock %}

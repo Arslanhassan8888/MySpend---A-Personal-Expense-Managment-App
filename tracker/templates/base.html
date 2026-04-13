@@ -27,18 +27,19 @@
                     <li>
                         <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
                     </li>
-                    <li>
-                        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                    <li> 
+                        <a href="{{ url_for('main.about') }}" class="{% if request.path == '/about' %}active{% endif %}">About</a>
                     </li>
                     <li>
-                        <a href="/overview" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
+                        <a href="{{ url_for('main.dashboard') }}" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.overview') }}" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
                     </li>
                     <li>
                         <a href="#">Reviews</a>
                     </li>
-                    <li>
-                        <a href="#">FAQ</a>
-                    </li>
+                    
                     <li>
                         <a href="#">Contact Us</a>
                     </li>
@@ -91,6 +92,8 @@
                                 <a href="/">Home</a>
                             </li>
                             <li>
+                                <a href="{{ url_for('main.about') }}">About</a>
+                            <li>
                                 <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
                             </li>
                             <li>
@@ -98,9 +101,6 @@
                             </li>
                             <li>
                                 <a href="#">Reviews</a>
-                            </li>
-                            <li>
-                                <a href="#">FAQ</a>
                             </li>
                             <li>
                                 <a href="#">Contact Us</a>

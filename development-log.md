@@ -169,3 +169,7 @@ I implemented dynamic overview charts by extending the /overview route and prepa
 On the frontend, I passed the chart data from Flask into HTML using Jinja tojson inside custom data-* attributes on each canvas. In JavaScript, I used DOMContentLoaded, getElementById, getAttribute, and JSON.parse to retrieve and convert the data before rendering the charts with Chart.js.
 
 I also added chart-specific configuration such as legends, tooltip formatting, axis titles, responsive behaviour, and custom colours. For the category pie chart, I implemented additional JavaScript logic using reduce() and a custom Chart.js plugin to calculate and display percentage labels directly on the chart.
+
+## 14/04/2026 About Page Implementation
+
+I created a new About page with a semantic HTML structure, responsive layout, and simplified styling to match the project design. I also updated the navigation by adding About Us and removing FAQ, while improving hover effects and card presentation.
