@@ -966,3 +966,14 @@ def reviews():
 
     # Show the Reviews page
     return render_template("reviews.html", reviews=reviews)
+
+# Route for the add review page, which allows logged-in users to submit their own reviews and testimonials about the MySpend app. This page is only accessible to users who are logged in, and if a user tries to access it without being logged in, they will be redirected to the login page. The route simply renders the add_review.html template, which contains the form for submitting a review.
+# This page encourages users to share their feedback and experiences with MySpend, helping to build a community of users and provide valuable insights for potential new users.
+@main.route("/add-review", methods=["GET"])
+def add_review():
+
+    # Only logged-in users can access
+    if "user_id" not in session:
+        return redirect(url_for("main.login"))
+
+    return render_template("add_review.html")
