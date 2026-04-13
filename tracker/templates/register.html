@@ -25,7 +25,7 @@
             class="login-message login-message-success"
             role="status"
             id="register-success-message"
-            data-redirect-url="{{ url_for('login') }}"
+            data-redirect-url="{{ url_for('main.login') }}"
         >
             {{ success }}
         </p>
@@ -116,7 +116,7 @@
         <section class="login-register">
             <p>
                 Already have an account?
-                <a href="/login">Login here</a>
+                <a href="{{ url_for('main.login') }}">Login here</a>
             </p>
         </section>
     </article>

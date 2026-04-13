@@ -37,7 +37,7 @@
                         <a href="{{ url_for('main.overview') }}" class="{% if request.path == '/overview' %}active{% endif %}">Overview</a>
                     </li>
                     <li>
-                        <a href="#">Reviews</a>
+                        <a href="{{ url_for('main.reviews') }}" class="{% if request.path == '/reviews' %}active{% endif %}">Reviews</a>
                     </li>
                     
                     <li>
@@ -100,7 +100,7 @@
                                  <a href="{{ url_for('main.overview') }}">Overview</a>
                             </li>
                             <li>
-                                <a href="#">Reviews</a>
+                                <a href="{{ url_for('main.reviews') }}">Reviews</a>
                             </li>
                             <li>
                                 <a href="#">Contact Us</a>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reviews.css') }}">
+{% endblock %}
+{% block content %}
+<main class="reviews-page">
+
+    <section class="about-hero" aria-labelledby="reviews-title">
+        <h1 id="reviews-title">What Our Users Say</h1>
+        <p class="about-hero-text">
+            Discover how MySpend is helping users build better budgeting habits,
+            track spending with confidence, and manage personal finances with clarity.
+        </p>
+    </section>
+
+    <section class="reviews-action" aria-label="Review page action">
+        <a href="#" class="reviews-add-button">Add Review</a>
+    </section>
+
+    <!-- Reviews Grid -->
+    <section class="reviews-grid" aria-label="User reviews">
+        <!-- Loop through reviews passed from the Flask view and display them -->
+        {% for review in reviews %}
+        <article class="review-card">
+            <!-- Display star rating based on the review.rating value -->
+            <p class="review-card-rating" aria-label="{{ review.rating }} out of 5 stars">
+                <!-- Use a loop to display filled stars based on the rating -->
+                {% for _ in range(review.rating) %}★{% endfor %}
+            </p>
+
+            <!-- Display review text -->
+            <p class="review-card-text">
+                <!-- Ensure that review text is properly escaped to prevent XSS -->
+                {{ review.review_text }}
+            </p>
+
+            <footer class="review-card-footer">
+                <!-- Display reviewer name and location -->
+                <h2>{{ review.reviewer_name }}</h2>
+                <p class="review-card-location">{{ review.location }}</p>
+            </footer>
+        </article>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

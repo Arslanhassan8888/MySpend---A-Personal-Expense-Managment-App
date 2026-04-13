@@ -322,6 +322,12 @@ def dashboard():
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
+    
+    if user is None:
+        conn.close()
+        session.clear()
+        flash("Your session has expired. Please log in again.", "error")
+        return redirect(url_for("main.login"))
 
     # SORT
     sort = request.args.get("sort")
@@ -658,6 +664,12 @@ def overview():
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
+    
+    if user is None:
+        conn.close()
+        session.clear()
+        flash("Your session has expired. Please log in again.", "error")
+        return redirect(url_for("main.login"))
 
     # -----------------------------
     # DAILY CHART DATA
@@ -932,8 +944,10 @@ def get_home_quote():
 def about():
     return render_template("about.html")
 
-# Route for the reviews page, which displays user reviews and testimonials about the MySpend app. This page is accessible from the navigation menu and serves to provide social proof and feedback from users who have used the app. The route connects to the database, retrieves all reviews ordered from newest to oldest, and then renders the reviews.html template, passing the retrieved reviews to be displayed on the page.
-@main.route("/reviews") # this create the page at the URL /reviews and defines the function that will be called when a user visits that URL. The function connects to the database, retrieves all reviews ordered by the most recently inserted first, and then renders the reviews.html template, passing the reviews data to be displayed on the page.
+# Route for the reviews page, which displays user reviews and testimonials
+# about the MySpend app. This page is accessible from the navigation menu
+# and retrieves all reviews from the database, showing the newest first.
+@main.route("/reviews")
 def reviews():
 
     # Connect to the database
@@ -944,7 +958,7 @@ def reviews():
     reviews = cursor.execute("""
         SELECT reviewer_name, location, rating, review_text
         FROM reviews
-        ORDER BY review_id DESC 
+        ORDER BY review_id DESC
     """).fetchall()
 
     # Close the connection
