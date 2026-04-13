@@ -1,0 +1,21 @@
+/* =========================
+   CONTACT PAGE
+========================= */
+
+.contact-page {
+    width: 100%;
+}
+
+.contact-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 36px 20px 48px;
+}
+
+.contact-card {
+    background: #ffffff;
+    border: 2px solid #8b5cf6;
+    border-radius: 28px;
+    padding: 36px 34px 30px;
+    box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
+}

@@ -1072,3 +1072,10 @@ def add_review():
     # Flash success once, then redirect back to the same page
     flash("Thank you for sharing your feedback. Your review has been submitted successfully.", "success")
     return redirect(url_for("main.add_review"))
+
+
+# Route for the contact page.
+# This page displays the contact form and business contact information.
+@main.route("/contact", methods=["GET"])
+def contact():
+    return render_template("contact.html")
