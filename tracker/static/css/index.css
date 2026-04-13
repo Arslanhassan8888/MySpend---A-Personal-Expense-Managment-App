@@ -3,18 +3,18 @@
 ========================= */
 
 .home-page {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
 }
-
 
 /* =========================
    HERO SECTION
 ========================= */
 
 .home-hero {
-    max-width: 1000px;
-    margin: 10px auto 28px;
+    width: 100%;
+    margin: 0 0 28px;
     padding: 42px 20px 30px;
     position: relative;
     overflow: hidden;
@@ -44,7 +44,7 @@
 }
 
 .home-hero-inner {
-    max-width: 760px;
+    max-width: 1000px;
     margin: 0 auto;
     position: relative;
     z-index: 1;

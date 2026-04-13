@@ -1,9 +1,18 @@
 
+header .nav-left,
+header .nav-left section,
+header .nav-right {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+}
+
+
 /* HERO */
 .about-hero {
     max-width: 1450px;
     margin: 0 auto;
-    margin-top: -140px;
+    margin-top: -100px;
     padding: 2rem 1.5rem 2.8rem;
     text-align: center;
     background:
@@ -356,5 +365,68 @@
 
     .about-stat-item h3 {
         font-size: 2.7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 0 20px;
+        position: relative;
+    }
+
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-left img {
+        width: 50px;
+    }
+
+    .nav-left section {
+        margin-bottom: 0;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 0;
+        margin-bottom: 0;
+        position: absolute;
+        right: 58px;
+        top: 28px;
+        transform: none;
+        margin-top: 10px;
+        margin-right: 12px;
+    }
+
+    .user {
+        font-size: 18px;
+    }
+
+    #menu-toggle {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: 20px;
+        top: 22px;
+        line-height: 1;
+        margin-top: 26px;
+        margin-right: 20px;
+    }
+
+    .tagline {
+        margin-top: -20px;
+        font-size: 13px;
     }
 }

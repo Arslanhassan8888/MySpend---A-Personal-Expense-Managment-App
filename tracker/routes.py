@@ -967,13 +967,32 @@ def reviews():
     # Show the Reviews page
     return render_template("reviews.html", reviews=reviews)
 
-# Route for the add review page, which allows logged-in users to submit their own reviews and testimonials about the MySpend app. This page is only accessible to users who are logged in, and if a user tries to access it without being logged in, they will be redirected to the login page. The route simply renders the add_review.html template, which contains the form for submitting a review.
-# This page encourages users to share their feedback and experiences with MySpend, helping to build a community of users and provide valuable insights for potential new users.
+# The add_review route allows logged-in users to submit their reviews about the MySpend app. When a user tries to access this page, the route first checks if they are logged in by verifying if "user_id" exists in the session. If the user is not logged in, they are redirected to the login page with a flash message prompting them to log in to leave a review. If the user is logged in, the route then connects to the database and checks if the user has already submitted a review by querying the reviews table for any existing review associated with their user_id. If an existing review is found, the user is redirected back to the reviews page with a flash message indicating that they have already submitted a review. If no existing review is found, the route renders the add_review.html template, allowing the user to fill out and submit their review for MySpend.
+# This functionality ensures that each user can only submit one review, preventing duplicate reviews and encouraging users to provide thoughtful feedback about their experience with the app. It also maintains the integrity of the reviews section by ensuring that the feedback is genuine and not spammed with multiple entries from the same user.
 @main.route("/add-review", methods=["GET"])
 def add_review():
 
-    # Only logged-in users can access
+    # Only logged-in users can access this page
     if "user_id" not in session:
+        flash("Please log in to leave a review.", "error")
         return redirect(url_for("main.login"))
 
+    # Connect to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check whether this user has already submitted a review
+    existing_review = cursor.execute(
+        "SELECT review_id FROM reviews WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    conn.close()
+
+    # If the user already has a review, send them back
+    if existing_review:
+        flash("You have already submitted a review.", "error")
+        return redirect(url_for("main.reviews"))
+
+    # Show the add review page
     return render_template("add_review.html")
