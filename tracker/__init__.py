@@ -20,7 +20,8 @@ from flask_wtf import CSRFProtect
 # This allows us to test the database connection when the app starts.
 # create_tables is imported to ensure that the database tables are created when the app starts.
 # insert_default_categories is imported to populate the categories table with default values if they don't already exist.
-from .models import get_db_connection, create_tables, insert_default_categories
+# insert_default_reviews is imported to populate the reviews table with default values if they don't already exist.
+from .models import get_db_connection, create_tables, insert_default_categories, insert_default_reviews
 
 
 # Application Factory Function
@@ -60,6 +61,6 @@ def create_app():
     create_tables()  # Ensure database tables are created when the app starts.
     
     insert_default_categories()  # Insert default categories if they don't exist.
-    
+    insert_default_reviews()  # Insert default reviews if they don't exist.
     # Return the configured Flask application. 
     return app
