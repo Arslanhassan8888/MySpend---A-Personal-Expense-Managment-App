@@ -967,9 +967,12 @@ def reviews():
     # Show the Reviews page
     return render_template("reviews.html", reviews=reviews)
 
-# The add_review route allows logged-in users to submit their reviews about the MySpend app. When a user tries to access this page, the route first checks if they are logged in by verifying if "user_id" exists in the session. If the user is not logged in, they are redirected to the login page with a flash message prompting them to log in to leave a review. If the user is logged in, the route then connects to the database and checks if the user has already submitted a review by querying the reviews table for any existing review associated with their user_id. If an existing review is found, the user is redirected back to the reviews page with a flash message indicating that they have already submitted a review. If no existing review is found, the route renders the add_review.html template, allowing the user to fill out and submit their review for MySpend.
-# This functionality ensures that each user can only submit one review, preventing duplicate reviews and encouraging users to provide thoughtful feedback about their experience with the app. It also maintains the integrity of the reviews section by ensuring that the feedback is genuine and not spammed with multiple entries from the same user.
-@main.route("/add-review", methods=["GET"])
+# Route for the add review page, which allows logged-in users to submit
+# their own review about the MySpend app. Each user is allowed to submit
+# only one review. If the user is not logged in, they are redirected to
+# the login page. If the user has already submitted a review, they are
+# redirected back to the reviews page.
+@main.route("/add-review", methods=["GET", "POST"])
 def add_review():
 
     # Only logged-in users can access this page
@@ -977,9 +980,59 @@ def add_review():
         flash("Please log in to leave a review.", "error")
         return redirect(url_for("main.login"))
 
+    # Normal page load: just show the form
+    if request.method == "GET":
+        return render_template("add_review.html")
+
     # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    # Get submitted form values and remove extra spaces
+    reviewer_name = request.form.get("reviewer_name", "").strip()
+    reviewer_email = request.form.get("reviewer_email", "").strip()
+    location = request.form.get("location", "").strip()
+    rating = request.form.get("rating", "").strip()
+    review_text = request.form.get("review_text", "").strip()
+
+    # Validate that all fields are filled in
+    if not reviewer_name or not reviewer_email or not location or not rating or not review_text:
+        conn.close()
+        return render_template(
+            "add_review.html",
+            error="All fields are required.",
+            entered_name=reviewer_name,
+            entered_email=reviewer_email,
+            entered_location=location,
+            entered_rating=rating,
+            entered_review_text=review_text
+        )
+
+    # Validate email format
+    if "@" not in reviewer_email or "." not in reviewer_email:
+        conn.close()
+        return render_template(
+            "add_review.html",
+            error="Please enter a valid email address.",
+            entered_name=reviewer_name,
+            entered_email=reviewer_email,
+            entered_location=location,
+            entered_rating=rating,
+            entered_review_text=review_text
+        )
+
+    # Validate rating value
+    if rating not in ["1", "2", "3", "4", "5"]:
+        conn.close()
+        return render_template(
+            "add_review.html",
+            error="Please choose a star rating.",
+            entered_name=reviewer_name,
+            entered_email=reviewer_email,
+            entered_location=location,
+            entered_rating=rating,
+            entered_review_text=review_text
+        )
 
     # Check whether this user has already submitted a review
     existing_review = cursor.execute(
@@ -987,12 +1040,35 @@ def add_review():
         (session["user_id"],)
     ).fetchone()
 
+    # Show duplicate review error only after submit attempt
+    if existing_review:
+        conn.close()
+        return render_template(
+            "add_review.html",
+            error="You have already submitted a review.",
+            entered_name=reviewer_name,
+            entered_email=reviewer_email,
+            entered_location=location,
+            entered_rating=rating,
+            entered_review_text=review_text
+        )
+
+    # Insert the review into the database
+    cursor.execute("""
+        INSERT INTO reviews (user_id, reviewer_name, location, rating, review_text)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        session["user_id"],
+        reviewer_name,
+        location,
+        int(rating),
+        review_text
+    ))
+
+    # Save changes to the database
+    conn.commit()
     conn.close()
 
-    # If the user already has a review, send them back
-    if existing_review:
-        flash("You have already submitted a review.", "error")
-        return redirect(url_for("main.reviews"))
-
-    # Show the add review page
-    return render_template("add_review.html")
+    # Flash success once, then redirect back to the same page
+    flash("Thank you for sharing your feedback. Your review has been submitted successfully.", "success")
+    return redirect(url_for("main.add_review"))

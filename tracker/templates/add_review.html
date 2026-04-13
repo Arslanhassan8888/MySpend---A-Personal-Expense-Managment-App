@@ -22,11 +22,6 @@
             </p>
             {% endif %}
 
-            {% if success %}
-            <p class="add-review-message add-review-message-success" role="status">
-                {{ success }}
-            </p>
-            {% endif %}
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -52,10 +47,6 @@
                 aria-describedby="add-review-help"
             >
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                <p id="add-review-help" class="add-review-help-text">
-                    All fields are required. Please choose a star rating before submitting.
-                </p>
 
                 <section class="add-review-field">
                     <label for="reviewer_name">Full Name</label>
