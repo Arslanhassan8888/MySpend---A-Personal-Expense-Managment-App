@@ -1,5 +1,7 @@
 <section id="expenses" class="history-card">
+    <h2 class="visually-hidden">Expense history section</h2>
     <section class="history-top">
+        <h3 class="visually-hidden">History header</h3>
         <section class="history-title">
             <h2>Expense History</h2>
         </section>
@@ -7,10 +9,9 @@
             {{ expenses|length }} Total
         </p>
     </section>
-
     <section class="history-table-wrap">
+        <h3 class="visually-hidden">Expense table area</h3>
         <p id="table-status-message" class="table-status-success" hidden></p>
-
         {% if request.args.get("sort") %}
         <p class="table-status-success">Sort applied successfully.</p>
         {% endif %}
@@ -47,7 +48,6 @@
             {% endfor %}
         </ul>
         {% endif %}
-
         <form
             method="POST"
             action="/delete-selected-expenses#expenses"
@@ -55,12 +55,11 @@
             onsubmit="return confirmDelete()"
         >
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
             <table class="history-table">
                 <thead>
                     <tr>
                         <th scope="col">
-                            <label for="select-all" class="sr-only">Select all expenses</label>
+                            <label for="select-all" class="visually-hidden">Select all expenses</label>
                             <input type="checkbox" id="select-all">
                         </th>
                         <th scope="col">Date</th>
@@ -79,7 +78,7 @@
                     {% for expense in expenses %}
                     <tr>
                         <td>
-                            <label for="expense_{{ expense.expense_id }}" class="sr-only">
+                            <label for="expense_{{ expense.expense_id }}" class="visually-hidden">
                                 Select expense {{ expense.expense_id }}
                             </label>
                             <input
@@ -101,18 +100,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <button
-                                type="button"
-                                class="table-action-button"
-                                onclick="openEditModal(
+                            <button type="button" class="table-action-button" onclick="openEditModal(
                                     '{{ expense.expense_id }}',
                                     '{{ expense.amount }}',
                                     '{{ expense.category_id }}',
                                     '{{ expense.date }}',
                                     '{{ expense.description | e }}'
-                                )"
-                                aria-label="Edit expense {{ expense.expense_id }}"
-                            >
+                                )">
                                 Edit
                             </button>
                         </td>
@@ -121,20 +115,17 @@
                     {% endif %}
                 </tbody>
             </table>
-
             <section class="history-actions">
+                <h3 class="visually-hidden">History actions</h3>
                 <button id="delete-button" type="submit" class="history-danger-button">
                     Delete Selected (0)
                 </button>
-
                 <button type="button" class="history-secondary-button" onclick="openSortModal()">
                     Sort
                 </button>
-
                 <button type="button" class="history-secondary-button" onclick="openSearchModal()">
                     Search
                 </button>
-
                 <a href="/dashboard#expenses" class="history-link-button" id="clear-expenses-link">
                     Clear
                 </a>

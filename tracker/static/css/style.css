@@ -1,3 +1,16 @@
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -53,15 +66,20 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 20px;
 }
 
 /* MySpend */
-.brand h1 {
+.brand-title {
     margin: 0;
+    margin-top: 40px;
     padding: 0;
     font-size: 26px;
     color: #5b21b6;
-    line-height: 1;   
+    line-height: 1;
+    font-weight: 700;
+    display: block;
+    transform: translateY(-20px);
 }
 
 /* Expense Tracker */
@@ -213,7 +231,7 @@ main {
 }
 
 .footer-links a {
-    color: #ddd;
+    color: #6b7280;
     text-decoration: none;
     display: inline-block;
     transition: all 0.5s ease;

@@ -7,12 +7,17 @@
 {% endblock %}
 
 {% block content %}
-<main class="add-review-page">
-    <section class="add-review-shell" aria-labelledby="add-review-title">
+<section class="add-review-page">
+    <h1 class="visually-hidden">Add Review</h1>
+
+    <section class="add-review-shell">
+        <h2 class="visually-hidden">Add review form section</h2>
+
         <article class="add-review-card">
+            <h2 class="visually-hidden">Add review card</h2>
 
             <section class="add-review-intro">
-                <h1 id="add-review-title">Add Your Review</h1>
+                <h2 id="add-review-title">Add Your Review</h2>
                 <p>Share your experience with MySpend</p>
             </section>
 
@@ -21,7 +26,6 @@
                 {{ error }}
             </p>
             {% endif %}
-
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -44,11 +48,11 @@
                 action="{{ url_for('main.add_review') }}"
                 class="add-review-form"
                 novalidate
-                aria-describedby="add-review-help"
             >
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <section class="add-review-field">
+                    <h2 class="visually-hidden">Full name field</h2>
                     <label for="reviewer_name">Full Name</label>
                     <input
                         id="reviewer_name"
@@ -62,6 +66,7 @@
                 </section>
 
                 <section class="add-review-field">
+                    <h2 class="visually-hidden">Email field</h2>
                     <label for="reviewer_email">Email Address</label>
                     <input
                         id="reviewer_email"
@@ -75,6 +80,7 @@
                 </section>
 
                 <section class="add-review-field">
+                    <h2 class="visually-hidden">Location field</h2>
                     <label for="location">Location</label>
                     <input
                         id="location"
@@ -87,6 +93,7 @@
                 </section>
 
                 <section class="add-review-field">
+                    <h2 class="visually-hidden">Rating field</h2>
                     <label for="rating">Star Rating</label>
                     <select id="rating" name="rating" required>
                         <option value="">Choose a rating</option>
@@ -99,6 +106,7 @@
                 </section>
 
                 <section class="add-review-field">
+                    <h2 class="visually-hidden">Review text field</h2>
                     <label for="review_text">Your Review</label>
                     <textarea
                         id="review_text"
@@ -114,14 +122,14 @@
                 </button>
             </form>
 
-            <section class="add-review-footer-note" aria-label="Navigation back to reviews">
+            <section class="add-review-footer-note">
+                <h2 class="visually-hidden">Back to reviews</h2>
                 <p>
                     Want to read other feedback?
                     <a href="{{ url_for('main.reviews') }}">Back to Reviews</a>
                 </p>
             </section>
-
         </article>
     </section>
-</main>
+</section>
 {% endblock %}

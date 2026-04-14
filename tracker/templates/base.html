@@ -3,31 +3,27 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}MySpend{% endblock %}</title>
-        <!-- GLOBAL CSS -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <!-- PAGE CSS -->
         {% block css %}{% endblock %}
     </head>
     <body>
-        <!-- ================= HEADER ================= -->
         <header>
             <nav>
-                <!-- LEFT -->
                 <section class="nav-left">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
+                    <h2 id="site-branding-title" class="visually-hidden">Site branding</h2>
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MySpend logo">
                     <section>
-                        <h1>MySpend</h1>
+                        <h2 class="visually-hidden">site</h2>
+                        <p class="brand-title">MySpend</p>
                         <small class="tagline">Expense Tracker</small>
                     </section>
                 </section>
-                <!-- MOBILE BUTTON -->
                 <button id="menu-toggle">☰</button>
-                <!-- CENTER NAV -->
                 <ul id="nav-menu">
                     <li>
                         <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
                     </li>
-                    <li> 
+                    <li>
                         <a href="{{ url_for('main.about') }}" class="{% if request.path == '/about' %}active{% endif %}">About</a>
                     </li>
                     <li>
@@ -39,13 +35,12 @@
                     <li>
                         <a href="{{ url_for('main.reviews') }}" class="{% if request.path == '/reviews' %}active{% endif %}">Reviews</a>
                     </li>
-                    
                     <li>
                         <a href="{{ url_for('main.contact') }}" class="{% if request.path == '/contact' %}active{% endif %}">Contact Us</a>
                     </li>
                 </ul>
-                <!-- RIGHT -->
                 <section class="nav-right">
+                    <h2 class="visually-hidden">Account actions</h2>
                     {% if session.get("user_id") %}
                     <span class="user">{{ session.get("name") }}</span>
                     <a href="/logout">Logout</a>
@@ -56,7 +51,7 @@
                 </section>
             </nav>
         </header>
-        <!-- ================= FLASH MESSAGE ================= -->
+
         {% with messages = get_flashed_messages() %}
     {% if messages %}
         <section>
@@ -66,14 +61,15 @@
         </section>
         {% endif %}
 {% endwith %}
-        <!-- ================= MAIN CONTENT ================= -->
+
         <main>
             {% block content %}{% endblock %}
         </main>
-        <!-- ================= FOOTER ================= -->
+
         <footer class="footer">
             <section class="footer-top">
-                <!-- LEFT -->
+                <h2 class="visually-hidden">Footer content</h2>
+
                 <section class="footer-col">
                     <h2>MySpend</h2>
                     <p class="sub">Financial Dashboard</p>
@@ -81,34 +77,22 @@
                         Take control of your finances with our intuitive expense tracking platform.
                     </p>
                 </section>
-                <!-- MIDDLE -->
+
                 <section class="footer-col">
-                    <!-- TITLE -->
-                    <h3 class="quick-title">Quick Links</h3>
-                    <!-- LINKS BLOCK -->
+                    <h2 class="visually-hidden">links</h2>
                     <section class="quick-links-block">
+                        <h3 class="quick-title">Quick Links</h3>
                         <ul class="footer-links">
-                            <li>
-                                <a href="/">Home</a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('main.about') }}">About</a>
-                            <li>
-                                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                            </li>
-                            <li>
-                                 <a href="{{ url_for('main.overview') }}">Overview</a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('main.reviews') }}">Reviews</a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('main.contact') }}" >Contact Us</a>
-                            </li>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="{{ url_for('main.about') }}">About</a></li>
+                            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('main.overview') }}">Overview</a></li>
+                            <li><a href="{{ url_for('main.reviews') }}">Reviews</a></li>
+                            <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
                         </ul>
                     </section>
                 </section>
-                <!-- RIGHT -->
+
                 <section class="footer-col">
                     <h3>Contact Us</h3>
                     <p>support@myspend.com</p>
@@ -119,16 +103,18 @@
                     </p>
                 </section>
             </section>
-            <!-- BOTTOM -->
+
             <section class="footer-bottom">
+                <h2 class="visually-hidden">Footer legal information</h2>
                 <p>© 2026 MySpend. Made in Manchester</p>
                 <section class="footer-policy">
+                    <h3 class="visually-hidden">Policies</h3>
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
                 </section>
             </section>
         </footer>
-        <!-- ================= JS ================= -->
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{{ url_for('static', filename='js/general.js') }}"></script>
     </body>

@@ -2,8 +2,9 @@
     id="editModal"
     class="history-modal"
     hidden
-    aria-labelledby="edit-title"
 >
+    <h2 class="visually-hidden">Edit expense modal</h2>
+
     <section class="history-modal-card">
         <h3 id="edit-title">Edit Expense</h3>
         <p id="edit-feedback" class="modal-feedback" hidden></p>
@@ -18,6 +19,7 @@
             <input type="hidden" id="edit_id" name="expense_id">
 
             <section class="modal-field">
+                <h4 class="visually-hidden">Amount field</h4>
                 <label for="edit_amount">Amount</label>
                 <input
                     id="edit_amount"
@@ -26,14 +28,15 @@
                     min="0.01"
                     name="amount"
                     required
-                    aria-describedby="edit-amount-hint"
                 >
                 <p id="edit-amount-hint" class="field-hint">Enter a positive number greater than zero.</p>
             </section>
 
             <section class="modal-field">
+                <h4 class="visually-hidden">Category field</h4>
                 <label for="edit_category">Category</label>
                 <select id="edit_category" name="category_id" required>
+                    <option value="">Choose a category</option>
                     {% for c in categories %}
                     <option value="{{ c.category_id }}">{{ c.name }}</option>
                     {% endfor %}
@@ -41,6 +44,7 @@
             </section>
 
             <section class="modal-field">
+                <h4 class="visually-hidden">Date field</h4>
                 <label for="edit_date">Date</label>
                 <input
                     id="edit_date"
@@ -51,17 +55,18 @@
             </section>
 
             <section class="modal-field">
+                <h4 class="visually-hidden">Description field</h4>
                 <label for="edit_description">Description</label>
                 <input
                     id="edit_description"
                     type="text"
                     name="description"
-                    aria-describedby="edit-description-hint"
                 >
                 <p id="edit-description-hint" class="field-hint">Optional note for this expense.</p>
             </section>
 
             <section class="modal-actions">
+                <h4 class="visually-hidden">Modal actions</h4>
                 <button type="submit" class="history-primary-button">Save Changes</button>
                 <button type="button" class="history-secondary-button" onclick="closeModal()">Cancel</button>
             </section>

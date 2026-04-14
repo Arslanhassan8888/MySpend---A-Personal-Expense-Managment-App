@@ -2,8 +2,9 @@
     id="sortModal"
     class="history-modal"
     hidden
-    aria-labelledby="sort-title"
 >
+    <h2 class="visually-hidden">Sort modal</h2>
+
     <section class="history-modal-card">
         <h3 id="sort-title">Sort Expenses</h3>
         <p id="sort-feedback" class="modal-feedback" hidden></p>
@@ -15,6 +16,7 @@
             novalidate
         >
             <section class="modal-field">
+                <h4 class="visually-hidden">Sort options</h4>
                 <p class="modal-label">Choose one sort option</p>
 
                 <label for="sort_date_desc" class="radio-option">
@@ -59,6 +61,7 @@
             </section>
 
             <section class="modal-field">
+                <h4 class="visually-hidden">Category field</h4>
                 <label for="sort_category_id">Category</label>
                 <select id="sort_category_id" name="category_id">
                     <option value="">All</option>
@@ -69,6 +72,7 @@
             </section>
 
             <section class="modal-actions">
+                <h4 class="visually-hidden">Modal actions</h4>
                 <button type="submit" class="history-primary-button">Apply</button>
                 <button type="button" class="history-secondary-button" onclick="closeSortModal()">Cancel</button>
             </section>

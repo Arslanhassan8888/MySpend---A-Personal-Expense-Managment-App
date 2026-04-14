@@ -9,11 +9,16 @@
 
 {% block content %}
 <section class="login-shell">
-    <article class="login-form-card" aria-labelledby="register-form-title">
+    <h1 class="visually-hidden">Register</h1>
+
+    <article class="login-form-card">
+        <h2 class="visually-hidden">Register form card</h2>
+
         <section class="login-form-header">
-            <h1 id="register-form-title">Create Your Account</h1>
+            <h2 id="register-form-title">Create Your Account</h2>
             <p>Sign up now and start managing your finances like a pro</p>
         </section>
+
         {% if error %}
         <p class="login-message login-message-error" role="alert">
             {{ error }}
@@ -30,6 +35,7 @@
             {{ success }}
         </p>
         {% endif %}
+
         <form
             method="POST"
             action="/register"
@@ -37,7 +43,9 @@
             novalidate
         >
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <section class="login-field">
+                <h2 class="visually-hidden">Full name field</h2>
                 <label for="name">Full Name</label>
                 <input
                     id="name"
@@ -49,7 +57,9 @@
                     value="{{ entered_name or '' }}"
                 >
             </section>
+
             <section class="login-field">
+                <h2 class="visually-hidden">Email field</h2>
                 <label for="email">Email Address</label>
                 <input
                     id="email"
@@ -61,9 +71,12 @@
                     value="{{ entered_email or '' }}"
                 >
             </section>
+
             <section class="login-field">
+                <h2 class="visually-hidden">Password field</h2>
                 <label for="password">Password</label>
                 <section class="login-password-wrap">
+                    <h3 class="visually-hidden">Password input and toggle</h3>
                     <input
                         id="password"
                         name="password"
@@ -80,9 +93,12 @@
                     Use at least 12 characters, including one number and one special character.
                 </p>
             </section>
+
             <section class="login-field">
+                <h2 class="visually-hidden">Confirm password field</h2>
                 <label for="confirm_password">Confirm Password</label>
                 <section class="login-password-wrap">
+                    <h3 class="visually-hidden">Confirm password input and toggle</h3>
                     <input
                         id="confirm_password"
                         name="confirm_password"
@@ -96,7 +112,9 @@
                     </button>
                 </section>
             </section>
+
             <section class="register-check-row">
+                <h2 class="visually-hidden">Terms agreement</h2>
                 <label class="register-check" for="agree_terms">
                     <input
                         id="agree_terms"
@@ -111,9 +129,12 @@
                     </span>
                 </label>
             </section>
+
             <button type="submit" class="login-submit">Create Account</button>
         </form>
+
         <section class="login-register">
+            <h2 class="visually-hidden">Login link</h2>
             <p>
                 Already have an account?
                 <a href="{{ url_for('main.login') }}">Login here</a>

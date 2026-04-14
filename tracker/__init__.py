@@ -1,66 +1,68 @@
 """
 tracker/__init__.py
-This file initializes the tracker package.
+-------------------
+Initialises the tracker package and creates the Flask application.
 
-It contains the Application Factory function, which:
-- Creates the Flask application
-- Configures the application
-- Registers Blueprints (route groups)
-
-Using the Application Factory pattern improves:
-- Scalability
-- Maintainability
-- Testing capability
+This file uses the Application Factory pattern to:
+- create the Flask app
+- apply configuration and security settings
+- register the main Blueprint
+- prepare the database on startup
 """
 
+# Flask is the main class used to create the web application instance.
 from flask import Flask
+
+# CSRFProtect adds protection against Cross-Site Request Forgery attacks
+# for forms submitted within the application.
 from flask_wtf import CSRFProtect
 
-# Import the get_db_connection function from models.py.
-# This allows us to test the database connection when the app starts.
-# create_tables is imported to ensure that the database tables are created when the app starts.
-# insert_default_categories is imported to populate the categories table with default values if they don't already exist.
-# insert_default_reviews is imported to populate the reviews table with default values if they don't already exist.
-from .models import get_db_connection, create_tables, insert_default_categories, insert_default_reviews
+# Import database helper functions used when the application starts.
+# get_db_connection checks that the database can be reached.
+# create_tables ensures the required tables exist.
+# insert_default_categories adds starter categories if they are missing.
+# insert_default_reviews adds default review records if the table is empty.
+from .models import (
+    get_db_connection,
+    create_tables,
+    insert_default_categories,
+    insert_default_reviews
+)
 
 
-# Application Factory Function
-# This function creates and configures the Flask application.
-# It returns a fully initialized app instance.
+# --> APPLICATION FACTORY
+# Create and configure the Flask application, then return it.
 def create_app():
     
     # Create a new Flask application instance.
-    # __name__ tells Flask where the application is located.
+    # __name__ helps Flask locate templates, static files, and package resources.
     app = Flask(__name__)
     
-    app.secret_key = "ciao_bello"  # Set a secret key for session management and security features.
+    # Secret key used for sessions and other security-related features.
+    app.secret_key = "ciao_bello"
     
-    app.config["SESSION_COOKIE_HTTPONLY"] = True  # Mitigate XSS attacks by making cookies inaccessible to JavaScript.
-    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"  # Mitigate CSRF attacks by restricting cross-site cookie sending.
-    app.config["SESSION_COOKIE_SECURE"] = False  # Set to True in production to ensure cookies are only sent over HTTPS.
+    # Cookie security settings.
+    app.config["SESSION_COOKIE_HTTPONLY"] = True   # Prevent JavaScript access to session cookies.
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"  # Reduce cross-site request risks.
+    app.config["SESSION_COOKIE_SECURE"] = False    # Change to True in production when using HTTPS.
     
-    CSRFProtect(app)  # Enable CSRF protection for all forms in the application.
+    # Enable CSRF protection for application forms.
+    CSRFProtect(app)
     
-    
-    # Import the Blueprint named "main" from routes.py.
-    # The dot (.) indicates importing from the current package.
+    # Import the shared Blueprint from the current package.
     from .routes import main
     
-    
-    # Register the Blueprint with the Flask app.
-    # This connects all routes defined in routes.py.
+    # Register all routes linked to the Blueprint.
     app.register_blueprint(main)
     
-    
-    # Connect to the SQLite database using the get_db_connection function.
+    # Open and close a database connection to confirm the database is available.
     conn = get_db_connection()
-    
-    # Close the database connection after testing it.
     conn.close()
     
-    create_tables()  # Ensure database tables are created when the app starts.
+    # Ensure the database structure and default records are ready.
+    create_tables()
+    insert_default_categories()
+    insert_default_reviews()
     
-    insert_default_categories()  # Insert default categories if they don't exist.
-    insert_default_reviews()  # Insert default reviews if they don't exist.
-    # Return the configured Flask application. 
+    # Return the fully configured application.
     return app

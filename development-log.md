@@ -173,3 +173,16 @@ I also added chart-specific configuration such as legends, tooltip formatting, a
 ## 14/04/2026 About Page Implementation
 
 I created a new About page with a semantic HTML structure, responsive layout, and simplified styling to match the project design. I also updated the navigation by adding About Us and removing FAQ, while improving hover effects and card presentation.
+
+## 14/04/2026  Reviews & Add Review Pages
+
+I created the Reviews page using a card layout to display user feedback clearly. The rating is stored as a number (1–5) and converted into stars using a Jinja loop in the template.
+
+For the Add Review page, I built a form with validation using Flask. I used request.form.get() to collect data and ensured all fields are required. Only logged-in users can submit reviews by checking the session. I also added a check to prevent duplicate reviews and used flash messages with redirect() to show feedback correctly.
+
+## 15/04/2026 Contact Page
+
+I created the Contact Us page with a simple form and a side section for contact details. The form uses proper labels and validation to ensure all fields are completed and the email is valid.
+
+Flask handles the form submission, and I used flash messages with redirect() so the success message appears once and disappears after refresh.
+

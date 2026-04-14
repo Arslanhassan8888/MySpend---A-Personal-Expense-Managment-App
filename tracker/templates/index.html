@@ -9,15 +9,16 @@
 
 {% block content %}
 <section class="home-page">
+    <h1 id="home-page-title" class="visually-hidden">Home page content</h1>
 
-    <!-- HERO -->
-    <section class="home-hero" aria-labelledby="home-hero-title">
+    <section class="home-hero">
+        <h2 class="visually-hidden">hero</h2>
+
         <section class="home-hero-inner">
-
-            <h1 id="home-hero-title" class="home-title">
+            <h2 id="home-hero-title" class="home-title">
                 Your Money.
                 <span class="home-title-accent">Your Way</span>
-            </h1>
+            </h2>
 
             <p class="home-subtitle">
                 Experience the easiest way to track expenses, set budgets, and reach your
@@ -25,22 +26,19 @@
             </p>
 
             <section class="home-actions">
+                <h2 class="visually-hidden">Home page primary action</h2>
                 <a href="/dashboard" class="home-primary-button">
                     Start Tracking Free
                     <span class="home-button-arrow"></span>
                 </a>
             </section>
-
         </section>
     </section>
 
-    <!-- QUOTE / API SECTION -->
-    <article class="home-quote-card" aria-labelledby="home-quote-title">
-        <p class="home-quote-mark">”</p>
+    <article class="home-quote-card">
+        <h2 class="visually-hidden">quote</h2>
 
-        <h2 id="home-quote-title" class="sr-only">
-            Motivational finance quote
-        </h2>
+        <p class="home-quote-mark">”</p>
 
         <blockquote class="home-quote-text">
             "{{ quote_text or 'A budget is telling your money where to go instead of wondering where it went.' }}"
@@ -56,9 +54,8 @@
         </small>
     </article>
 
-    <!-- BOTTOM CTA -->
-    <section class="home-cta" aria-labelledby="home-cta-title">
-        <h2 id="home-cta-title">Ready to Take Control?</h2>
+    <section class="home-cta">
+        <h2>Ready to Take Control?</h2>
 
         <p>
             Join users who are already managing their finances smarter with simple
@@ -70,6 +67,5 @@
             <span class="home-button-arrow"></span>
         </a>
     </section>
-
 </section>
 {% endblock %}

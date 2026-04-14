@@ -8,7 +8,7 @@
     background: linear-gradient(135deg, #7c3aed, #9333ea);
     color: white;
     max-width: 1100px;
-    margin: 40px auto 30px;
+    margin: 20px auto 30px;
     padding: 45px 40px;
     border-radius: 25px;
     text-align: center;
@@ -30,7 +30,7 @@
 }
 
 /* TEXT */
-.dashboard-hero h1 {
+.dashboard-hero h2 {
     margin: 0;
     font-size: 38px;
     font-weight: 700;
@@ -255,7 +255,7 @@ td {
     margin: 0 0 8px;
     font-size: 14px;
     font-weight: 600;
-    color: #4b5563;
+    color: #2E2E2E;
 }
 
 .budget-values strong {
@@ -268,6 +268,12 @@ td {
 
 .remaining {
     text-align: right;
+}
+.remaining strong {
+    color: #8C4C03;
+}
+.remaining strong.warning {
+    color: #8C4C03;
 }
 
 .progress-wrapper {
@@ -318,7 +324,7 @@ progress.high::-moz-progress-bar {
     place-items: center;
     font-size: 13px;
     font-weight: 700;
-    color: #ffffff;
+    color: #474747;
     pointer-events: none;
 }
 
@@ -344,7 +350,7 @@ progress.high::-moz-progress-bar {
 }
 
 .warning {
-    color: #d97706;
+    color: #683903;
 }
 
 .danger {
@@ -353,7 +359,7 @@ progress.high::-moz-progress-bar {
 
 .transactions {
     font-size: 15px;
-    color: #4b5563;
+    color: #2E2E2E;
 }
 
 /* =========================
@@ -595,8 +601,8 @@ progress.high::-moz-progress-bar {
     border-radius: 14px;
     border: none;
     font-weight: 600;
-    color: white;
-    background: #059669;
+    color: #ffffff;
+    background: #0F5132;
     cursor: pointer;
     transition: 0.25s;
 }
@@ -834,16 +840,18 @@ progress.high::-moz-progress-bar {
     inset: 0;
     background: rgba(15, 23, 42, 0.45);
     padding: 20px;
-    z-index: 1200;
+    z-index: 9999;
     overflow-y: auto;
+    margin-top: 60px;
 }
 
 .history-modal-card {
-    max-width: 620px;
+    max-width: 500px;
+    max-height: 700px;
     margin: 20px auto;
     background: #ffffff;
     border-radius: 24px;
-    padding: 28px;
+    padding: 18px 18px;
     box-shadow: 0 24px 50px rgba(0, 0, 0, 0.2);
 }
 
@@ -937,17 +945,7 @@ progress.high::-moz-progress-bar {
     margin-top: 24px;
 }
 
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
+
 
 /* Modal cancel button = red like delete (override only in modals) */
 .history-modal .history-secondary-button {
@@ -973,7 +971,7 @@ progress.high::-moz-progress-bar {
         padding: 35px 25px;
     }
 
-    .dashboard-hero h1 {
+    .dashboard-hero h2 {
         font-size: 30px;
     }
 
@@ -1155,7 +1153,7 @@ progress.high::-moz-progress-bar {
         border-radius: 18px;
     }
 
-    .dashboard-hero h1 {
+    .dashboard-hero h2 {
         font-size: 24px;
         line-height: 1.3;
     }

@@ -12,7 +12,7 @@ header .nav-right {
 .about-hero {
     max-width: 1450px;
     margin: 0 auto;
-    margin-top: -100px;
+    margin-top: -20px;
     padding: 2rem 1.5rem 2.8rem;
     text-align: center;
     background:
@@ -32,7 +32,7 @@ header .nav-right {
     font-weight: 600;
 }
 
-.about-hero h1 {
+.about-hero h2 {
     max-width: 980px;
     margin: 0 auto 1.2rem;
     font-size: clamp(2.6rem, 6vw, 5rem);
@@ -248,7 +248,7 @@ header .nav-right {
         padding: 1.8rem 1.2rem 2.4rem;
     }
 
-    .about-hero h1 {
+    .about-hero h2 {
         font-size: 3.4rem;
     }
 
@@ -298,7 +298,7 @@ header .nav-right {
         margin-bottom: 1rem;
     }
 
-    .about-hero h1 {
+    .about-hero h2 {
         font-size: 2.4rem;
         line-height: 1.1;
     }

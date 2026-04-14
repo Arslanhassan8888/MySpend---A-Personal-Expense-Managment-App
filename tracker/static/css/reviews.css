@@ -5,11 +5,11 @@ header .nav-left section,
 header .nav-right {
     position: relative;
     z-index: 1;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .reviews-page .about-hero {
-    margin-top: -100px;
+    margin-top: -40px;
     padding-top: 2.5rem;
 }
 
@@ -102,7 +102,7 @@ header .nav-right {
 
 /* REVIEW CARD FOOTER */
 
-.review-card-footer h2 {
+.review-card-footer h3 {
     margin: 0 0 2px;
     font-size: 1.3rem;
     line-height: 1.15;
@@ -162,7 +162,7 @@ header .nav-right {
         padding: 24px 20px;
     }
 
-    .review-card-footer h2 {
+    .review-card-footer h3 {
         font-size: 1.6rem;
     }
 }

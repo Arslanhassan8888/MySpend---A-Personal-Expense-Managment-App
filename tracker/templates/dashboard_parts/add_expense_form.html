@@ -1,4 +1,6 @@
 <section id="add-expense" class="expense-card">
+    <h2 class="visually-hidden">Add expense form</h2>
+
     <section class="expense-header">
         <h2>Add New Expense</h2>
     </section>
@@ -22,6 +24,7 @@
         {% endif %}
 
         <section>
+            <h3 class="visually-hidden">Amount field</h3>
             <label for="amount">Amount (£)</label>
             <input
                 id="amount"
@@ -35,6 +38,7 @@
         </section>
 
         <section>
+            <h3 class="visually-hidden">Date field</h3>
             <label for="date">Date</label>
             <input
                 id="date"
@@ -45,8 +49,10 @@
         </section>
 
         <section>
+            <h3 class="visually-hidden">Category field</h3>
             <label for="category">Category</label>
             <select id="category" name="category_id" required>
+                <option value="">Choose a category</option>
                 {% for c in categories %}
                 <option value="{{ c.category_id }}">{{ c.name }}</option>
                 {% endfor %}
@@ -54,6 +60,7 @@
         </section>
 
         <section>
+            <h3 class="visually-hidden">Description field</h3>
             <label for="description">Description</label>
             <input
                 id="description"
@@ -64,6 +71,7 @@
         </section>
 
         <section class="expense-button">
+            <h3 class="visually-hidden">Submit button</h3>
             <button type="submit">Add Expense</button>
         </section>
     </form>

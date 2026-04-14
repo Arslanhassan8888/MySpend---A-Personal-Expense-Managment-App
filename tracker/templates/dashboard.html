@@ -10,60 +10,69 @@
 
 {% set flashed_messages = get_flashed_messages(with_categories=true) %}
 
-<!-- HERO -->
-<header class="dashboard-hero">
-    <h1>Welcome back, {{ name }}</h1>
-    <p>Here's your financial overview for {{ current_month }}</p>
-</header>
+<section class="dashboard-page">
+    <h1 class="visually-hidden">Dashboard</h1>
 
-<!-- SUMMARY -->
-<section class="summary">
-    <article class="card red">
-        <h3>Total Spent</h3>
-        <p class="amount">£{{ total }}</p>
-        <small>All time expenses</small>
-    </article>
+    <!-- HERO -->
+    <header class="dashboard-hero">
+        <h2>Welcome back, {{ name }}</h2>
+        <p>Here's your financial overview for {{ current_month }}</p>
+    </header>
 
-    <article class="card blue">
-        <h3>Monthly Spent</h3>
-        <p class="amount">£{{ monthly_total }}</p>
-        <small>Current month</small>
-    </article>
+    <!-- SUMMARY -->
+    <section class="summary">
+        <h2 class="visually-hidden">Summary</h2>
 
-    <article class="card purple">
-        <h3>Weekly Spent</h3>
-        <p class="amount">£{{ weekly_total }}</p>
-        <small>Last 7 days</small>
-    </article>
+        <article class="card red">
+            <h3>Total Spent</h3>
+            <p class="amount">£{{ total }}</p>
+            <small>All time expenses</small>
+        </article>
 
-    <article class="card green">
-        <h3>Daily Spent</h3>
-        <p class="amount">£{{ daily_total }}</p>
-        <small>Today only</small>
-    </article>
+        <article class="card blue">
+            <h3>Monthly Spent</h3>
+            <p class="amount">£{{ monthly_total }}</p>
+            <small>Current month</small>
+        </article>
 
-    <article class="card orange">
-        <h3>Remaining</h3>
-        <p class="amount">£{{ remaining }}</p>
-        <small>Budget left</small>
-    </article>
+        <article class="card purple">
+            <h3>Weekly Spent</h3>
+            <p class="amount">£{{ weekly_total }}</p>
+            <small>Last 7 days</small>
+        </article>
+
+        <article class="card green">
+            <h3>Daily Spent</h3>
+            <p class="amount">£{{ daily_total }}</p>
+            <small>Today only</small>
+        </article>
+
+        <article class="card orange">
+            <h3>Remaining</h3>
+            <p class="amount">£{{ remaining }}</p>
+            <small>Budget left</small>
+        </article>
+    </section>
+
+    <!-- BUDGET -->
+    <section id="budget" class="budget-grid">
+        <h2 class="visually-hidden">Budget section</h2>
+
+        {% include "dashboard_parts/budget_section.html" %}
+        {% include "dashboard_parts/chart_section.html" %}
+    </section>
+
+    <!-- ADD EXPENSE -->
+    {% include "dashboard_parts/add_expense_form.html" %}
+
+    <!-- HISTORY -->
+    {% include "dashboard_parts/expense_history.html" %}
+
+    <!-- MODALS -->
+    {% include "dashboard_parts/edit_modal.html" %}
+    {% include "dashboard_parts/sort_modal.html" %}
+    {% include "dashboard_parts/search_modal.html" %}
+
 </section>
-
-<!-- BUDGET + CHART -->
-<section id="budget" class="budget-grid">
-    {% include "dashboard_parts/budget_section.html" %}
-    {% include "dashboard_parts/chart_section.html" %}
-</section>
-
-<!-- ADD EXPENSE -->
-{% include "dashboard_parts/add_expense_form.html" %}
-
-<!-- HISTORY -->
-{% include "dashboard_parts/expense_history.html" %}
-
-<!-- MODALS -->
-{% include "dashboard_parts/edit_modal.html" %}
-{% include "dashboard_parts/sort_modal.html" %}
-{% include "dashboard_parts/search_modal.html" %}
 
 {% endblock %}

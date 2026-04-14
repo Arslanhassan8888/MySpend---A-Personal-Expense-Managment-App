@@ -6,28 +6,35 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/reviews.css') }}">
 {% endblock %}
-{% block content %}
-<main class="reviews-page">
 
-    <section class="about-hero" aria-labelledby="reviews-title">
-        <h1 id="reviews-title">What Our Users Say</h1>
+{% block content %}
+<section class="reviews-page">
+    <h1 class="visually-hidden">Reviews</h1>
+
+    <section class="about-hero">
+        <h2 id="reviews-title">What Our Users Say</h2>
         <p class="about-hero-text">
             Discover how MySpend is helping users build better budgeting habits,
             track spending with confidence, and manage personal finances with clarity.
         </p>
     </section>
 
-    <section class="reviews-action" aria-label="Review page action">
+    <section class="reviews-action">
+        <h2 class="visually-hidden">Review page action</h2>
         <a href="{{ url_for('main.add_review') }}" class="reviews-add-button">Add Review</a>
     </section>
 
     <!-- Reviews Grid -->
-    <section class="reviews-grid" aria-label="User reviews">
+    <section class="reviews-grid">
+        <h2 class="visually-hidden">User reviews</h2>
+
         <!-- Loop through reviews passed from the Flask view and display them -->
         {% for review in reviews %}
         <article class="review-card">
+            <h2 class="visually-hidden">Review by {{ review.reviewer_name }}</h2>
+
             <!-- Display star rating based on the review.rating value -->
-            <p class="review-card-rating" aria-label="{{ review.rating }} out of 5 stars">
+            <p class="review-card-rating">
                 <!-- Use a loop to display filled stars based on the rating -->
                 {% for _ in range(review.rating) %}★{% endfor %}
             </p>
@@ -40,11 +47,11 @@
 
             <footer class="review-card-footer">
                 <!-- Display reviewer name and location -->
-                <h2>{{ review.reviewer_name }}</h2>
+                <h3>{{ review.reviewer_name }}</h3>
                 <p class="review-card-location">{{ review.location }}</p>
             </footer>
         </article>
         {% endfor %}
     </section>
-</main>
+</section>
 {% endblock %}

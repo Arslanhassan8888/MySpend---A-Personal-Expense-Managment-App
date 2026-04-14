@@ -1,7 +1,10 @@
 <article class="budget-card">
+    <h2 class="visually-hidden">Budget overview</h2>
+
     <section class="budget-title">
         <h2>Monthly Budget Overview</h2>
     </section>
+
     <form method="POST" action="/set-budget#budget" class="budget-input">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="budget_amount">Set Monthly Budget</label>
@@ -33,12 +36,19 @@
     </form>
 
     <section class="budget-box">
+        <h2 class="visually-hidden">Budget details</h2>
+
         <section class="budget-values">
+            <h3 class="visually-hidden">Budget values</h3>
+
             <section class="budget-limit">
+                <h4 class="visually-hidden">Budget limit</h4>
                 <p>Budget Limit</p>
                 <strong>£{{ budget_amount }}</strong>
             </section>
+
             <section class="remaining">
+                <h4 class="visually-hidden">Remaining balance</h4>
                 <p>Remaining Balance</p>
                 <strong class="
                     {% if progress >= 100 %}danger
@@ -52,6 +62,7 @@
         </section>
 
         <section class="progress-wrapper">
+            <h3 class="visually-hidden">Progress</h3>
             <progress value="{{ progress }}" max="100" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
             <span class="progress-label">
                 {{ progress|round(1) }}% Used
@@ -59,6 +70,7 @@
         </section>
 
         <section class="budget-status-row">
+            <h3 class="visually-hidden">Budget status</h3>
             <p class="budget-status {% if progress >= 100 %}danger{% elif progress >= 80 %}warning{% else %}success{% endif %}">
                 {% if progress >= 100 %}
                     Budget exceeded

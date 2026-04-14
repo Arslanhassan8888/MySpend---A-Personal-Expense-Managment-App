@@ -8,11 +8,16 @@
 
 {% block content %}
 <section class="login-shell">
-    <article class="login-form-card" aria-labelledby="login-form-title">
+    <h1 class="visually-hidden">Login</h1>
+
+    <article class="login-form-card">
+        <h2 class="visually-hidden">Login form card</h2>
+
         <section class="login-form-header">
-            <h1 id="login-form-title">Welcome Back!</h1>
+            <h2 id="login-form-title">Welcome Back!</h2>
             <p>Login to access your financial dashboard</p>
         </section>
+
         {% if error %}
         <p class="login-message login-message-error" role="alert">{{ error }}</p>
         {% endif %}
@@ -26,6 +31,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+
         <form
             method="POST"
             action="/login"
@@ -33,8 +39,9 @@
             novalidate
         >
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            
+
             <section class="login-field">
+                <h2 class="visually-hidden">Email field</h2>
                 <label for="email">Email Address</label>
                 <input
                     id="email"
@@ -46,9 +53,12 @@
                     value="{{ entered_email or '' }}"
                 >
             </section>
+
             <section class="login-field">
+                <h2 class="visually-hidden">Password field</h2>
                 <label for="password">Password</label>
                 <section class="login-password-wrap">
+                    <h3 class="visually-hidden">Password input and toggle</h3>
                     <input
                         id="password"
                         name="password"
@@ -62,15 +72,20 @@
                     </button>
                 </section>
             </section>
+
             <button type="submit" class="login-submit">Login to Dashboard</button>
         </form>
+
         <section class="login-register">
+            <h2 class="visually-hidden">Register link</h2>
             <p>
                 Don't have an account?
                 <a href="/register">Register here</a>
             </p>
         </section>
+
         <section class="login-terms">
+            <h2 class="visually-hidden">Terms information</h2>
             <p>
                 By continuing, you agree to our Terms of Service and Privacy Policy
             </p>
