@@ -13,8 +13,8 @@ from flask import session
 # Import the shared Blueprint.
 from .main_blueprint import main
 
-# Import the helper function used to get the home page quote.
-from ..legacy_routes import get_home_quote
+
+from ..quote_api import get_home_quote
 
 
 # This route handles requests to the root URL "/".
