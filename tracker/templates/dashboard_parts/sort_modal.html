@@ -1,3 +1,4 @@
+<!-- SORT MODAL - allows user to sort and filter expenses -->
 <section
     id="sortModal"
     class="history-modal"
@@ -5,20 +6,30 @@
 >
     <h2 class="visually-hidden">Sort modal</h2>
 
+    <!-- MODAL CARD - container for sort form -->
     <section class="history-modal-card">
+
+        <!-- TITLE AND FEEDBACK -->
         <h3 id="sort-title">Sort Expenses</h3>
+
+        {# Feedback message shown dynamically via JavaScript #}
         <p id="sort-feedback" class="modal-feedback" hidden></p>
 
+        <!-- SORT FORM - sends selected options via GET -->
         <form
             id="sortForm"
             method="GET"
             action="/dashboard#expenses"
             novalidate
         >
+
+            <!-- SORT OPTIONS (RADIO BUTTONS) -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Sort options</h4>
+
                 <p class="modal-label">Choose one sort option</p>
 
+                <!-- NEWEST TO OLDEST -->
                 <label for="sort_date_desc" class="radio-option">
                     <input
                         id="sort_date_desc"
@@ -29,6 +40,7 @@
                     Newest to Oldest
                 </label>
 
+                <!-- OLDEST TO NEWEST -->
                 <label for="sort_date_asc" class="radio-option">
                     <input
                         id="sort_date_asc"
@@ -39,6 +51,7 @@
                     Oldest to Newest
                 </label>
 
+                <!-- LOW TO HIGH -->
                 <label for="sort_amount_asc" class="radio-option">
                     <input
                         id="sort_amount_asc"
@@ -49,6 +62,7 @@
                     Low to High Price
                 </label>
 
+                <!-- HIGH TO LOW -->
                 <label for="sort_amount_desc" class="radio-option">
                     <input
                         id="sort_amount_desc"
@@ -60,21 +74,39 @@
                 </label>
             </section>
 
+            <!-- CATEGORY FILTER -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Category field</h4>
+
                 <label for="sort_category_id">Category</label>
+
                 <select id="sort_category_id" name="category_id">
                     <option value="">All</option>
-                    {% for c in categories %}
-                    <option value="{{ c.category_id }}">{{ c.name }}</option>
+
+                    {# Populate categories dynamically from Flask #}
+                    {% for c in categories %} {# Loop through the list of categories passed from the backend and create an option element for each category. #}
+                    <option value="{{ c.category_id }}">{{ c.name }}</option> {# The value of each option is set to the category's ID, and the displayed text is the category's name. #}
                     {% endfor %}
                 </select>
             </section>
 
+            <!-- ACTION BUTTONS -->
             <section class="modal-actions">
                 <h4 class="visually-hidden">Modal actions</h4>
-                <button type="submit" class="history-primary-button">Apply</button>
-                <button type="button" class="history-secondary-button" onclick="closeSortModal()">Cancel</button>
+
+                <!-- APPLY SORT -->
+                <button type="submit" class="history-primary-button">
+                    Apply
+                </button>
+
+                <!-- CLOSE MODAL -->
+                <button
+                    type="button"
+                    class="history-secondary-button"
+                    onclick="closeSortModal()"
+                >
+                    Cancel
+                </button>
             </section>
         </form>
     </section>

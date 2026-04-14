@@ -1,10 +1,11 @@
 """
 tracker/routes/auth/__init__.py
 
-This package contains authentication route modules.
+This package groups all authentication-related routes.
 """
 
-# Import authentication route modules so Flask can register them.
-from . import logout
-from . import login
-from . import register
+# Import authentication modules so Flask registers their routes.
+# Each imported file contains route functions linked to the main Blueprint.
+from . import logout      # Handles user logout functionality
+from . import login       # Handles user login (authentication)
+from . import register    # Handles new user registration

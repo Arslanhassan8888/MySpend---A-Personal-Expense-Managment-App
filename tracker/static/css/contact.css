@@ -1,12 +1,11 @@
-/* =========================
-   CONTACT PAGE
-========================= */
+/* CONTACT PAGE */
 
+/* Main page wrapper */
 .contact-page {
     width: 100%;
 }
 
-/* Keep header spacing consistent with reviews/add review */
+/* Keep header spacing consistent with reviews and add review */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -15,13 +14,17 @@ header .nav-right {
     margin-bottom: 20px;
 }
 
+/* Outer page wrapper */
 .contact-shell {
     max-width: 1350px;
     margin: 0 auto;
     padding: 36px 20px 48px;
 }
 
-/* CONTACT HERO - MATCH REVIEWS PAGE */
+
+/* HERO SECTION */
+
+/* Main hero section for the contact page */
 .about-hero {
     max-width: 1450px;
     margin: 0 auto 32px;
@@ -33,6 +36,7 @@ header .nav-right {
         radial-gradient(circle at 70% 85%, rgba(168, 85, 247, 0.10), transparent 22%);
 }
 
+/* Main hero heading */
 .about-hero h2 {
     max-width: 980px;
     margin: 0 auto 1.2rem;
@@ -42,6 +46,7 @@ header .nav-right {
     color: #7c1dff;
 }
 
+/* Hero supporting text */
 .about-hero-text {
     max-width: 860px;
     margin: 0 auto;
@@ -50,10 +55,10 @@ header .nav-right {
     color: #556274;
 }
 
-/* =========================
-   TWO-COLUMN LAYOUT
-========================= */
 
+/* TWO-COLUMN LAYOUT */
+
+/* Main layout for form and contact info */
 .contact-layout {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
@@ -61,10 +66,10 @@ header .nav-right {
     align-items: start;
 }
 
-/* =========================
-   FORM CARD
-========================= */
 
+/* FORM CARD */
+
+/* Main contact form card */
 .contact-form-card {
     background: #ffffff;
     border: 2px solid #8b5cf6;
@@ -73,10 +78,12 @@ header .nav-right {
     box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
 }
 
+/* Intro area above the form */
 .contact-form-intro {
     margin-bottom: 28px;
 }
 
+/* Form heading */
 .contact-form-intro h2 {
     margin: 0;
     font-size: 30px;
@@ -84,12 +91,14 @@ header .nav-right {
     color: #7c2cff;
 }
 
+/* Form intro text */
 .contact-form-intro p {
     margin: 12px 0 0;
     font-size: 17px;
     color: #6b7280;
 }
 
+/* Small helper text above the form */
 .contact-help-text {
     margin: 0 0 6px;
     font-size: 14px;
@@ -97,12 +106,14 @@ header .nav-right {
     color: #6b7280;
 }
 
+/* Form layout */
 .contact-form {
     display: flex;
     flex-direction: column;
     gap: 22px;
 }
 
+/* Field labels */
 .contact-field label {
     display: block;
     margin-bottom: 10px;
@@ -111,6 +122,7 @@ header .nav-right {
     color: #374151;
 }
 
+/* Shared field style */
 .contact-field input,
 .contact-field textarea {
     width: 100%;
@@ -124,23 +136,27 @@ header .nav-right {
     font-family: Arial, sans-serif;
 }
 
+/* Input height and padding */
 .contact-field input {
     min-height: 58px;
     padding: 0 16px;
 }
 
+/* Textarea size and padding */
 .contact-field textarea {
     min-height: 170px;
     padding: 14px 16px;
     resize: vertical;
 }
 
+/* Focus style for form fields */
 .contact-field input:focus,
 .contact-field textarea:focus {
     border-color: #7c2cff;
     box-shadow: 0 0 0 4px rgba(124, 44, 255, 0.08);
 }
 
+/* Submit button */
 .contact-submit {
     margin-top: 4px;
     min-height: 58px;
@@ -155,15 +171,16 @@ header .nav-right {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Submit button hover effect */
 .contact-submit:hover {
     transform: translateY(-1px);
     box-shadow: 0 18px 30px rgba(99, 82, 255, 0.28);
 }
 
-/* =========================
-   MESSAGES
-========================= */
 
+/* MESSAGES */
+
+/* Shared message style */
 .contact-message {
     margin: 0 0 18px;
     padding: 14px 16px;
@@ -172,26 +189,29 @@ header .nav-right {
     font-weight: 600;
 }
 
+/* Success message */
 .contact-message-success {
     background: #ecfdf5;
     color: #15803d;
     border: 1px solid #bbf7d0;
 }
 
+/* Error message */
 .contact-message-error {
     background: #fef2f2;
     color: #b91c1c;
     border: 1px solid #fecaca;
 }
 
-/* =========================
-   INFO SIDE
-========================= */
 
+/* INFO SIDE */
+
+/* Right-side contact info area */
 .contact-info {
     padding-top: 6px;
 }
 
+/* Contact info heading */
 .contact-info-title {
     margin: 0;
     font-size: 32px;
@@ -199,6 +219,7 @@ header .nav-right {
     color: #111827;
 }
 
+/* Contact info intro text */
 .contact-info-text {
     margin: 14px 0 28px;
     font-size: 18px;
@@ -206,12 +227,14 @@ header .nav-right {
     color: #6b7280;
 }
 
+/* Grid of contact info cards */
 .contact-info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 22px;
 }
 
+/* Single contact info card */
 .contact-info-card {
     background: #ffffff;
     border-left: 5px solid #8b5cf6;
@@ -221,11 +244,13 @@ header .nav-right {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Contact info card hover effect */
 .contact-info-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 34px rgba(15, 23, 42, 0.12);
 }
 
+/* Contact info card title */
 .contact-info-card h3 {
     margin: 0 0 16px;
     font-size: 22px;
@@ -233,6 +258,7 @@ header .nav-right {
     color: #1f3f93;
 }
 
+/* Contact info card text */
 .contact-info-card p {
     margin: 0 0 12px;
     font-size: 16px;
@@ -240,13 +266,15 @@ header .nav-right {
     color: #4b5563;
 }
 
+/* Remove last paragraph bottom margin */
 .contact-info-card p:last-child {
     margin-bottom: 0;
 }
 
-/* =========================
-   TABLET
-========================= */
+
+/* TABLET */
+
+/* Layout changes for screens 1000px and below */
 @media (max-width: 1000px) {
     .contact-layout {
         grid-template-columns: 1fr;
@@ -258,18 +286,17 @@ header .nav-right {
     }
 
     .about-hero {
-    padding: 1.8rem 1.2rem 2.4rem;
-}
+        padding: 1.8rem 1.2rem 2.4rem;
+    }
 
-.about-hero h1 {
-    font-size: 3.4rem;
-}
+    .about-hero h1 {
+        font-size: 3.4rem;
+    }
 
-.about-hero-text {
-    font-size: 1rem;
-    line-height: 1.8;
-}
-
+    .about-hero-text {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
 
     .contact-form-card {
         padding: 32px 26px 28px;
@@ -296,9 +323,10 @@ header .nav-right {
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
+
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;
@@ -362,25 +390,29 @@ header .nav-right {
     }
 }
 
+
+/* MOBILE */
+
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .contact-shell {
         padding: 20px 12px 32px;
     }
 
- .about-hero {
-    padding: 1.4rem 1rem 2rem;
-    margin-bottom: 24px;
-}
+    .about-hero {
+        padding: 1.4rem 1rem 2rem;
+        margin-bottom: 24px;
+    }
 
-.about-hero h1 {
-    font-size: 2.4rem;
-    line-height: 1.1;
-}
+    .about-hero h1 {
+        font-size: 2.4rem;
+        line-height: 1.1;
+    }
 
-.about-hero-text {
-    font-size: 0.95rem;
-    line-height: 1.7;
-}
+    .about-hero-text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
 
     .contact-form-card {
         border-radius: 22px;

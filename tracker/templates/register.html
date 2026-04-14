@@ -1,30 +1,40 @@
+{# TEMPLATE: register.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Register{% endblock %}
 
+{# Page-specific CSS files #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <section class="login-shell">
     <h1 class="visually-hidden">Register</h1>
 
+    <!-- REGISTER CARD - main registration container -->
     <article class="login-form-card">
         <h2 class="visually-hidden">Register form card</h2>
 
+        <!-- FORM HEADER - page heading and short description -->
         <section class="login-form-header">
             <h2 id="register-form-title">Create Your Account</h2>
             <p>Sign up now and start managing your finances like a pro</p>
         </section>
 
+        {# Display error message passed from the route when validation fails #}
         {% if error %}
         <p class="login-message login-message-error" role="alert">
             {{ error }}
         </p>
         {% endif %}
 
+        {# Display success message after registration is completed successfully #}
+        {# The redirect URL is stored in a data attribute so JavaScript can redirect the user to login after a short delay #}
         {% if success %}
         <p
             class="login-message login-message-success"
@@ -36,14 +46,17 @@
         </p>
         {% endif %}
 
+        <!-- REGISTER FORM - sends user details to the backend -->
         <form
             method="POST"
             action="/register"
             class="login-form"
             novalidate
         >
+            {# CSRF token helps protect the form from unauthorised submissions #}
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+            <!-- FULL NAME FIELD - keeps entered value if validation fails -->
             <section class="login-field">
                 <h2 class="visually-hidden">Full name field</h2>
                 <label for="name">Full Name</label>
@@ -58,6 +71,7 @@
                 >
             </section>
 
+            <!-- EMAIL FIELD - keeps entered value if validation fails -->
             <section class="login-field">
                 <h2 class="visually-hidden">Email field</h2>
                 <label for="email">Email Address</label>
@@ -72,9 +86,11 @@
                 >
             </section>
 
+            <!-- PASSWORD FIELD - includes password visibility toggle -->
             <section class="login-field">
                 <h2 class="visually-hidden">Password field</h2>
                 <label for="password">Password</label>
+
                 <section class="login-password-wrap">
                     <h3 class="visually-hidden">Password input and toggle</h3>
                     <input
@@ -89,14 +105,18 @@
                         Show
                     </button>
                 </section>
+
+                <!-- PASSWORD HINT - explains password rules -->
                 <p class="register-hint">
                     Use at least 12 characters, including one number and one special character.
                 </p>
             </section>
 
+            <!-- CONFIRM PASSWORD FIELD - used to match the first password -->
             <section class="login-field">
                 <h2 class="visually-hidden">Confirm password field</h2>
                 <label for="confirm_password">Confirm Password</label>
+
                 <section class="login-password-wrap">
                     <h3 class="visually-hidden">Confirm password input and toggle</h3>
                     <input
@@ -113,8 +133,10 @@
                 </section>
             </section>
 
+            <!-- TERMS CHECKBOX - user must agree before registration -->
             <section class="register-check-row">
                 <h2 class="visually-hidden">Terms agreement</h2>
+
                 <label class="register-check" for="agree_terms">
                     <input
                         id="agree_terms"
@@ -130,9 +152,11 @@
                 </label>
             </section>
 
+            <!-- SUBMIT BUTTON - sends form data for registration -->
             <button type="submit" class="login-submit">Create Account</button>
         </form>
 
+        <!-- LOGIN LINK - for users who already have an account -->
         <section class="login-register">
             <h2 class="visually-hidden">Login link</h2>
             <p>
@@ -142,4 +166,5 @@
         </section>
     </article>
 </section>
+
 {% endblock %}

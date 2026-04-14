@@ -1,4 +1,6 @@
+/* ABOUT PAGE STYLES */
 
+/* Keep header left and right sections above decorative layers */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -8,7 +10,9 @@ header .nav-right {
 }
 
 
-/* HERO */
+/* HERO SECTION */
+
+/* Main hero section at the top of the about page */
 .about-hero {
     max-width: 1450px;
     margin: 0 auto;
@@ -20,6 +24,7 @@ header .nav-right {
         radial-gradient(circle at 70% 85%, rgba(168, 85, 247, 0.10), transparent 22%);
 }
 
+/* Optional badge above the hero title */
 .about-badge {
     display: inline-block;
     margin: 0 0 1.2rem;
@@ -32,6 +37,7 @@ header .nav-right {
     font-weight: 600;
 }
 
+/* Main hero heading */
 .about-hero h2 {
     max-width: 980px;
     margin: 0 auto 1.2rem;
@@ -41,6 +47,7 @@ header .nav-right {
     color: #7c1dff;
 }
 
+/* Hero supporting text */
 .about-hero-text {
     max-width: 860px;
     margin: 0 auto;
@@ -49,7 +56,10 @@ header .nav-right {
     color: #556274;
 }
 
-/* STORY */
+
+/* STORY SECTION */
+
+/* Two-column layout for story content and info box */
 .about-story {
     max-width: 1450px;
     margin: 0 auto;
@@ -60,6 +70,7 @@ header .nav-right {
     align-items: start;
 }
 
+/* Story title and stats title */
 .about-story-text h2,
 .about-stats-inner h2 {
     margin: 0 0 1.5rem;
@@ -68,6 +79,7 @@ header .nav-right {
     color: #0f172a;
 }
 
+/* Difference section title */
 .about-difference h2 {
     margin: 0 0 1.5rem;
     font-size: clamp(2rem, 4vw, 3.2rem);
@@ -75,6 +87,7 @@ header .nav-right {
     color: #7c1dff;
 }
 
+/* Story paragraph text */
 .about-story-text p {
     margin: 0 0 1.5rem;
     font-size: 1rem;
@@ -82,6 +95,7 @@ header .nav-right {
     color: #42556d;
 }
 
+/* Box for mission, vision, and values */
 .about-story-box {
     background: #ffffff;
     border: 4px solid #e3d4ff;
@@ -89,24 +103,29 @@ header .nav-right {
     padding: 2rem;
     box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
 }
+
+/* Each row inside the story info box */
 .about-info-row {
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid #ececf2;
 }
 
+/* Remove border from last row */
 .about-info-row:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
 }
 
+/* Small heading inside info box */
 .about-info-row h3 {
     margin: 0 0 0.7rem;
     font-size: 1.6rem;
     color: #1e293b;
 }
 
+/* Text inside info box */
 .about-info-row p {
     margin: 0;
     font-size: 1rem;
@@ -114,7 +133,10 @@ header .nav-right {
     color: #5d6a7c;
 }
 
-/* DIFFERENCE */
+
+/* DIFFERENCE SECTION */
+
+/* Section showing what makes the platform different */
 .about-difference {
     max-width: 1500px;
     margin: 0 auto;
@@ -122,38 +144,45 @@ header .nav-right {
     text-align: center;
 }
 
+/* Supporting text under section title */
 .about-difference-text {
     margin: 0 0 2.3rem;
     font-size: 1.1rem;
     color: #56657a;
 }
 
+/* Grid of feature cards */
 .about-cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.6rem;
 }
 
+/* Single feature card */
 .about-card {
     background: #ffffff;
-    border-left: 6px solid #8b5cf6; /* purple side border */
+    border-left: 6px solid #8b5cf6;
     border-radius: 1.5rem;
     padding: 2.1rem 1.6rem;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
     text-align: center;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
+/* Hover effect for feature cards */
 .about-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
 }
 
+/* Card heading */
 .about-card h3 {
     margin: 0 0 1rem;
     font-size: 1.55rem;
     color: #0f172a;
 }
 
+/* Card text */
 .about-card p {
     margin: 0;
     font-size: 1rem;
@@ -161,22 +190,27 @@ header .nav-right {
     color: #4f6178;
 }
 
-/* STATS */
+
+/* STATS SECTION */
+
+/* Main stats wrapper */
 .about-stats {
     max-width: 1500px;
     margin: 0 auto;
     padding: 0 1.5rem 3rem;
 }
 
+/* Purple stats box */
 .about-stats-inner {
+    position: relative;
+    overflow: hidden;
     padding: 2.2rem 1.6rem 2rem;
     border-radius: 2rem;
     text-align: center;
     background: linear-gradient(135deg, #7c1dff 0%, #b11ccf 45%, #4f46e5 100%);
-    position: relative;
-    overflow: hidden;
 }
 
+/* Decorative circles in stats background */
 .about-stats-inner::before,
 .about-stats-inner::after {
     content: "";
@@ -185,6 +219,7 @@ header .nav-right {
     background: rgba(255, 255, 255, 0.10);
 }
 
+/* Top-right circle */
 .about-stats-inner::before {
     width: 160px;
     height: 160px;
@@ -192,6 +227,7 @@ header .nav-right {
     right: -35px;
 }
 
+/* Bottom-left circle */
 .about-stats-inner::after {
     width: 120px;
     height: 120px;
@@ -199,6 +235,7 @@ header .nav-right {
     left: -20px;
 }
 
+/* Keep text above decorative circles */
 .about-stats-inner h2,
 .about-stats-text,
 .about-stat-item h3,
@@ -207,17 +244,20 @@ header .nav-right {
     z-index: 1;
 }
 
+/* Stats section heading */
 .about-stats-inner h2 {
     margin-bottom: 0.8rem;
     color: #ffffff;
 }
 
+/* Stats intro text */
 .about-stats-text {
     margin: 0 0 1.8rem;
     color: rgba(255, 255, 255, 0.92);
     font-size: 1rem;
 }
 
+/* Stats grid layout */
 .about-stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -226,8 +266,7 @@ header .nav-right {
     z-index: 1;
 }
 
-
-
+/* Big number in stats item */
 .about-stat-item h3 {
     margin: 0 0 0.45rem;
     font-size: clamp(2.2rem, 4vw, 3.6rem);
@@ -236,13 +275,17 @@ header .nav-right {
     font-weight: 800;
 }
 
+/* Small label in stats item */
 .about-stat-item p {
     margin: 0;
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.92);
 }
 
+
 /* TABLET */
+
+/* Layout changes for screens 900px and below */
 @media (max-width: 900px) {
     .about-hero {
         padding: 1.8rem 1.2rem 2.4rem;
@@ -286,7 +329,10 @@ header .nav-right {
     }
 }
 
+
 /* MOBILE */
+
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .about-hero {
         padding: 1.4rem 1rem 2rem;
@@ -368,6 +414,10 @@ header .nav-right {
     }
 }
 
+
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;

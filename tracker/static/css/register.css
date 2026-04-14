@@ -1,7 +1,6 @@
-/* =========================
-   REGISTER PAGE
-========================= */
+/* REGISTER PAGE */
 
+/* Keep header left and right sections above decorative layers */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -10,7 +9,7 @@ header .nav-right {
     margin-bottom: 20px;
 }
 
-
+/* Small password rule hint under the password field */
 .register-hint {
     margin: 8px 0 0;
     font-size: 13px;
@@ -18,10 +17,12 @@ header .nav-right {
     color: #6b7280;
 }
 
+/* Wrapper for terms checkbox row */
 .register-check-row {
     margin-top: 2px;
 }
 
+/* Terms checkbox label and text */
 .register-check {
     display: inline-flex;
     align-items: flex-start;
@@ -32,6 +33,7 @@ header .nav-right {
     cursor: pointer;
 }
 
+/* Terms checkbox */
 .register-check input {
     width: 18px;
     height: 18px;
@@ -39,16 +41,19 @@ header .nav-right {
     accent-color: #7c2cff;
 }
 
+/* Terms links */
 .register-check a {
     color: #7c2cff;
     font-weight: 700;
     text-decoration: none;
 }
 
+/* Terms links hover */
 .register-check a:hover {
     text-decoration: underline;
 }
 
+/* Success message style */
 .login-message-success {
     background: #ecfdf5;
     color: #15803d;
@@ -56,10 +61,9 @@ header .nav-right {
 }
 
 
-/* =========================
-   TABLET
-========================= */
+/* TABLET */
 
+/* Layout changes for screens 900px and below */
 @media (max-width: 900px) {
     .register-hint,
     .register-check {
@@ -67,10 +71,10 @@ header .nav-right {
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
 
+/* MOBILE */
+
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .register-hint,
     .register-check {
@@ -78,6 +82,10 @@ header .nav-right {
     }
 }
 
+
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;

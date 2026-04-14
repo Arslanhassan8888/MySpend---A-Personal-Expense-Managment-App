@@ -1,44 +1,62 @@
+<!-- BUDGET CHART CARD - visual breakdown of used vs remaining budget -->
 <aside
     class="budget-chart-card"
-    data-used="{{ monthly_total }}"
-    data-left="{{ remaining if remaining > 0 else 0 }}"
-    data-progress="{{ progress|round(1) }}"
+    data-used="{{ monthly_total }}"                       {# data-used attribute stores the total amount spent in the current month, which is passed from the backend. #}
+    data-left="{{ remaining if remaining > 0 else 0 }}"   {# data-left attribute stores the remaining budget, which is calculated as the budget amount minus the total expenses. #}
+    data-progress="{{ progress|round(1) }}"               {# data-progress attribute stores the percentage of the budget that has been used. #}
 >
     <h2 class="visually-hidden">Budget chart</h2>
+
+    <!-- HEADER - chart title and current month -->
     <section class="budget-chart-heading">
         <h2>Monthly Spending Progress</h2>
-        <p class="budget-chart-subtitle">{{ current_month }}</p>
+        <p class="budget-chart-subtitle">{{ current_month }}</p> {# Display the name of the current month, which is passed from the backend. #}
     </section>
+
+    <!-- CHART - doughnut chart rendered with Chart.js -->
     <figure class="budget-chart-figure">
+
+        {# Canvas used by JavaScript to render the chart #}
         <canvas id="budgetSplitChart"></canvas>
+
+        <!-- CENTER LABEL - shows percentage used inside chart -->
         <figcaption class="budget-chart-center">
-            <strong>{{ progress|round(1) }}%</strong>
+            <strong>{{ progress|round(1) }}%</strong> {# Display the percentage of the budget that has been used, rounded to one decimal place. #}
             <span>Used</span>
         </figcaption>
     </figure>
+
+    <!-- DATA TABLE - textual summary of chart values -->
     <table class="budget-chart-table">
         <caption class="sr-only">Budget progress summary</caption>
+
         <thead>
             <tr>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
+                <th scope="col">Status</th> {# "Status" column describes whether the amount is part of the used budget or the remaining budget. #}
+                <th scope="col">Amount</th> {# "Amount" column shows the monetary value for each status. #}
             </tr>
         </thead>
+
         <tbody>
+
+            <!-- USED AMOUNT -->
             <tr>
                 <th scope="row">
                     <span class="chart-dot chart-dot-used"></span>
                     Used this month
                 </th>
-                <td>£{{ monthly_total }}</td>
+                <td>£{{ monthly_total }}</td> {# Display the total amount spent in the current month. #}
             </tr>
+
+            <!-- REMAINING AMOUNT -->
             <tr>
                 <th scope="row">
                     <span class="chart-dot chart-dot-left"></span>
                     Remaining budget
                 </th>
-                <td>£{{ remaining if remaining > 0 else 0 }}</td>
+                <td>£{{ remaining if remaining > 0 else 0 }}</td> {# Display the remaining budget, but if the remaining amount is negative (i.e., the budget has been exceeded), display 0 instead to avoid showing a negative value in the chart summary. #}
             </tr>
+
         </tbody>
     </table>
 </aside>

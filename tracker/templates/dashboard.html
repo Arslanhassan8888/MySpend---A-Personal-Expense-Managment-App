@@ -1,52 +1,62 @@
+{# TEMPLATE: dashboard.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Dashboard{% endblock %}
 
+{# Page-specific CSS file #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
 
+{# Store flashed messages once so included template parts can use them #}
 {% set flashed_messages = get_flashed_messages(with_categories=true) %}
 
 <section class="dashboard-page">
     <h1 class="visually-hidden">Dashboard</h1>
 
-    <!-- HERO -->
+    <!-- HERO SECTION - welcome message and current month -->
     <header class="dashboard-hero">
         <h2>Welcome back, {{ name }}</h2>
         <p>Here's your financial overview for {{ current_month }}</p>
     </header>
 
-    <!-- SUMMARY -->
+    <!-- SUMMARY SECTION - quick overview of totals -->
     <section class="summary">
         <h2 class="visually-hidden">Summary</h2>
 
+        <!-- Total spending card -->
         <article class="card red">
             <h3>Total Spent</h3>
             <p class="amount">£{{ total }}</p>
             <small>All time expenses</small>
         </article>
 
+        <!-- Monthly spending card -->
         <article class="card blue">
             <h3>Monthly Spent</h3>
             <p class="amount">£{{ monthly_total }}</p>
             <small>Current month</small>
         </article>
 
+        <!-- Weekly spending card -->
         <article class="card purple">
             <h3>Weekly Spent</h3>
             <p class="amount">£{{ weekly_total }}</p>
             <small>Last 7 days</small>
         </article>
 
+        <!-- Daily spending card -->
         <article class="card green">
             <h3>Daily Spent</h3>
             <p class="amount">£{{ daily_total }}</p>
             <small>Today only</small>
         </article>
 
+        <!-- Remaining budget card -->
         <article class="card orange">
             <h3>Remaining</h3>
             <p class="amount">£{{ remaining }}</p>
@@ -54,21 +64,24 @@
         </article>
     </section>
 
-    <!-- BUDGET -->
+    <!-- BUDGET SECTION - includes budget form and budget chart -->
     <section id="budget" class="budget-grid">
         <h2 class="visually-hidden">Budget section</h2>
 
+        {# Include budget input and budget summary section #}
         {% include "dashboard_parts/budget_section.html" %}
+
+        {# Include visual chart for budget progress #}
         {% include "dashboard_parts/chart_section.html" %}
     </section>
 
-    <!-- ADD EXPENSE -->
+    <!-- ADD EXPENSE SECTION - includes expense form -->
     {% include "dashboard_parts/add_expense_form.html" %}
 
-    <!-- HISTORY -->
+    <!-- EXPENSE HISTORY SECTION - includes expense table and actions -->
     {% include "dashboard_parts/expense_history.html" %}
 
-    <!-- MODALS -->
+    <!-- MODALS - popup forms for editing, sorting, and searching -->
     {% include "dashboard_parts/edit_modal.html" %}
     {% include "dashboard_parts/sort_modal.html" %}
     {% include "dashboard_parts/search_modal.html" %}

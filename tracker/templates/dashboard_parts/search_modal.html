@@ -1,3 +1,4 @@
+<!-- SEARCH MODAL - allows user to filter expenses -->
 <section
     id="searchModal"
     class="history-modal"
@@ -5,25 +6,42 @@
 >
     <h2 class="visually-hidden">Search modal</h2>
 
+    <!-- MODAL CARD - container for search form -->
     <section class="history-modal-card">
+
+        <!-- TITLE AND FEEDBACK -->
         <h3 id="search-title">Search Expenses</h3>
+
+        {# Feedback message shown dynamically via JavaScript #}
         <p id="search-feedback" class="modal-feedback" hidden></p>
 
+        <!-- SEARCH FORM - sends filters via GET request -->
         <form
             id="searchForm"
             method="GET"
             action="/dashboard#expenses"
             novalidate
         >
+
+            <!-- DESCRIPTION FIELD -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Description field</h4>
+
                 <label for="search_description">Description</label>
-                <input id="search_description" type="text" name="description">
+
+                <input
+                    id="search_description"
+                    type="text"
+                    name="description"
+                >
             </section>
 
+            <!-- MIN AMOUNT FIELD -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Minimum amount field</h4>
+
                 <label for="search_min_amount">Min Amount</label>
+
                 <input
                     id="search_min_amount"
                     type="number"
@@ -31,12 +49,18 @@
                     min="0"
                     step="0.01"
                 >
-                <p id="search-min-hint" class="field-hint">Use positive numbers only.</p>
+
+                <p id="search-min-hint" class="field-hint">
+                    Use positive numbers only.
+                </p>
             </section>
 
+            <!-- MAX AMOUNT FIELD -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Maximum amount field</h4>
+
                 <label for="search_max_amount">Max Amount</label>
+
                 <input
                     id="search_max_amount"
                     type="number"
@@ -44,25 +68,55 @@
                     min="0"
                     step="0.01"
                 >
-                <p id="search-max-hint" class="field-hint">Use positive numbers only.</p>
+
+                <p id="search-max-hint" class="field-hint">
+                    Use positive numbers only.
+                </p>
             </section>
 
+            <!-- DATE FROM FIELD -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Date from field</h4>
+
                 <label for="search_date_from">Date From</label>
-                <input id="search_date_from" type="date" name="date_from">
+
+                <input
+                    id="search_date_from"
+                    type="date"
+                    name="date_from"
+                >
             </section>
 
+            <!-- DATE TO FIELD -->
             <section class="modal-field">
                 <h4 class="visually-hidden">Date to field</h4>
+
                 <label for="search_date_to">Date To</label>
-                <input id="search_date_to" type="date" name="date_to">
+
+                <input
+                    id="search_date_to"
+                    type="date"
+                    name="date_to"
+                >
             </section>
 
+            <!-- ACTION BUTTONS -->
             <section class="modal-actions">
                 <h4 class="visually-hidden">Modal actions</h4>
-                <button type="submit" class="history-primary-button">Apply</button>
-                <button type="button" class="history-secondary-button" onclick="closeSearchModal()">Cancel</button>
+
+                <!-- APPLY FILTERS -->
+                <button type="submit" class="history-primary-button">
+                    Apply
+                </button>
+
+                <!-- CLOSE MODAL -->
+                <button
+                    type="button"
+                    class="history-secondary-button"
+                    onclick="closeSearchModal()"
+                >
+                    Cancel
+                </button>
             </section>
         </form>
     </section>

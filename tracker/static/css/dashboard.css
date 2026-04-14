@@ -1,9 +1,8 @@
+/* DASHBOARD PAGE STYLES */
 
+/* HERO SECTION */
 
-/* =========================
-   HERO SECTION
-========================= */
-
+/* Main hero section at the top of the dashboard */
 .dashboard-hero {
     background: linear-gradient(135deg, #7c3aed, #9333ea);
     color: white;
@@ -17,7 +16,7 @@
     overflow: hidden;
 }
 
-/* decorative glow */
+/* Decorative glow shape */
 .dashboard-hero::after {
     content: "";
     position: absolute;
@@ -29,48 +28,50 @@
     border-radius: 50%;
 }
 
-/* TEXT */
+/* Hero heading */
 .dashboard-hero h2 {
     margin: 0;
     font-size: 38px;
     font-weight: 700;
 }
 
+/* Hero text */
 .dashboard-hero p {
     margin-top: 14px;
     font-size: 18px;
     opacity: 0.95;
 }
 
-/* =========================
-   CONTENT SECTIONS
-========================= */
 
+/* CONTENT SECTIONS */
+
+/* Shared section spacing */
 section {
     position: relative;
     z-index: 1;
     margin-bottom: 20px;
 }
 
-/* =========================
-   TABLE
-========================= */
 
+/* TABLE */
+
+/* Shared table layout */
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
+/* Shared table cell style */
 th,
 td {
     border: 1px solid #ccc;
     padding: 8px;
 }
 
-/* =========================
-   SUMMARY GRID
-========================= */
 
+/* SUMMARY GRID */
+
+/* Grid for dashboard summary cards */
 .summary {
     max-width: 1100px;
     margin: 0 auto;
@@ -79,10 +80,10 @@ td {
     gap: 20px;
 }
 
-/* =========================
-   CARD BASE
-========================= */
 
+/* CARD BASE */
+
+/* Base style for summary cards */
 .card {
     background: #f9fafb;
     padding: 34px 36px;
@@ -93,66 +94,72 @@ td {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* hover = lift only (no color change) */
+/* Card hover effect */
 .card:hover {
     transform: translateY(-6px);
     box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
 }
 
-/* =========================
-   LEFT COLOR BORDER AND BACKGROUND
-========================= */
 
+/* CARD COLOURS */
+
+/* Red summary card */
 .card.red {
     background: linear-gradient(145deg, #fdf2f2, #f8eaea);
     border-left: 5px solid #ef4444;
 }
 
+/* Blue summary card */
 .card.blue {
     background: linear-gradient(145deg, #eff6ff, #e6f0ff);
     border-left: 5px solid #3b82f6;
 }
 
+/* Purple summary card */
 .card.purple {
     background: linear-gradient(145deg, #f5f3ff, #ede9fe);
     border-left: 5px solid #8b5cf6;
 }
 
+/* Green summary card */
 .card.green {
     background: linear-gradient(145deg, #ecfdf5, #e6f9ef);
     border-left: 5px solid #22c55e;
 }
 
+/* Orange summary card */
 .card.orange {
     background: linear-gradient(145deg, #fff7ed, #ffedd5);
     border-left: 5px solid #f97316;
 }
 
-/* =========================
-   TEXT
-========================= */
 
+/* CARD TEXT */
+
+/* Card heading */
 .card h3 {
     margin: 15px 0 5px;
     font-size: 18px;
     color: #555;
 }
 
+/* Large amount text */
 .amount {
     font-size: 34px;
     font-weight: bold;
     margin: 5px 0;
 }
 
+/* Small card text */
 .card small {
     color: #777;
     font-size: 14px;
 }
 
-/* =========================
-   BUDGET
-========================= */
 
+/* BUDGET SECTION */
+
+/* Two-column layout for budget area */
 .budget-grid {
     max-width: 1150px;
     margin: 40px auto 0;
@@ -162,6 +169,7 @@ td {
     align-items: start;
 }
 
+/* Main budget card */
 .budget-card {
     background: linear-gradient(180deg, #ffffff 0%, #fcfbff 100%);
     padding: 32px 30px;
@@ -170,6 +178,7 @@ td {
     box-shadow: 0 18px 35px rgba(124, 58, 237, 0.12);
 }
 
+/* Budget title */
 .budget-title h2 {
     margin: 0 0 34px;
     font-size: 24px;
@@ -177,6 +186,7 @@ td {
     color: #111827;
 }
 
+/* Budget form layout */
 .budget-input {
     display: grid;
     grid-template-columns: 1fr 200px;
@@ -188,6 +198,7 @@ td {
     align-items: center;
 }
 
+/* Budget label */
 .budget-input label {
     grid-area: label;
     font-size: 15px;
@@ -195,10 +206,12 @@ td {
     color: #475569;
 }
 
+/* Budget message area */
 .budget-form-messages {
     grid-area: message;
 }
 
+/* Budget input field */
 .budget-input input {
     grid-area: input;
     width: 100%;
@@ -213,10 +226,12 @@ td {
     box-sizing: border-box;
 }
 
+/* Budget input focus */
 .budget-input input:focus {
     border-color: #8b5cf6;
 }
 
+/* Budget submit button */
 .budget-input button {
     grid-area: button;
     padding: 17px 24px;
@@ -231,11 +246,13 @@ td {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Budget button hover */
 .budget-input button:hover {
     transform: translateY(-1px);
     box-shadow: 0 16px 28px rgba(99, 82, 255, 0.3);
 }
 
+/* Budget summary box */
 .budget-box {
     background: #f1ecfb;
     border-radius: 22px;
@@ -243,6 +260,7 @@ td {
     margin-top: 30px;
 }
 
+/* Top budget values row */
 .budget-values {
     display: flex;
     justify-content: space-between;
@@ -251,6 +269,7 @@ td {
     margin-bottom: 22px;
 }
 
+/* Small text above values */
 .budget-values p {
     margin: 0 0 8px;
     font-size: 14px;
@@ -258,6 +277,7 @@ td {
     color: #2E2E2E;
 }
 
+/* Large value text */
 .budget-values strong {
     display: block;
     font-size: 24px;
@@ -266,21 +286,28 @@ td {
     margin-bottom: -10px;
 }
 
+/* Right side remaining block */
 .remaining {
     text-align: right;
 }
+
+/* Remaining value default colour */
 .remaining strong {
     color: #8C4C03;
 }
+
+/* Remaining warning colour */
 .remaining strong.warning {
     color: #8C4C03;
 }
 
+/* Progress bar wrapper */
 .progress-wrapper {
     position: relative;
     margin-bottom: 26px;
 }
 
+/* Main progress bar */
 .progress-wrapper progress {
     display: block;
     width: 100%;
@@ -293,30 +320,37 @@ td {
     -webkit-appearance: none;
 }
 
+/* Green progress */
 progress.low::-webkit-progress-value {
     background: #16a34a;
 }
 
+/* Orange progress */
 progress.mid::-webkit-progress-value {
     background: #f59e0b;
 }
 
+/* Red progress */
 progress.high::-webkit-progress-value {
     background: #dc2626;
 }
 
+/* Green progress for Firefox */
 progress.low::-moz-progress-bar {
     background: #16a34a;
 }
 
+/* Orange progress for Firefox */
 progress.mid::-moz-progress-bar {
     background: #f59e0b;
 }
 
+/* Red progress for Firefox */
 progress.high::-moz-progress-bar {
     background: #dc2626;
 }
 
+/* Text shown inside progress bar */
 .progress-label {
     position: absolute;
     inset: 0;
@@ -328,6 +362,7 @@ progress.high::-moz-progress-bar {
     pointer-events: none;
 }
 
+/* Budget status row */
 .budget-status-row {
     display: flex;
     justify-content: space-between;
@@ -336,36 +371,42 @@ progress.high::-moz-progress-bar {
     flex-wrap: wrap;
 }
 
+/* Remove paragraph margins */
 .budget-status-row p {
     margin: 0;
 }
 
+/* Budget status text */
 .budget-status {
     font-size: 15px;
     font-weight: 700;
 }
 
+/* Success text colour */
 .success {
     color: #0b8f3a;
 }
 
+/* Warning text colour */
 .warning {
     color: #683903;
 }
 
+/* Danger text colour */
 .danger {
     color: #dc2626;
 }
 
+/* Transactions count text */
 .transactions {
     font-size: 15px;
     color: #2E2E2E;
 }
 
-/* =========================
-   FORM MESSAGES
-========================= */
 
+/* FORM MESSAGES */
+
+/* Shared message list */
 .form-messages,
 .table-messages {
     margin: 0;
@@ -373,6 +414,7 @@ progress.high::-moz-progress-bar {
     list-style: none;
 }
 
+/* Shared message item */
 .form-messages li,
 .table-messages li {
     padding: 10px 14px;
@@ -382,6 +424,7 @@ progress.high::-moz-progress-bar {
     width: fit-content;
 }
 
+/* Success message style */
 .form-messages .success,
 .table-messages .success {
     background: #ecfdf5;
@@ -389,6 +432,7 @@ progress.high::-moz-progress-bar {
     border: 1px solid #bbf7d0;
 }
 
+/* Error message style */
 .form-messages .error,
 .table-messages .error {
     background: #fef2f2;
@@ -396,10 +440,10 @@ progress.high::-moz-progress-bar {
     border: 1px solid #fecaca;
 }
 
-/* =========================
-   BUDGET CHART CARD
-========================= */
 
+/* BUDGET CHART CARD */
+
+/* Card holding the budget doughnut chart */
 .budget-chart-card {
     background: #ffffff;
     padding: 28px 26px 30px;
@@ -416,12 +460,14 @@ progress.high::-moz-progress-bar {
     overflow: hidden;
 }
 
+/* Heading block above chart */
 .budget-chart-heading {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
+/* Chart heading */
 .budget-chart-heading h2 {
     margin: 0;
     font-size: 20px;
@@ -430,6 +476,7 @@ progress.high::-moz-progress-bar {
     color: #111827;
 }
 
+/* Chart subtitle */
 .budget-chart-subtitle {
     margin: 0;
     font-size: 13px;
@@ -437,6 +484,7 @@ progress.high::-moz-progress-bar {
     color: #6b7280;
 }
 
+/* Chart figure wrapper */
 .budget-chart-figure {
     position: relative;
     margin: 0;
@@ -444,12 +492,14 @@ progress.high::-moz-progress-bar {
     max-height: 210px;
 }
 
+/* Chart canvas */
 .budget-chart-figure canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;
 }
 
+/* Center text inside chart */
 .budget-chart-center {
     position: absolute;
     inset: 0;
@@ -460,6 +510,7 @@ progress.high::-moz-progress-bar {
     transform: translateY(20px);
 }
 
+/* Large percentage text */
 .budget-chart-center strong {
     display: block;
     font-size: 28px;
@@ -468,6 +519,7 @@ progress.high::-moz-progress-bar {
     color: #111827;
 }
 
+/* Small label below percentage */
 .budget-chart-center span {
     display: block;
     margin-top: 6px;
@@ -479,12 +531,14 @@ progress.high::-moz-progress-bar {
     letter-spacing: 0.04em;
 }
 
+/* Budget chart table */
 .budget-chart-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
 }
 
+/* Table heading cells */
 .budget-chart-table thead th {
     border: none;
     padding: 0 0 2px;
@@ -495,6 +549,7 @@ progress.high::-moz-progress-bar {
     background: transparent;
 }
 
+/* Table body text */
 .budget-chart-table tbody th,
 .budget-chart-table tbody td {
     border: none;
@@ -506,16 +561,19 @@ progress.high::-moz-progress-bar {
     vertical-align: middle;
 }
 
+/* Left table text */
 .budget-chart-table tbody th {
     text-align: left;
     padding-left: 2px;
 }
 
+/* Right table values */
 .budget-chart-table tbody td {
     text-align: right;
     padding-right: 24px;
 }
 
+/* Small chart legend dot */
 .chart-dot {
     display: inline-block;
     width: 12px;
@@ -525,18 +583,20 @@ progress.high::-moz-progress-bar {
     vertical-align: middle;
 }
 
+/* Used amount colour */
 .chart-dot-used {
     background: #16a34a;
 }
 
+/* Remaining amount colour */
 .chart-dot-left {
     background: #d1d5db;
 }
 
-/* =========================
-   EXPENSE CARD
-========================= */
 
+/* EXPENSE CARD */
+
+/* Main card for add expense form */
 .expense-card {
     max-width: 1400px;
     width: 95%;
@@ -548,16 +608,17 @@ progress.high::-moz-progress-bar {
     box-shadow: 0 18px 35px rgba(34, 197, 94, 0.12);
 }
 
+/* Expense section heading */
 .expense-header h2 {
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 25px;
 }
 
-/* =========================
-   FORM GRID
-========================= */
 
+/* FORM GRID */
+
+/* Add expense form layout */
 .expense-form {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -565,6 +626,7 @@ progress.high::-moz-progress-bar {
     align-items: end;
 }
 
+/* Expense form labels */
 .expense-form label {
     display: block;
     font-size: 14px;
@@ -572,6 +634,7 @@ progress.high::-moz-progress-bar {
     color: #444;
 }
 
+/* Expense form inputs and select */
 .expense-form input,
 .expense-form select {
     width: 100%;
@@ -583,18 +646,21 @@ progress.high::-moz-progress-bar {
     box-sizing: border-box;
 }
 
+/* Inner form sections */
 .expense-form section {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
+/* Form messages row */
 .expense-form-messages {
     grid-column: 1 / -1;
     margin-bottom: 10px;
     margin-top: 0;
 }
 
+/* Add expense button */
 .expense-button button {
     width: 100%;
     padding: 14px;
@@ -607,15 +673,16 @@ progress.high::-moz-progress-bar {
     transition: 0.25s;
 }
 
+/* Add expense button hover */
 .expense-button button:hover {
     background: #047857;
     transform: translateY(-2px);
 }
 
-/* =========================
-   EXPENSE TABLE
-========================= */
 
+/* EXPENSE TABLE */
+
+/* Success message above table */
 .table-status-success {
     margin: 0 0 18px;
     padding: 12px 14px;
@@ -627,6 +694,7 @@ progress.high::-moz-progress-bar {
     border: 1px solid #bbf7d0;
 }
 
+/* Main history card */
 .history-card {
     max-width: 1400px;
     width: 95%;
@@ -638,6 +706,7 @@ progress.high::-moz-progress-bar {
     overflow: hidden;
 }
 
+/* History top bar */
 .history-top {
     display: flex;
     justify-content: space-between;
@@ -648,6 +717,7 @@ progress.high::-moz-progress-bar {
     background: linear-gradient(180deg, #faf7ff 0%, #f5f3ff 100%);
 }
 
+/* History title */
 .history-title h2 {
     margin: 0;
     font-size: 28px;
@@ -655,6 +725,7 @@ progress.high::-moz-progress-bar {
     color: #111827;
 }
 
+/* Total expenses badge */
 .history-total {
     margin: 0;
     padding: 10px 16px;
@@ -666,18 +737,22 @@ progress.high::-moz-progress-bar {
     font-weight: 700;
 }
 
+/* Table wrapper */
 .history-table-wrap {
     padding: 32px;
 }
 
+/* Table messages spacing */
 .table-messages {
     margin-bottom: 18px;
 }
 
+/* History form wrapper */
 .history-form {
     margin: 0;
 }
 
+/* Main history table */
 .history-table {
     width: 100%;
     border-collapse: separate;
@@ -688,6 +763,7 @@ progress.high::-moz-progress-bar {
     background: #ffffff;
 }
 
+/* Table heading cells */
 .history-table thead th {
     background: #f3effc;
     color: #111827;
@@ -698,18 +774,22 @@ progress.high::-moz-progress-bar {
     border: none;
 }
 
+/* Checkbox column width */
 .history-table thead th:first-child {
     width: 52px;
 }
 
+/* Table row transition */
 .history-table tbody tr {
     transition: background 0.2s ease;
 }
 
+/* Table row hover */
 .history-table tbody tr:hover {
     background: #faf7ff;
 }
 
+/* Table body cells */
 .history-table tbody td {
     padding: 18px 16px;
     font-size: 16px;
@@ -721,37 +801,44 @@ progress.high::-moz-progress-bar {
     vertical-align: middle;
 }
 
+/* Remove top border from first row */
 .history-table tbody tr:first-child td {
     border-top: none;
 }
 
+/* Selected row highlight */
 .selected-row {
     background: #f7f4ff;
 }
 
+/* Checkbox style */
 .history-table input[type="checkbox"] {
     width: 20px;
     height: 20px;
     accent-color: #8b5cf6;
 }
 
+/* Amount text */
 .history-amount {
     font-size: 20px;
     font-weight: 800;
     color: #111827;
 }
 
+/* Empty description text */
 .history-empty-description {
     color: #9ca3af;
     font-style: italic;
 }
 
+/* Empty table message */
 .history-empty {
     text-align: center;
     color: #6b7280;
     padding: 28px 16px;
 }
 
+/* Edit button */
 .table-action-button {
     border: none;
     background: linear-gradient(135deg, #8b2cf5, #4f46e5);
@@ -765,11 +852,13 @@ progress.high::-moz-progress-bar {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Edit button hover */
 .table-action-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 16px 28px rgba(99, 82, 255, 0.3);
 }
 
+/* Action buttons row */
 .history-actions {
     display: flex;
     align-items: center;
@@ -778,6 +867,7 @@ progress.high::-moz-progress-bar {
     margin-top: 30px;
 }
 
+/* Shared action button style */
 .history-danger-button,
 .history-primary-button,
 .history-secondary-button,
@@ -791,31 +881,37 @@ progress.high::-moz-progress-bar {
     box-sizing: border-box;
 }
 
+/* Delete button */
 .history-danger-button {
     border: none;
     background: linear-gradient(135deg, #fb7185, #f87171);
     color: #ffffff;
 }
 
+/* Delete button hover */
 .history-danger-button:hover {
     filter: brightness(0.97);
 }
 
+/* Disabled delete button */
 .history-danger-button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
+/* Primary button */
 .history-primary-button {
     border: none;
     background: linear-gradient(135deg, #7c3aed, #9333ea);
     color: #ffffff;
 }
 
+/* Primary button hover */
 .history-primary-button:hover {
     filter: brightness(0.97);
 }
 
+/* Secondary and link buttons */
 .history-secondary-button,
 .history-link-button {
     border: none;
@@ -825,16 +921,17 @@ progress.high::-moz-progress-bar {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Secondary and link button hover */
 .history-secondary-button:hover,
 .history-link-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 16px 28px rgba(99, 82, 255, 0.3);
 }
 
-/* =========================
-   MODALS
-========================= */
 
+/* MODALS */
+
+/* Dark background behind modal */
 .history-modal {
     position: fixed;
     inset: 0;
@@ -845,6 +942,7 @@ progress.high::-moz-progress-bar {
     margin-top: 60px;
 }
 
+/* Main modal card */
 .history-modal-card {
     max-width: 500px;
     max-height: 700px;
@@ -855,6 +953,7 @@ progress.high::-moz-progress-bar {
     box-shadow: 0 24px 50px rgba(0, 0, 0, 0.2);
 }
 
+/* Modal title */
 .history-modal-card h3 {
     margin: 0 0 20px;
     font-size: 24px;
@@ -862,6 +961,7 @@ progress.high::-moz-progress-bar {
     color: #111827;
 }
 
+/* Field wrapper inside modal */
 .modal-field {
     display: flex;
     flex-direction: column;
@@ -869,6 +969,7 @@ progress.high::-moz-progress-bar {
     margin-bottom: 18px;
 }
 
+/* Field labels */
 .modal-field label,
 .modal-label {
     font-size: 15px;
@@ -877,6 +978,7 @@ progress.high::-moz-progress-bar {
     margin: 0;
 }
 
+/* Radio option row */
 .radio-option {
     display: grid;
     grid-template-columns: 22px 1fr;
@@ -888,6 +990,7 @@ progress.high::-moz-progress-bar {
     margin-bottom: 10px;
 }
 
+/* Radio input style */
 .radio-option input[type="radio"] {
     width: 18px;
     height: 18px;
@@ -895,6 +998,7 @@ progress.high::-moz-progress-bar {
     accent-color: #7c3aed;
 }
 
+/* Modal input and select */
 .modal-field input,
 .modal-field select {
     width: 100%;
@@ -906,18 +1010,21 @@ progress.high::-moz-progress-bar {
     font-size: 15px;
 }
 
+/* Modal input focus */
 .modal-field input:focus,
 .modal-field select:focus {
     outline: none;
     border-color: #8b5cf6;
 }
 
+/* Small field hint */
 .field-hint {
     margin: 0;
     font-size: 13px;
     color: #6b7280;
 }
 
+/* Feedback box inside modal */
 .modal-feedback {
     margin: 0 0 18px;
     padding: 12px 14px;
@@ -926,18 +1033,21 @@ progress.high::-moz-progress-bar {
     font-weight: 700;
 }
 
+/* Success feedback */
 .modal-feedback.success {
     background: #ecfdf5;
     color: #15803d;
     border: 1px solid #bbf7d0;
 }
 
+/* Error feedback */
 .modal-feedback.error {
     background: #fef2f2;
     color: #dc2626;
     border: 1px solid #fecaca;
 }
 
+/* Modal buttons row */
 .modal-actions {
     display: flex;
     gap: 12px;
@@ -945,9 +1055,7 @@ progress.high::-moz-progress-bar {
     margin-top: 24px;
 }
 
-
-
-/* Modal cancel button = red like delete (override only in modals) */
+/* Modal cancel button override */
 .history-modal .history-secondary-button {
     border: none;
     background: linear-gradient(135deg, #fb7185, #f87171);
@@ -955,16 +1063,16 @@ progress.high::-moz-progress-bar {
     box-shadow: 0 12px 24px rgba(248, 113, 113, 0.25);
 }
 
+/* Modal cancel button hover */
 .history-modal .history-secondary-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 16px 28px rgba(248, 113, 113, 0.3);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
 
-/* Tablet */
+/* RESPONSIVE */
+
+/* Tablet layout changes */
 @media (max-width: 900px) {
     .dashboard-hero {
         max-width: 95%;
@@ -1146,7 +1254,7 @@ progress.high::-moz-progress-bar {
     }
 }
 
-/* Mobile */
+/* Mobile layout changes */
 @media (max-width: 600px) {
     .dashboard-hero {
         padding: 28px 18px;

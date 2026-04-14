@@ -1,24 +1,46 @@
+{# TEMPLATE: base.html #}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Basic page setup -->
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {# Page title (can be overridden by child templates) #}
         <title>{% block title %}MySpend{% endblock %}</title>
+
+        {# Main shared CSS file #}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        {# Extra CSS (for specific pages) #}
         {% block css %}{% endblock %}
     </head>
+
     <body>
+
+        <!-- HEADER AND NAVIGATION - shared across all pages -->
         <header>
             <nav>
+
+                <!-- Left: logo and branding -->
                 <section class="nav-left">
                     <h2 id="site-branding-title" class="visually-hidden">Site branding</h2>
+
                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="MySpend logo">
+
                     <section>
                         <h2 class="visually-hidden">site</h2>
                         <p class="brand-title">MySpend</p>
                         <small class="tagline">Expense Tracker</small>
                     </section>
                 </section>
+
+                <!-- Mobile menu button -->
                 <button id="menu-toggle">☰</button>
+
+                <!-- Navigation links -->
+                 <!--  used to highlight the active page -->
                 <ul id="nav-menu">
                     <li>
                         <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
@@ -39,37 +61,49 @@
                         <a href="{{ url_for('main.contact') }}" class="{% if request.path == '/contact' %}active{% endif %}">Contact Us</a>
                     </li>
                 </ul>
+
+                <!-- Right: account actions -->
                 <section class="nav-right">
                     <h2 class="visually-hidden">Account actions</h2>
-                    {% if session.get("user_id") %}
-                    <span class="user">{{ session.get("name") }}</span>
-                    <a href="/logout">Logout</a>
-                    {% else %}
-                    <a href="/login">Login</a>
-                    <a href="/register">Register</a>
-                    {% endif %}
+
+                    {# Show different links depending on login state #}
+                    {# We check if the user is logged in by looking for "user_id" in the session. If it exists, we display the user's name and a logout link.
+                     If not, we show login and register links. #}
+                    {% if session.get("user_id") %}  {# We check if the user is logged in by looking for "user_id" in the session. #}
+                    <span class="user">{{ session.get("name") }}</span> {# If the user is logged in, we display their name using session.get("name"). #}
+                    <a href="/logout">Logout</a> {# We also provide a logout link that points to the /logout route. #}
+                    {% else %}                      {# If the user is not logged in, we show login and register links. #}
+                    <a href="/login">Login</a>         {# We provide a login link that points to the /login route. #}
+                    <a href="/register">Register</a> {# We provide a register link that points to the /register route. #}
+                    {% endif %} {# End of the conditional block for login state #}
                 </section>
+
             </nav>
         </header>
 
-        {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <section>
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </section>
-        {% endif %}
-{% endwith %}
+        <!-- FLASH MESSAGES - shown after actions like login or form submit -->
+         {# We use get_flashed_messages() to retrieve any messages that have been flashed during the request. If there are messages, we loop through them and display each one inside a <p> tag. This allows us to show feedback to the user after actions like logging in or submitting a form. #}
+        {% with messages = get_flashed_messages() %}  {# We use get_flashed_messages() to retrieve any messages that have been flashed during the request. #}
+            {% if messages %}                           {# If there are messages, we check if the messages variable is not empty. #}
+            <section>
+                {% for message in messages %}           {# If there are messages, we loop through them using a for loop. #}
+                <p>{{ message }}</p>                {# For each message, we display it inside a <p> tag. #}
+                {% endfor %}                        {# End of the for loop for messages. #}
+            </section>
+            {% endif %}                      {# End of the if block for checking if there are messages. #}
+        {% endwith %}
 
+        <!-- MAIN CONTENT - replaced by child templates -->
         <main>
-            {% block content %}{% endblock %}
+            {% block content %}{% endblock %}  {# This block will be replaced by the content defined in child templates that extend this base template. #}
         </main>
 
+        <!-- FOOTER - shared across all pages -->
         <footer class="footer">
-            <section class="footer-top">
-                <h2 class="visually-hidden">Footer content</h2>
 
+            <section class="footer-top">
+
+                <!-- Brand section -->
                 <section class="footer-col">
                     <h2>MySpend</h2>
                     <p class="sub">Financial Dashboard</p>
@@ -78,10 +112,11 @@
                     </p>
                 </section>
 
+                <!-- Quick links -->
                 <section class="footer-col">
-                    <h2 class="visually-hidden">links</h2>
                     <section class="quick-links-block">
                         <h3 class="quick-title">Quick Links</h3>
+
                         <ul class="footer-links">
                             <li><a href="/">Home</a></li>
                             <li><a href="{{ url_for('main.about') }}">About</a></li>
@@ -93,6 +128,7 @@
                     </section>
                 </section>
 
+                <!-- Contact info -->
                 <section class="footer-col">
                     <h3>Contact Us</h3>
                     <p>support@myspend.com</p>
@@ -102,20 +138,28 @@
                         United Kingdom
                     </p>
                 </section>
+
             </section>
 
+            <!-- Footer bottom -->
             <section class="footer-bottom">
-                <h2 class="visually-hidden">Footer legal information</h2>
                 <p>© 2026 MySpend. Made in Manchester</p>
+
                 <section class="footer-policy">
-                    <h3 class="visually-hidden">Policies</h3>
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
                 </section>
             </section>
+
         </footer>
 
+        <!-- SCRIPTS - shared JS and external libraries -->
+
+        <!-- Chart.js for charts -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Main JS file -->
         <script src="{{ url_for('static', filename='js/general.js') }}"></script>
+
     </body>
 </html>

@@ -1,17 +1,31 @@
 """
 tracker/routes/about.py
+----------------------
+This file defines the route for the About page.
 
-This file contains the about page route for the MySpend application.
+The About page provides information about the MySpend application,
+its purpose, features, and the developer.
 """
 
-# render_template is used to render HTML templates.
+# render_template is used to return an HTML page to the user.
 from flask import render_template
 
-# Import the shared Blueprint.
+# Import the shared Blueprint used to register routes.
 from .main_blueprint import main
 
 
-# Route for the about page, which provides information about the MySpend app, its features, and the developer. This page is accessible from the navigation menu and serves to give users a better understanding of what MySpend offers and who created it. The route simply renders the about.html template, which contains the content for the about page.
+# STEP 1: About page route
 @main.route("/about")
-def about():
+def about() -> str:
+    """
+    Display the About page.
+
+    This route:
+    - handles requests to "/about"
+    - renders the about.html template
+
+    Returns:
+        str: Rendered HTML page for the About section
+    """
+
     return render_template("about.html")

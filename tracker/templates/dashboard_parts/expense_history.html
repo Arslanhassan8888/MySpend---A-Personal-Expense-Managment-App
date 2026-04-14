@@ -1,35 +1,51 @@
+<!-- EXPENSE HISTORY - displays all user expenses with actions -->
 <section id="expenses" class="history-card">
     <h2 class="visually-hidden">Expense history section</h2>
+
+    <!-- HEADER - title and total count -->
     <section class="history-top">
         <h3 class="visually-hidden">History header</h3>
+
         <section class="history-title">
             <h2>Expense History</h2>
         </section>
+
+        <!-- TOTAL COUNT -->
         <p class="history-total">
-            {{ expenses|length }} Total
+            {{ expenses|length }} Total {# Display the total number of expenses, calculated by getting the length of the expenses list passed from the backend. #}
         </p>
     </section>
+
+    <!-- TABLE WRAPPER -->
     <section class="history-table-wrap">
         <h3 class="visually-hidden">Expense table area</h3>
+
+        <!-- STATUS MESSAGE (used dynamically via JS) -->
         <p id="table-status-message" class="table-status-success" hidden></p>
-        {% if request.args.get("sort") %}
+
+        <!-- SORT / SEARCH FEEDBACK -->
+        {% if request.args.get("sort") %} {# Check if a "sort" parameter exists in the URL query string, which indicates that a sort action has been applied. #}
+
         <p class="table-status-success">Sort applied successfully.</p>
         {% endif %}
 
-        {% if request.args.get("description") or request.args.get("min_amount") or request.args.get("max_amount") or request.args.get("date_from") or request.args.get("date_to") or request.args.get("category_id") %}
+        {% if request.args.get("description") or request.args.get("min_amount") or request.args.get("max_amount") or request.args.get("date_from")  
+        or request.args.get("date_to") or request.args.get("category_id") %} {# Check if any of the search parameters (description, min_amount, max_amount, date_from, date_to, category_id) exist in the URL query string, which indicates that a search filter has been applied. #}
         <p class="table-status-success">Search applied successfully.</p>
         {% endif %}
 
-        {% set table_messages = [] %}
-        {% for category, message in flashed_messages %}
-            {% if "updated" in message|lower or "deleted" in message|lower or "no expenses selected" in message|lower %}
-                {% set _ = table_messages.append((category, message)) %}
+        {# FILTER FLASH MESSAGES - only show update/delete related messages #}
+        {% set table_messages = [] %}   {#  Create an empty list to store messages related to expense updates and deletions. #}
+        {% for category, message in flashed_messages %} {# Loop through all flashed messages (passed from the backend) and their categories. #}
+            {% if "updated" in message|lower or "deleted" in message|lower or "no expenses selected" in message|lower %} {# Check if the message contains keywords related to expense updates, deletions, or no expenses selected (case-insensitive). #}
+                {% set _ = table_messages.append((category, message)) %} {# If the message contains keywords related to expense updates, deletions, or no expenses selected (case-insensitive), add it to the table_messages list along with its category. #}
             {% endif %}
         {% endfor %}
 
-        {% if table_messages %}
+        <!-- DISPLAY FILTERED MESSAGES -->
+        {% if table_messages %}  {# If there are any messages related to expense updates, deletions, or no expenses selected, display them in a list. #}
         <ul class="table-messages">
-            {% for category, message in table_messages %}
+            {% for category, message in table_messages %} {# Loop through the filtered messages and their categories. #}
             <li class="
                 {% if category == 'success' %}
                     success
@@ -48,20 +64,27 @@
             {% endfor %}
         </ul>
         {% endif %}
+
+        <!-- FORM - handles bulk delete -->
         <form
             method="POST"
             action="/delete-selected-expenses#expenses"
             class="history-form"
             onsubmit="return confirmDelete()"
         >
+            {# CSRF protection token #}
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- EXPENSE TABLE -->
             <table class="history-table">
                 <thead>
                     <tr>
+                        <!-- SELECT ALL CHECKBOX -->
                         <th scope="col">
                             <label for="select-all" class="visually-hidden">Select all expenses</label>
                             <input type="checkbox" id="select-all">
                         </th>
+
                         <th scope="col">Date</th>
                         <th scope="col">Category</th>
                         <th scope="col">Amount</th>
@@ -69,18 +92,26 @@
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody>
+
+                    <!-- EMPTY STATE -->
                     {% if expenses|length == 0 %}
                     <tr>
                         <td colspan="6" class="history-empty">No expenses found</td>
                     </tr>
-                    {% else %}
-                    {% for expense in expenses %}
+
+                    <!-- EXPENSE ROWS -->
+                    {% else %} {# If there are expenses in the list, loop through each expense and create a table row for it. #}
+                    {% for expense in expenses %} {# Loop through each expense in the expenses list passed from the backend. #}
                     <tr>
+
+                        <!-- SELECT CHECKBOX -->
                         <td>
                             <label for="expense_{{ expense.expense_id }}" class="visually-hidden">
                                 Select expense {{ expense.expense_id }}
                             </label>
+
                             <input
                                 id="expense_{{ expense.expense_id }}"
                                 type="checkbox"
@@ -89,24 +120,38 @@
                                 value="{{ expense.expense_id }}"
                             >
                         </td>
+
+                        <!-- DATE (formatted manually) -->
                         <td>{{ expense.date[8:10] }}/{{ expense.date[5:7] }}/{{ expense.date[0:4] }}</td>
+
+                        <!-- CATEGORY -->
                         <td>{{ expense.name }}</td>
+
+                        <!-- AMOUNT -->
                         <td class="history-amount">£{{ expense.amount }}</td>
+
+                        <!-- DESCRIPTION -->
                         <td class="{% if not expense.description %}history-empty-description{% endif %}">
-                            {% if expense.description %}
-                                {{ expense.description }}
+                            {% if expense.description %} {# If the expense has a description, display it. Otherwise, display "No description" with a different style to indicate that it's empty. #}
+                                {{ expense.description }} {# Display the description of the expense. #}
                             {% else %}
-                                No description
+                                No description {# Display "No description" if the description is empty. #}
                             {% endif %}
                         </td>
+
+                        <!-- ACTION BUTTON -->
                         <td>
-                            <button type="button" class="table-action-button" onclick="openEditModal(
+                            <button
+                                type="button"
+                                class="table-action-button"
+                                onclick="openEditModal(
                                     '{{ expense.expense_id }}',
                                     '{{ expense.amount }}',
                                     '{{ expense.category_id }}',
                                     '{{ expense.date }}',
                                     '{{ expense.description | e }}'
-                                )">
+                                )"
+                            >
                                 Edit
                             </button>
                         </td>
@@ -115,17 +160,27 @@
                     {% endif %}
                 </tbody>
             </table>
+
+            <!-- ACTION BUTTONS -->
             <section class="history-actions">
                 <h3 class="visually-hidden">History actions</h3>
+
+                <!-- DELETE SELECTED -->
                 <button id="delete-button" type="submit" class="history-danger-button">
                     Delete Selected (0)
                 </button>
+
+                <!-- SORT -->
                 <button type="button" class="history-secondary-button" onclick="openSortModal()">
                     Sort
                 </button>
+
+                <!-- SEARCH -->
                 <button type="button" class="history-secondary-button" onclick="openSearchModal()">
                     Search
                 </button>
+
+                <!-- CLEAR FILTERS -->
                 <a href="/dashboard#expenses" class="history-link-button" id="clear-expenses-link">
                     Clear
                 </a>

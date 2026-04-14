@@ -186,3 +186,14 @@ I created the Contact Us page with a simple form and a side section for contact 
 
 Flask handles the form submission, and I used flash messages with redirect() so the success message appears once and disappears after refresh.
 
+## 16/04/2026 Validation and accessibility checks
+
+I reviewed all project pages using W3C validation, WAVE, Lighthouse, and Axe DevTools. Then, I fixed the issues found and improved accessibility, structure, and overall page quality across the site.
+
+## 17/04/2026 Modular division
+
+I improved the modular structure across the project, especially in the routes system and dashboard templates. Split related parts into smaller sections to make the code easier to manage, reuse, and maintain.
+
+## 18/04/2026 Full comments across the project
+
+Added detailed comments across the full project in Python, HTML templates, CSS, and JavaScript. Improved explanations for imports, sections, functions, and logic to make the code clearer and easier to understand

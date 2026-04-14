@@ -1,3 +1,6 @@
+/* HEADER AND FOOTER */
+
+/* Hide visually but keep for screen readers */
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -11,39 +14,48 @@
     white-space: nowrap;
 }
 
+
+/* PAGE BASE */
+
+/* Main page background and font */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-
-    
     background-color: #fafafa;
 
-    /* subtle premium texture */
-    background-image: 
+    /* Subtle background texture */
+    background-image:
         radial-gradient(circle at 20% 20%, rgba(124,58,237,0.04), transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(124,58,237,0.03), transparent 50%);
 }
+
+
 /* HEADER */
+
+/* Fixed header bar */
 header {
     position: fixed;
     width: 100%;
     top: 0;
     background: white;
-    box-shadow: 
+    box-shadow:
         0 1px 0 rgba(0,0,0,0.04),
         0 2px 0 rgba(124,58,237,0.6);
-
     transition: 0.3s;
     z-index: 1000;
     margin-bottom: -20px;
 }
 
-/* SCROLL EFFECT */
+/* Header style after scrolling */
 header.scrolled {
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
 }
 
+
+/* NAVIGATION */
+
+/* Main nav layout */
 nav {
     display: flex;
     align-items: center;
@@ -51,17 +63,22 @@ nav {
     padding: 0px 30px;
 }
 
-/* LEFT */
+
+/* LEFT SIDE */
+
+/* Logo and brand wrapper */
 .nav-left {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
+/* Logo image */
 .nav-left img {
     width: 65px;
 }
 
+/* Brand text wrapper */
 .brand {
     display: flex;
     flex-direction: column;
@@ -69,7 +86,7 @@ nav {
     margin-top: 20px;
 }
 
-/* MySpend */
+/* Main brand name */
 .brand-title {
     margin: 0;
     margin-top: 40px;
@@ -82,24 +99,28 @@ nav {
     transform: translateY(-20px);
 }
 
-/* Expense Tracker */
+/* Extra brand text */
 .brand p {
     margin: 0;
     padding: 0;
     font-size: 13px;
     color: black;
-    line-height: 1;   
+    line-height: 1;
     margin-top: -20px;
 }
 
+/* Tagline under brand */
 .tagline {
-    display: block;        
-    margin-top: -20px;      
+    display: block;
+    margin-top: -20px;
     font-size: 13px;
     color: black;
 }
 
-/* CENTER */
+
+/* CENTER LINKS */
+
+/* Shared list styling */
 ul {
     display: flex;
     list-style: none;
@@ -108,6 +129,7 @@ ul {
     margin: 0;
 }
 
+/* Shared link style */
 a {
     text-decoration: none;
     color: #444;
@@ -119,18 +141,34 @@ a {
     font-size: 17px;
 }
 
+/* Link hover effect */
 a:hover {
     background: #ede9fe;
     color: #6d28d9;
     transform: scale(1.05);
 }
 
+/* Active navigation link */
 .active {
     background: linear-gradient(90deg,#7c3aed,#9333ea);
     color: white;
 }
 
-/* RIGHT */
+/* Keep nav links inline for hover animation */
+ul a {
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+
+/* Smooth nav link hover scale */
+ul a:hover {
+    transform: scale(1.05);
+}
+
+
+/* RIGHT SIDE */
+
+/* Right section with user and account links */
 .nav-right {
     display: flex;
     align-items: center;
@@ -138,28 +176,24 @@ a:hover {
     margin-top: 18px;
 }
 
+/* Logged-in user name */
 .user {
     color: #7c3aed;
     font-weight: bold;
     font-size: 18px;
 }
 
+/* Logout hover style */
 .logout:hover {
     background: #fee2e2;
     color: #dc2626;
     font-size: 18px;
 }
 
-ul a {
-    display: inline-block;   
-    transition: transform 0.4s ease;
-}
 
-ul a:hover {
-    transform: scale(1.05); 
-}
+/* MOBILE MENU BUTTON */
 
-/* MOBILE BUTTON */
+/* Hidden on desktop */
 #menu-toggle {
     display: none;
     font-size: 24px;
@@ -168,13 +202,19 @@ ul a:hover {
     border: none;
 }
 
-/* CONTENT */
+
+/* MAIN CONTENT */
+
+/* Push content below fixed header */
 main {
     margin-top: 90px;
     padding: 20px;
 }
 
-/* ===== FOOTER ===== */
+
+/* FOOTER */
+
+/* Main footer container */
 .footer {
     background: linear-gradient(135deg, #1e1b4b, #5b21b6);
     color: white;
@@ -182,7 +222,7 @@ main {
     margin-top: -10px;
 }
 
-/* TOP SECTION */
+/* Top footer layout */
 .footer-top {
     display: flex;
     justify-content: space-between;
@@ -191,32 +231,41 @@ main {
     margin-bottom: -30px;
 }
 
-/* COLUMNS */
+/* Footer columns */
 .footer-col {
     max-width: 300px;
 }
 
-/* TITLE */
+/* Footer title */
 .footer-col h2 {
     margin: 0;
     font-size: 22px;
 }
 
-/* SUB TEXT */
+/* Footer subtitle */
 .footer-col .sub {
     margin: 5px 0 15px;
     font-size: 14px;
     opacity: 0.8;
 }
 
-/* DESCRIPTION */
+/* Footer description */
 .footer-col .desc {
     font-size: 15px;
     line-height: 1.6;
     opacity: 0.9;
 }
 
-/* LINKS */
+/* Footer paragraph text */
+.footer-col p {
+    margin: 8px 0;
+    opacity: 0.9;
+}
+
+
+/* FOOTER LINKS */
+
+/* Quick links list */
 .footer-links {
     list-style: none;
     padding: 0;
@@ -224,12 +273,14 @@ main {
     gap: 40px;
 }
 
+/* Quick links item spacing */
 .footer-links li {
     margin-bottom: 10px;
     margin-right: -20px;
     margin-left: -10px;
 }
 
+/* Quick links style */
 .footer-links a {
     color: #6b7280;
     text-decoration: none;
@@ -237,7 +288,7 @@ main {
     transition: all 0.5s ease;
 }
 
-/*  NEW SMOOTH HOVER */
+/* Quick links hover effect */
 .footer-links a:hover {
     background: white;
     color: black;
@@ -247,24 +298,31 @@ main {
     transform: translateY(-1px);
 }
 
-/* CONTACT */
-.footer-col p {
-    margin: 8px 0;
-    opacity: 0.9;
+/* Quick links heading */
+.quick-title {
+    margin-left: 30px;
+    font-size: 25px;
 }
 
-/* BOTTOM */
+/* Quick links block position */
+.quick-links-block {
+    margin-left: -130px;
+}
+
+
+/* FOOTER BOTTOM */
+
+/* Bottom footer row */
 .footer-bottom {
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid rgba(255,255,255,0.2);
-
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
 
-/* POLICY LINKS */
+/* Policy links */
 .footer-policy a {
     margin-left: 20px;
     color: #ddd;
@@ -273,7 +331,7 @@ main {
     transition: all 0.5s ease;
 }
 
-/*  SAME HOVER AS LINKS */
+/* Policy links hover effect */
 .footer-policy a:hover {
     background: white;
     color: black;
@@ -283,22 +341,18 @@ main {
     transform: translateY(-1px);
 }
 
-.quick-title {
-    margin-left: 30px;
-    font-size: 25px;
-}
 
-.quick-links-block {
-    margin-left: -130px;
-}
+/* TABLET + MOBILE */
 
-/* MOBILE */
-@media (max-width:768px){
+/* Layout changes for smaller screens */
+@media (max-width:768px) {
 
+    /* Show mobile menu button */
     #menu-toggle {
         display: block;
     }
 
+    /* Hide nav menu until opened */
     #nav-menu {
         display: none;
         flex-direction: column;
@@ -310,14 +364,18 @@ main {
         padding: 20px;
         z-index: 999;
     }
-    #nav-menu.show {
-    display: flex;
-}
 
+    /* Show menu when class is added */
+    #nav-menu.show {
+        display: flex;
+    }
+
+    /* Extra support for JS class */
     ul.show {
         display: flex;
     }
 
+    /* Move right-side account section */
     .nav-right {
         position: absolute;
         right: 80px;
@@ -325,48 +383,54 @@ main {
         transform: translateY(-50%);
     }
 
+    /* Smaller logo */
     .nav-left img {
         width: 50px;
     }
 
+    /* Existing selector kept exactly the same */
     .brand h1 {
         font-size: 20px;
     }
-}
 
-/* footer mobile */
-@media (max-width:768px) {
+    /* Stack footer sections */
     .footer-top {
         flex-direction: column;
         gap: 30px;
     }
 
+    /* Stack footer bottom */
     .footer-bottom {
         flex-direction: column;
         gap: 10px;
         text-align: center;
     }
 
+    /* Reduce spacing for policy links */
     .footer-policy a {
         margin: 0 10px;
     }
 
+    /* Adjust quick links title */
     .quick-title {
         margin-left: -20px;
         margin-right: -20px;
         font-size: 23px;
     }
 
+    /* Stack footer links vertically */
     .footer-links {
         display: flex;
         flex-direction: column;
         gap: 2px;
     }
 
+    /* Reset footer link item margins */
     .footer-links li {
         margin: 0;
     }
 
+    /* Reset quick links block position */
     .quick-links-block {
         margin-left: 0;
     }

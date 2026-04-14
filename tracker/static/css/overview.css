@@ -1,16 +1,15 @@
-/* =========================
-   OVERVIEW HERO
-========================= */
+/* OVERVIEW HERO */
 
+/* Top hero section for overview page */
 .overview-page-hero {
     max-width: 1300px;
     margin: 30px auto 34px;
 }
 
-/* =========================
-   CHART GRID
-========================= */
 
+/* CHART GRID */
+
+/* Grid layout for charts */
 .overview-chart-grid {
     max-width: 1450px;
     width: 98%;
@@ -21,10 +20,10 @@
     align-items: start;
 }
 
-/* =========================
-   CHART CARD
-========================= */
 
+/* CHART CARD */
+
+/* Card container for each chart */
 .overview-chart-card {
     background: linear-gradient(180deg, #ffffff 0%, #fcfcff 100%);
     border: 1px solid #ececf2;
@@ -33,10 +32,10 @@
     overflow: hidden;
 }
 
-/* =========================
-   TOP BAR
-========================= */
 
+/* TOP BAR */
+
+/* Header area of each chart card */
 .overview-chart-top {
     display: flex;
     justify-content: space-between;
@@ -46,6 +45,7 @@
     border-bottom: 1px solid #ececf2;
 }
 
+/* Chart title */
 .overview-chart-top h2 {
     margin: 0;
     font-size: 23px;
@@ -54,6 +54,7 @@
     line-height: 1.2;
 }
 
+/* Small badge on the right */
 .overview-chart-badge {
     margin: 0;
     padding: 9px 16px;
@@ -66,25 +67,28 @@
     white-space: nowrap;
 }
 
-/* =========================
-   FIGURE / CANVAS
-========================= */
 
+/* FIGURE / CANVAS */
+
+/* Wrapper around chart canvas */
 .overview-chart-figure {
     margin: 0;
     padding: 24px 28px 20px;
 }
 
+/* Main chart canvas */
 .overview-chart-figure canvas {
     display: block;
     width: 100% !important;
     height: 320px !important;
 }
 
+/* Pie chart specific height */
 .overview-chart-figure-pie canvas {
     height: 320px !important;
 }
 
+/* Caption under chart */
 .overview-chart-caption {
     margin-top: 14px;
     font-size: 14px;
@@ -92,10 +96,10 @@
     color: #6b7280;
 }
 
-/* =========================
-   TABLET
-========================= */
 
+/* TABLET */
+
+/* Layout changes for screens 1000px and below */
 @media (max-width: 1000px) {
     .overview-chart-grid {
         grid-template-columns: 1fr;
@@ -119,10 +123,10 @@
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
 
+/* MOBILE */
+
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .overview-page-hero {
         max-width: 94%;

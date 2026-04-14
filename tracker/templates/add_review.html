@@ -1,58 +1,78 @@
+{# TEMPLATE: add_review.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Add Review{% endblock %}
 
+{# Page-specific CSS file #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/add_review.css') }}">
 {% endblock %}
 
 {% block content %}
-<section class="add-review-page">
-    <h1 class="visually-hidden">Add Review</h1>
 
-    <section class="add-review-shell">
-        <h2 class="visually-hidden">Add review form section</h2>
+<!-- MAIN PAGE - add review page wrapper -->
+<main class="add-review-page">
+    <section class="add-review-shell" aria-labelledby="add-review-title">
 
+        <!-- REVIEW CARD - main container -->
         <article class="add-review-card">
-            <h2 class="visually-hidden">Add review card</h2>
 
+            <!-- INTRO SECTION -->
             <section class="add-review-intro">
-                <h2 id="add-review-title">Add Your Review</h2>
+                <h1 id="add-review-title">Add Your Review</h1>
                 <p>Share your experience with MySpend</p>
             </section>
 
+            {# Show error passed from backend #}
             {% if error %}
             <p class="add-review-message add-review-message-error" role="alert">
                 {{ error }}
             </p>
             {% endif %}
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
+            {# Show success passed from backend #}
+            {% if success %}
+            <p class="add-review-message add-review-message-success" role="status">
+                {{ success }}
+            </p>
+            {% endif %}
+
+            {# FLASH MESSAGES - loop once, no nesting #}
+            {% with messages = get_flashed_messages(with_categories=true) %} {# Retrieve flashed messages along with their categories (e.g., "success", "error"). #}
+                {% if messages %}             {# Check if there are any flashed messages. #}
+                    {% for category, message in messages %}  {# Loop through the messages and their categories. #}
+
+                        {# Show success flash message #}
                         {% if category == "success" %}
             <p class="add-review-message add-review-message-success" role="status">
-                {{ message }}
+                {{ message }} {# Display the success message content. #}
             </p>
+                        {# Show error flash message #}
                         {% elif category == "error" %}
             <p class="add-review-message add-review-message-error" role="alert">
-                {{ message }}
+                {{ message }} {# Display the error message content. #}
             </p>
+
                         {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
+            <!-- REVIEW FORM -->
             <form
                 method="POST"
                 action="{{ url_for('main.add_review') }}"
                 class="add-review-form"
                 novalidate
+                aria-describedby="add-review-help"
             >
+                {# CSRF protection #}
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+                <!-- FULL NAME -->
                 <section class="add-review-field">
-                    <h2 class="visually-hidden">Full name field</h2>
                     <label for="reviewer_name">Full Name</label>
                     <input
                         id="reviewer_name"
@@ -65,8 +85,8 @@
                     >
                 </section>
 
+                <!-- EMAIL -->
                 <section class="add-review-field">
-                    <h2 class="visually-hidden">Email field</h2>
                     <label for="reviewer_email">Email Address</label>
                     <input
                         id="reviewer_email"
@@ -79,8 +99,8 @@
                     >
                 </section>
 
+                <!-- LOCATION -->
                 <section class="add-review-field">
-                    <h2 class="visually-hidden">Location field</h2>
                     <label for="location">Location</label>
                     <input
                         id="location"
@@ -92,10 +112,11 @@
                     >
                 </section>
 
+                <!-- RATING -->
                 <section class="add-review-field">
-                    <h2 class="visually-hidden">Rating field</h2>
                     <label for="rating">Star Rating</label>
                     <select id="rating" name="rating" required>
+                        <!-- RATING OPTIONS - allows user to select a star rating -->
                         <option value="">Choose a rating</option>
                         <option value="5" {% if entered_rating == "5" %}selected{% endif %}>5 Stars</option>
                         <option value="4" {% if entered_rating == "4" %}selected{% endif %}>4 Stars</option>
@@ -105,8 +126,8 @@
                     </select>
                 </section>
 
+                <!-- REVIEW TEXT -->
                 <section class="add-review-field">
-                    <h2 class="visually-hidden">Review text field</h2>
                     <label for="review_text">Your Review</label>
                     <textarea
                         id="review_text"
@@ -117,19 +138,22 @@
                     >{{ entered_review_text or '' }}</textarea>
                 </section>
 
+                <!-- SUBMIT -->
                 <button type="submit" class="add-review-submit">
                     Submit Review
                 </button>
             </form>
 
-            <section class="add-review-footer-note">
-                <h2 class="visually-hidden">Back to reviews</h2>
+            <!-- FOOTER LINK -->
+            <section class="add-review-footer-note" aria-label="Navigation back to reviews">
                 <p>
                     Want to read other feedback?
                     <a href="{{ url_for('main.reviews') }}">Back to Reviews</a>
                 </p>
             </section>
+
         </article>
     </section>
-</section>
+</main>
+
 {% endblock %}

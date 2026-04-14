@@ -1,47 +1,62 @@
 """
 tracker/routes/dashboard/dashboard_page.py
-
+-----------------------------------------
 This file contains the main dashboard page route for the MySpend application.
 """
 
 # render_template is used to render HTML templates.
-# request is used to access form data sent by the user.
-# redirect and url_for are used to redirect users to different pages after certain actions.
-# url_for is used to generate URLs for the specified endpoint (route function).
+# request is used to access values from the URL, such as sorting and search filters.
+# redirect and url_for are used to move users to another page when needed.
 from flask import render_template, request, redirect, url_for
 
-# Import session to manage user sessions (e.g., keeping users logged in).
+# session is used to check if the user is logged in.
 from flask import session
 
-# Import datetime and timedelta for handling date and time operations, such as calculating date ranges for expense tracking.
+# datetime is used to work with the current month and date values.
 from datetime import datetime, timedelta
 
-# Import flash for displaying messages to users (e.g., success or error messages)
+# flash is used to display messages to the user.
 from flask import flash
 
-# Import the get_db_connection function from models.py to interact with the database.
+# Import the database connection helper from models.py.
 from ...models import get_db_connection
 
 # Import the shared Blueprint.
 from ..main_blueprint import main
 
 
-# Dashboard route - shows user-specific information after login
+# Dashboard route - shows user-specific financial information after login
 @main.route("/dashboard")
-def dashboard():
+def dashboard() -> str:
+    """
+    Display the main dashboard page.
 
+    This route:
+    - checks whether the user is logged in
+    - loads the user's details
+    - applies sorting and search filters to expenses
+    - calculates totals for spending and budget
+    - sends all dashboard data to the template
+
+    Returns:
+        str: Rendered HTML page or redirect response
+    """
+
+    # Check whether the user is logged in before showing the dashboard
     if "user_id" not in session:
         return redirect(url_for("main.login"))
 
+    # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # USER
+    # Get the user's name using the user_id stored in the session
     user = cursor.execute(
         "SELECT name FROM users WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()
     
+    # If the user record no longer exists, clear the session and redirect to login
     if user is None:
         conn.close()
         session.clear()
@@ -49,24 +64,28 @@ def dashboard():
         return redirect(url_for("main.login"))
 
     # SORT
+    # Get the selected sort option from the URL query string.
+    # If nothing is chosen, use newest date first as the default.
     sort = request.args.get("sort")
 
-    if not sort:
-        sort = "date_desc"
+    if not sort: # If no sort option is provided in the URL, we set the default
+        sort = "date_desc" # Default sorting is by date descending (newest first)
 
+    # Match the selected sort key to the correct SQL ORDER BY clause.
     order_clause = {
-        "date_desc": "expenses.date DESC",
-        "date_asc": "expenses.date ASC",
-        "amount_asc": "expenses.amount ASC",
-        "amount_desc": "expenses.amount DESC",
-        "category_asc": "categories.name ASC",
-        "category_desc": "categories.name DESC",
-        "desc_asc": "expenses.description ASC",
-        "desc_desc": "expenses.description DESC"
-    }.get(sort, "expenses.date DESC")
+        "date_desc": "expenses.date DESC", # Sort by date descending (newest first)
+        "date_asc": "expenses.date ASC", # Sort by date ascending (oldest first)
+        "amount_asc": "expenses.amount ASC", # Sort by amount ascending (lowest first)
+        "amount_desc": "expenses.amount DESC", # Sort by amount descending (highest first)
+        "category_asc": "categories.name ASC", # Sort by category name ascending (A-Z)
+        "category_desc": "categories.name DESC", # Sort by category name descending (Z-A)
+        "desc_asc": "expenses.description ASC", # Sort by description ascending (A-Z)
+        "desc_desc": "expenses.description DESC" # Sort by description descending (Z-A)
+    }.get(sort, "expenses.date DESC") # Use the provided sort key to get the corresponding ORDER BY clause, or default to "expenses.date DESC" if the key is not recognized.
 
     # SEARCH FILTERS
-    date_from = request.args.get("date_from")
+    # Read optional filter values from the URL query string.
+    date_from = request.args.get("date_from")   # Get the "date_from" filter value from the URL query string, which represents the start date for filtering expenses. If the user has entered a date in the filter form, it will be included in the URL as a query parameter (e.g., ?date_from=2024-01-01). If no value is provided, this will be None.
     date_to = request.args.get("date_to")
     min_amount = request.args.get("min_amount")
     max_amount = request.args.get("max_amount")
@@ -74,6 +93,9 @@ def dashboard():
     category_id = request.args.get("category_id")
 
     # BASE QUERY
+    # Start with the main query to load this user's expenses,
+    # joined with categories so the category name can also be shown.
+    
     query = f"""
     SELECT expenses.expense_id, expenses.date, expenses.amount, expenses.description, categories.name, expenses.category_id
     FROM expenses
@@ -81,17 +103,19 @@ def dashboard():
     WHERE expenses.user_id = ?
     """
 
+    # Start the parameter list with the logged-in user's ID.
     params = [session["user_id"]]
 
-    # APPLY FILTERS (only if user entered values)
+    # APPLY FILTERS
+    # Add extra conditions only if the user entered values.
 
-    if date_from and date_from != "":
-        query += " AND expenses.date >= ?"
-        params.append(date_from)
+    if date_from and date_from != "": # If the user provided a "date_from" value in the URL query string (e.g., ?date_from=2024-01-01), we add a condition to the SQL query to filter expenses with a date greater than or equal to that value. We also append the "date_from" value to the list of parameters that will be passed to the query execution.
+        query += " AND expenses.date >= ?" # Add a condition to the SQL query to filter expenses with a date greater than or equal to the "date_from" value.
+        params.append(date_from) # Append the "date_from" value to the list of parameters for the query execution.
 
-    if date_to and date_to != "":
-        query += " AND expenses.date <= ?"
-        params.append(date_to)
+    if date_to and date_to != "": # If the user provided a "date_to" value in the URL query string (e.g., ?date_to=2024-01-31), we add a condition to the SQL query to filter expenses with a date less than or equal to that value. We also append the "date_to" value to the list of parameters that will be passed to the query execution.
+        query += " AND expenses.date <= ?" # Add a condition to the SQL query to filter expenses with a date less than or equal to the "date_to" value.
+        params.append(date_to) # Append the "date_to" value to the list of parameters for the query execution.
 
     if min_amount and min_amount != "":
         query += " AND expenses.amount >= ?"
@@ -110,19 +134,23 @@ def dashboard():
         params.append(category_id)
 
     # SORT
+    # Add the final ORDER BY part to the SQL query.
     query += f" ORDER BY {order_clause}"
 
     # EXECUTE
-    expenses = cursor.execute(query, params).fetchall()
+    # Run the completed query and fetch the filtered expense list.
+    expenses = cursor.execute(query, params).fetchall() # Execute the SQL query with the constructed query string and the list of parameters, which includes the user_id and any filter values provided by the user. The result is a list of expenses that match the filters and are sorted according to the selected sort option.
 
     # TOTAL
+    # Calculate the user's total spending across all expenses.
     total = cursor.execute(
         "SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE user_id = ?",
         (session["user_id"],)
     ).fetchone()[0]
 
     # MONTHLY TOTAL
-    monthly_total = cursor.execute(
+    # Calculate total spending for the current month only.
+    monthly_total = cursor.execute( # We execute a SQL query to calculate the total amount of expenses for the logged-in user for the current month. We use COALESCE to return 0 if there are no expenses, and we filter expenses by user_id and the current month using strftime to extract the year and month from the date field.
         """
         SELECT COALESCE(SUM(amount), 0)
         FROM expenses
@@ -132,24 +160,31 @@ def dashboard():
         (session["user_id"],)
     ).fetchone()[0]
     
+    # Get the current month in YYYY-MM format for the budget lookup.
     month = datetime.now().strftime("%Y-%m")
 
+    # Get the budget set for the current month.
     budget = cursor.execute("""
         SELECT amount FROM budgets
         WHERE user_id = ? AND month = ?
     """, (session["user_id"], month)).fetchone()
 
+    # Use the saved budget amount if it exists, otherwise use 0.
     budget_amount = budget[0] if budget else 0
 
+    # Calculate how much budget is left after current monthly spending.
     remaining = budget_amount - monthly_total
-    # Calculate progress percentage for the budget. If the budget amount is greater than 0, calculate the percentage of the budget that has been used based on the monthly total. If the budget amount is 0 or less, set progress to 0 to avoid division by zero.
+
+    # Calculate the budget progress percentage.
+    # If no budget has been set, use 0 to avoid division by zero.
     if budget_amount > 0:
-        progress = (monthly_total/ budget_amount) * 100
+        progress = (monthly_total / budget_amount) * 100
     else:
         progress = 0
         
     # DAILY TOTAL
-    daily_total = cursor.execute(
+    # Calculate spending for today only.
+    daily_total = cursor.execute( # We execute a SQL query to calculate the total amount of expenses for the logged-in user for today. We use COALESCE to return 0 if there are no expenses, and we filter expenses by user_id and today's date using DATE('now').
         """
         SELECT COALESCE(SUM(amount), 0)
         FROM expenses
@@ -159,7 +194,9 @@ def dashboard():
         (session["user_id"],)
     ).fetchone()[0]
 
-    weekly_total = cursor.execute(
+    # WEEKLY TOTAL
+    # Calculate spending for the current week range.
+    weekly_total = cursor.execute( # We execute a SQL query to calculate the total amount of expenses for the logged-in user for the current week. We use COALESCE to return 0 if there are no expenses, and we filter expenses by user_id and the current week using DATE and weekday functions.
         """
         SELECT COALESCE(SUM(amount), 0)
         FROM expenses
@@ -169,23 +206,27 @@ def dashboard():
         """,
         (session["user_id"],)
     ).fetchone()[0]
-    categories = cursor.execute(
-    "SELECT * FROM categories"
-).fetchall()
+
+    # Get all categories so they can be shown in forms and filters.
+    categories = cursor.execute( # We execute a SQL query to fetch all categories from the database. This allows us to display them in forms and filters on the dashboard.
+        "SELECT * FROM categories"
+    ).fetchall()
+
+    # Close the database connection
     conn.close()
 
-    return render_template(
+    # Render the dashboard page with all required data
+    return render_template( # We render the "dashboard.html" template and pass all the necessary data for displaying the dashboard, including the user's name, the list of expenses, totals, categories, budget information, and the current month for display.
         "dashboard.html",
-        name=user["name"],
-        expenses=expenses,
-        total=total,
-        monthly_total=monthly_total,
+        name=user["name"], # Pass the user's name to the template for display in the dashboard header.
+        expenses=expenses, # Pass the list of expenses to the template for display in the expenses table.
+        total=total,       # Pass the total spending across all expenses to the template for display in the dashboard summary.
+        monthly_total=monthly_total, # Pass the total spending for the current month to the template for display in the monthly summary section.
         daily_total=daily_total,
         weekly_total=weekly_total,
         categories=categories,
         budget_amount=budget_amount,
         remaining=remaining,
         progress=progress,
-        current_month=datetime.now().strftime("%B %Y")
-        
+        current_month=datetime.now().strftime("%B %Y") # Pass the current month formatted as "Month Year" (e.g., "January 2024") to the template for display in the budget section.
     )

@@ -1,60 +1,79 @@
+{# TEMPLATE: index.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Home{% endblock %}
 
+{# Page-specific CSS files #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <section class="home-page">
     <h1 id="home-page-title" class="visually-hidden">Home page content</h1>
 
+    <!-- HERO SECTION - main introduction and call to action -->
     <section class="home-hero">
         <h2 class="visually-hidden">hero</h2>
 
         <section class="home-hero-inner">
+
+            <!-- Main heading -->
             <h2 id="home-hero-title" class="home-title">
                 Your Money.
                 <span class="home-title-accent">Your Way</span>
             </h2>
 
+            <!-- Supporting description -->
             <p class="home-subtitle">
                 Experience the easiest way to track expenses, set budgets, and reach your
                 financial goals. Join users building smarter spending habits every day.
             </p>
 
+            <!-- Primary action button -->
             <section class="home-actions">
                 <h2 class="visually-hidden">Home page primary action</h2>
+
                 <a href="/dashboard" class="home-primary-button">
                     Start Tracking Free
                     <span class="home-button-arrow"></span>
                 </a>
             </section>
+
         </section>
     </section>
 
+    <!-- QUOTE SECTION - dynamic quote from API or fallback -->
     <article class="home-quote-card">
         <h2 class="visually-hidden">quote</h2>
 
         <p class="home-quote-mark">”</p>
 
+        {# Display quote text from backend.
+           If no quote is available, a default quote is used. #}
         <blockquote class="home-quote-text">
             "{{ quote_text or 'A budget is telling your money where to go instead of wondering where it went.' }}"
         </blockquote>
 
+        {# Display quote author or fallback value #}
         <p class="home-quote-author">
             — {{ quote_author or 'Dave Ramsey' }}
         </p>
 
+        {# Display source of the quote (API or fallback) #}
         <small class="home-quote-source">
             Source:
             {{ quote_source or 'ZenQuotes' }}
         </small>
     </article>
 
+    <!-- CALL TO ACTION SECTION - encourages user to start using the app -->
     <section class="home-cta">
+
         <h2>Ready to Take Control?</h2>
 
         <p>
@@ -62,10 +81,14 @@
             tracking, better budgeting, and clearer financial habits.
         </p>
 
+        <!-- Secondary action button -->
         <a href="/dashboard" class="home-secondary-button">
             Get Started Now
             <span class="home-button-arrow"></span>
         </a>
+
     </section>
+
 </section>
+
 {% endblock %}

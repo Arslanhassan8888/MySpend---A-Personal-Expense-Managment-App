@@ -1,15 +1,24 @@
+<!-- About Page Template -->
+
+{# Extend the shared base template so this page inherits
+   the common layout, header, footer, and script section. #}
 {% extends "base.html" %}
 
+{# Set the browser tab title for this page. #}
 {% block title %}About Us{% endblock %}
 
+{# Load page-specific CSS for the About page. #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 {% endblock %}
 
+{# Main page content starts here. #}
 {% block content %}
+
 <section class="about-page">
     <h1 class="visually-hidden">About Us</h1>
 
+    <!-- HERO SECTION-->
     <section class="about-hero">
         <h2>Your Financial Partner for Success</h2>
         <p class="about-hero-text">
@@ -19,9 +28,11 @@
         </p>
     </section>
 
+    <!-- STORY SECTION -->
     <section class="about-story">
         <h2 class="visually-hidden">Our story section</h2>
 
+        <!-- Main story text -->
         <article class="about-story-text">
             <h2>Our Story</h2>
             <p>
@@ -42,9 +53,11 @@
             </p>
         </article>
 
+        <!-- Mission, vision, and values box -->
         <aside class="about-story-box">
             <h2 class="visually-hidden">Mission vision and values</h2>
 
+            <!-- Mission -->
             <section class="about-info-row">
                 <h3>Our Mission</h3>
                 <p>
@@ -53,6 +66,7 @@
                 </p>
             </section>
 
+            <!-- Vision -->
             <section class="about-info-row">
                 <h3>Our Vision</h3>
                 <p>
@@ -61,6 +75,7 @@
                 </p>
             </section>
 
+            <!-- Values -->
             <section class="about-info-row">
                 <h3>Our Values</h3>
                 <p>
@@ -70,6 +85,7 @@
         </aside>
     </section>
 
+    <!-- DIFFERENCE SECTION -->
     <section class="about-difference">
         <h2>What Makes Us Different</h2>
         <p class="about-difference-text">
@@ -79,6 +95,7 @@
         <section class="about-cards">
             <h3 class="visually-hidden">Key features</h3>
 
+            <!-- Feature card 1 -->
             <article class="about-card">
                 <h3>User-Centric</h3>
                 <p>
@@ -86,6 +103,7 @@
                 </p>
             </article>
 
+            <!-- Feature card 2 -->
             <article class="about-card">
                 <h3>Secure &amp; Private</h3>
                 <p>
@@ -93,6 +111,7 @@
                 </p>
             </article>
 
+            <!-- Feature card 3 -->
             <article class="about-card">
                 <h3>Lightning Fast</h3>
                 <p>
@@ -100,6 +119,7 @@
                 </p>
             </article>
 
+            <!-- Feature card 4 -->
             <article class="about-card">
                 <h3>Premium Quality</h3>
                 <p>
@@ -109,6 +129,7 @@
         </section>
     </section>
 
+    <!-- STATISTICS SECTION -->
     <section class="about-stats">
         <h2 class="visually-hidden">Statistics section</h2>
 
@@ -119,21 +140,25 @@
             <section class="about-stats-grid">
                 <h3 class="visually-hidden">Statistics</h3>
 
+                <!-- Statistic 1 -->
                 <article class="about-stat-item">
                     <h3>10K+</h3>
                     <p>Active Users</p>
                 </article>
 
+                <!-- Statistic 2 -->
                 <article class="about-stat-item">
                     <h3>£5M+</h3>
                     <p>Budgets Managed</p>
                 </article>
 
+                <!-- Statistic 3 -->
                 <article class="about-stat-item">
                     <h3>50K+</h3>
                     <p>Expenses Tracked</p>
                 </article>
 
+                <!-- Statistic 4 -->
                 <article class="about-stat-item">
                     <h3>99%</h3>
                     <p>Satisfaction Rate</p>
@@ -142,4 +167,6 @@
         </section>
     </section>
 </section>
+
+
 {% endblock %}

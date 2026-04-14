@@ -1,29 +1,38 @@
+<!-- BUDGET CARD - shows budget form, totals, and current budget status -->
 <article class="budget-card">
     <h2 class="visually-hidden">Budget overview</h2>
 
+    <!-- TITLE - section heading -->
     <section class="budget-title">
         <h2>Monthly Budget Overview</h2>
     </section>
 
+    <!-- BUDGET FORM - sends budget amount to backend -->
     <form method="POST" action="/set-budget#budget" class="budget-input">
+
+        {# CSRF protection token #}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
         <label for="budget_amount">Set Monthly Budget</label>
 
-        {% set budget_messages = [] %}
-        {% for category, message in flashed_messages %}
-            {% if "budget" in message|lower %}
-                {% set _ = budget_messages.append((category, message)) %}
+        {# FILTER FLASH MESSAGES - only show messages related to budget actions #}
+        {% set budget_messages = [] %}  {# Create an empty list to store messages related to budget actions. #}
+        {% for category, message in flashed_messages %} {# Loop through all flashed messages (passed from the backend) and their categories. #}
+            {% if "budget" in message|lower %}    {# Check if the message contains the keyword "budget" (case-insensitive). #}
+                {% set _ = budget_messages.append((category, message)) %}  {# If the message contains the keyword "budget" (case-insensitive), add it to the budget_messages list along with its category. #}
             {% endif %}
         {% endfor %}
 
-        {% if budget_messages %}
+        {# DISPLAY FILTERED BUDGET MESSAGES #}
+        {% if budget_messages %}   {# If there are any messages related to budget actions, display them in a list. #}
         <ul class="form-messages budget-form-messages">
-            {% for category, message in budget_messages %}
-            <li class="{{ category }}">{{ message }}</li>
+            {% for category, message in budget_messages %}  {# Loop through the filtered budget messages and their categories. #}
+            <li class="{{ category }}">{{ message }}</li>   {# Display each message in a list item, using the category as a CSS class for styling (e.g., "success" or "error"). #}
             {% endfor %}
         </ul>
         {% endif %}
 
+        <!-- BUDGET INPUT -->
         <input
             id="budget_amount"
             type="number"
@@ -32,21 +41,27 @@
             step="0.01"
             min="0"
         >
+
+        <!-- SUBMIT BUTTON -->
         <button type="submit">Save Budget</button>
     </form>
 
+    <!-- BUDGET DETAILS - shows budget values and progress -->
     <section class="budget-box">
         <h2 class="visually-hidden">Budget details</h2>
 
+        <!-- VALUE SUMMARY - budget limit and remaining balance -->
         <section class="budget-values">
             <h3 class="visually-hidden">Budget values</h3>
 
+            <!-- BUDGET LIMIT -->
             <section class="budget-limit">
                 <h4 class="visually-hidden">Budget limit</h4>
                 <p>Budget Limit</p>
                 <strong>£{{ budget_amount }}</strong>
             </section>
 
+            <!-- REMAINING BALANCE - colour changes depending on progress -->
             <section class="remaining">
                 <h4 class="visually-hidden">Remaining balance</h4>
                 <p>Remaining Balance</p>
@@ -56,32 +71,42 @@
                     {% else %}success
                     {% endif %}
                 ">
-                    £{{ remaining }}
+                    £{{ remaining }} {# Display the remaining balance, which is calculated as the budget amount minus the total expenses. 
+                    The text color changes based on how much of the budget has been used: if 100% or more of the budget is used, it shows as "danger" (e.g., red); 
+                    if 80% or more is used, it shows as "warning" (e.g., orange); otherwise, it shows as "success" (e.g., green). #}
                 </strong>
             </section>
         </section>
 
+        <!-- PROGRESS BAR - shows percentage of budget used -->
         <section class="progress-wrapper">
             <h3 class="visually-hidden">Progress</h3>
+
+            {# Progress bar class changes depending on percentage used #}
             <progress value="{{ progress }}" max="100" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
+
             <span class="progress-label">
-                {{ progress|round(1) }}% Used
+                {{ progress|round(1) }}% Used {# Display the percentage of the budget that has been used, rounded to one decimal place. #}
             </span>
         </section>
 
+        <!-- BUDGET STATUS - text summary of current budget condition -->
         <section class="budget-status-row">
             <h3 class="visually-hidden">Budget status</h3>
+
             <p class="budget-status {% if progress >= 100 %}danger{% elif progress >= 80 %}warning{% else %}success{% endif %}">
-                {% if progress >= 100 %}
+                {% if progress >= 100 %}  {# If 100% or more of the budget is used, display a message indicating that the budget has been exceeded. #}
                     Budget exceeded
-                {% elif progress >= 80 %}
+                {% elif progress >= 80 %}  {# If 80% or more of the budget is used, display a warning message. #}
                     Warning: limit nearly reached
-                {% else %}
+                {% else %}  {# If less than 80% of the budget is used, display a message indicating that the budget is under control. #}
                     Budget is under control
                 {% endif %}
             </p>
+
+            <!-- TRANSACTION COUNT -->
             <p class="transactions">
-                {{ expenses|length }} transactions
+                {{ expenses|length }} transactions {# Display the number of transactions that have been recorded for the current month, which is determined by the length of the expenses list passed from the backend. #}
             </p>
         </section>
     </section>

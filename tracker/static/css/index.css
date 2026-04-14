@@ -1,26 +1,24 @@
-/* =========================
-   HOME PAGE
-========================= */
+/* HOME PAGE */
 
+/* HOME PAGE - main page wrapper */
 .home-page {
     width: calc(100% + 40px);
     margin-left: -20px;
     margin-right: -20px;
 }
 
-/* =========================
-   HERO SECTION
-========================= */
 
+/* HERO SECTION - top introduction area */
 .home-hero {
+    position: relative;
     width: 100%;
     margin: 0 0 28px;
     padding: 42px 20px 30px;
-    position: relative;
     overflow: hidden;
     text-align: center;
 }
 
+/* Left decorative background shape */
 .home-hero::before {
     content: "";
     position: absolute;
@@ -32,6 +30,7 @@
     pointer-events: none;
 }
 
+/* Right decorative background shape */
 .home-hero::after {
     content: "";
     position: absolute;
@@ -43,26 +42,30 @@
     pointer-events: none;
 }
 
+/* Inner hero content wrapper */
 .home-hero-inner {
-    max-width: 1000px;
-    margin: 0 auto;
     position: relative;
     z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
+/* Main hero heading */
 .home-title {
     margin: 0;
     font-size: 56px;
     line-height: 1.08;
     font-weight: 800;
-    color: #111827;
     letter-spacing: -0.03em;
+    color: #111827;
 }
 
+/* Highlighted word in hero heading */
 .home-title-accent {
     color: #7c3aed;
 }
 
+/* Hero supporting text */
 .home-subtitle {
     max-width: 760px;
     margin: 20px auto 0;
@@ -71,12 +74,14 @@
     color: #4b5563;
 }
 
+/* Wrapper for hero button */
 .home-actions {
     display: flex;
     justify-content: center;
     margin-top: 26px;
 }
 
+/* Shared button style */
 .home-primary-button,
 .home-secondary-button {
     display: inline-flex;
@@ -92,12 +97,14 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+/* Main hero button */
 .home-primary-button {
     background: linear-gradient(135deg, #7c3aed, #4f46e5);
     color: #ffffff;
     box-shadow: 0 14px 24px rgba(99, 82, 255, 0.18);
 }
 
+/* Shared hover effect for both buttons */
 .home-primary-button:hover,
 .home-secondary-button:hover {
     transform: translateY(-2px);
@@ -105,20 +112,16 @@
     box-shadow: 0 14px 24px rgba(99, 82, 255, 0.18);
     color: #ffffff;
     filter: brightness(1.02);
- 
-    
 }
 
+/* Arrow icon inside buttons */
 .home-button-arrow {
     font-size: 18px;
     line-height: 1;
 }
 
 
-/* =========================
-   QUOTE / API CARD
-========================= */
-
+/* QUOTE CARD - displays API or fallback quote */
 .home-quote-card {
     max-width: 760px;
     margin: 0 auto 42px;
@@ -127,30 +130,33 @@
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid #e9ddff;
     border-radius: 22px;
-     box-shadow:
+    box-shadow:
         0 0 0 2px rgba(255, 221, 87, 0.15),
         0 10px 24px rgba(124, 58, 237, 0.08),
         0 0 25px rgba(255, 221, 87, 0.25);
     backdrop-filter: blur(4px);
 }
 
+/* Quote mark symbol */
 .home-quote-mark {
     margin: 0 0 4px;
     font-size: 42px;
     line-height: 1;
-    color: #8b5cf6;
     font-weight: 800;
+    color: #8b5cf6;
 }
 
+/* Quote text */
 .home-quote-text {
     margin: 0;
     font-size: 20px;
     line-height: 1.65;
-    color: #374151;
     font-style: italic;
+    color: #374151;
     border: none;
 }
 
+/* Quote author */
 .home-quote-author {
     margin: 14px 0 0;
     font-size: 16px;
@@ -158,6 +164,7 @@
     color: #7c3aed;
 }
 
+/* Quote source */
 .home-quote-source {
     display: block;
     margin-top: 10px;
@@ -166,10 +173,7 @@
 }
 
 
-/* =========================
-   BOTTOM CTA
-========================= */
-
+/* BOTTOM CTA - final call to action section */
 .home-cta {
     max-width: 1020px;
     margin: 0 auto 40px;
@@ -181,6 +185,7 @@
     box-shadow: 0 16px 28px rgba(99, 82, 255, 0.18);
 }
 
+/* CTA heading */
 .home-cta h2 {
     margin: 0;
     font-size: 40px;
@@ -189,6 +194,7 @@
     color: #ffffff;
 }
 
+/* CTA text */
 .home-cta p {
     max-width: 700px;
     margin: 16px auto 0;
@@ -197,6 +203,7 @@
     color: rgba(255, 255, 255, 0.96);
 }
 
+/* CTA secondary button */
 .home-cta .home-secondary-button {
     margin-top: 24px;
     background: #ffffff;
@@ -205,10 +212,7 @@
 }
 
 
-/* =========================
-   TABLET
-========================= */
-
+/* TABLET - styles for screens 900px and below */
 @media (max-width: 900px) {
     .home-hero {
         padding: 34px 16px 24px;
@@ -249,10 +253,7 @@
 }
 
 
-/* =========================
-   MOBILE
-========================= */
-
+/* MOBILE - styles for screens 600px and below */
 @media (max-width: 600px) {
     .home-page {
         max-width: 100%;
@@ -325,8 +326,8 @@
     }
 
     .home-cta p {
-        font-size: 15px;
         margin-top: 12px;
+        font-size: 15px;
     }
 
     .home-cta .home-secondary-button {

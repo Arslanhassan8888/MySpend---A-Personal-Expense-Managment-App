@@ -1,31 +1,29 @@
 """
 app.py
-This file is the ENTRY POINT of the MySpend application.
+------
+Entry point of the MySpend application.
 
-Purpose:
-- Create the Flask application using the Application Factory.
-- Start the development server.
-- Run the application in debug mode during development.
+This file:
+- creates the Flask application using the factory function
+- starts the development server
+- enables debug mode during development
 
-The app instance is created in tracker/__init__.py.
+The app itself is defined in tracker/__init__.py.
 """
 
-# Import the factory function that builds the Flask application.
+# Import the function that builds and configures the Flask application.
 from tracker import create_app
 
 
-# Create the Flask application instance.
-# This calls the function defined inside tracker/__init__.py.
+# STEP 1: Create the Flask application instance
+# This calls the factory function from tracker/__init__.py.
 app = create_app()
 
-# Run the Application
-# This condition ensures the server runs only when this file
-# is executed directly (not when imported as a module).
+
+# STEP 2: Run the application
+# This block ensures the server only runs when this file is executed directly.
 if __name__ == "__main__":
     
     # Start the Flask development server.
-    # debug=True enables:
-    # - Automatic reload when code changes
-    # - Detailed error messages
+    # debug=True enables automatic reload and detailed error messages.
     app.run(debug=True)
-    

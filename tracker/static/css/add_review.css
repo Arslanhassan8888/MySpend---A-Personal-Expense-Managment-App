@@ -1,7 +1,6 @@
-/* =========================
-   ADD REVIEW PAGE
-========================= */
+/* ADD REVIEW PAGE */
 
+/* Keep header left and right sections above decorative layers */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -10,17 +9,19 @@ header .nav-right {
     margin-bottom: 20px;
 }
 
-
+/* Main page wrapper */
 .add-review-page {
     width: 100%;
 }
 
+/* Outer wrapper for the form card */
 .add-review-shell {
     max-width: 720px;
     margin: 0 auto;
     padding: 36px 20px 48px;
 }
 
+/* Main review form card */
 .add-review-card {
     background: #ffffff;
     border: 3px solid #8b5cf6;
@@ -30,11 +31,13 @@ header .nav-right {
     margin-top: -10px;
 }
 
+/* Intro section above the form */
 .add-review-intro {
     text-align: center;
     margin-bottom: 28px;
 }
 
+/* Main intro heading */
 .add-review-intro h2 {
     margin: 0;
     font-size: 36px;
@@ -42,12 +45,14 @@ header .nav-right {
     color: #7c2cff;
 }
 
+/* Intro supporting text */
 .add-review-intro p {
     margin: 14px 0 0;
     font-size: 18px;
     color: #6b7280;
 }
 
+/* Small helper text above fields */
 .add-review-help-text {
     margin: 0 0 6px;
     font-size: 14px;
@@ -55,12 +60,14 @@ header .nav-right {
     color: #6b7280;
 }
 
+/* Form layout */
 .add-review-form {
     display: flex;
     flex-direction: column;
     gap: 22px;
 }
 
+/* Field labels */
 .add-review-field label {
     display: block;
     margin-bottom: 10px;
@@ -69,6 +76,7 @@ header .nav-right {
     color: #374151;
 }
 
+/* Shared field style */
 .add-review-field input,
 .add-review-field select,
 .add-review-field textarea {
@@ -83,18 +91,21 @@ header .nav-right {
     font-family: Arial, sans-serif;
 }
 
+/* Input and select height */
 .add-review-field input,
 .add-review-field select {
     min-height: 58px;
     padding: 0 16px;
 }
 
+/* Textarea spacing */
 .add-review-field textarea {
     min-height: 150px;
     padding: 14px 16px;
     resize: vertical;
 }
 
+/* Focus style for all form fields */
 .add-review-field input:focus,
 .add-review-field select:focus,
 .add-review-field textarea:focus {
@@ -102,6 +113,7 @@ header .nav-right {
     box-shadow: 0 0 0 4px rgba(124, 44, 255, 0.08);
 }
 
+/* Submit button */
 .add-review-submit {
     margin-top: 4px;
     min-height: 58px;
@@ -116,11 +128,13 @@ header .nav-right {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Submit button hover effect */
 .add-review-submit:hover {
     transform: translateY(-1px);
     box-shadow: 0 18px 30px rgba(99, 82, 255, 0.28);
 }
 
+/* Shared message box */
 .add-review-message {
     margin: 0 0 18px;
     padding: 14px 16px;
@@ -129,40 +143,49 @@ header .nav-right {
     font-weight: 600;
 }
 
+/* Success message style */
 .add-review-message-success {
     background: #ecfdf5;
     color: #15803d;
     border: 1px solid #bbf7d0;
 }
 
+/* Error message style */
 .add-review-message-error {
     background: #fef2f2;
     color: #b91c1c;
     border: 1px solid #fecaca;
 }
 
+/* Footer note below the form */
 .add-review-footer-note {
     margin-top: 24px;
     text-align: center;
 }
 
+/* Footer note text */
 .add-review-footer-note p {
     margin: 0;
     font-size: 16px;
     color: #4b5563;
 }
 
+/* Footer note link */
 .add-review-footer-note a {
     color: #7c2cff;
     font-weight: 800;
     text-decoration: none;
 }
 
+/* Footer note link hover */
 .add-review-footer-note a:hover {
     text-decoration: underline;
 }
 
+
 /* REVIEWS PAGE MESSAGES */
+
+/* Shared message style for reviews page */
 .reviews-message {
     max-width: 900px;
     margin: 0 auto 24px;
@@ -173,21 +196,24 @@ header .nav-right {
     text-align: center;
 }
 
+/* Reviews success message */
 .reviews-message-success {
     background: #ecfdf5;
     color: #15803d;
     border: 1px solid #bbf7d0;
 }
 
+/* Reviews error message */
 .reviews-message-error {
     background: #fef2f2;
     color: #b91c1c;
     border: 1px solid #fecaca;
 }
 
-/* =========================
-   TABLET
-========================= */
+
+/* TABLET */
+
+/* Layout changes for screens 900px and below */
 @media (max-width: 900px) {
     .add-review-shell {
         max-width: 620px;
@@ -207,9 +233,10 @@ header .nav-right {
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
+
+/* MOBILE */
+
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .add-review-shell {
         padding: 20px 12px 32px;
@@ -265,6 +292,10 @@ header .nav-right {
     }
 }
 
+
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;

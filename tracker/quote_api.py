@@ -1,57 +1,82 @@
 """
 tracker/quote_api.py
+--------------------
+This file contains helper code for retrieving a quote
+for the MySpend homepage.
 
-This file contains the quote API helper functions for the MySpend application.
+It first tries to get a quote from an external API.
+If that fails, it uses a fallback quote stored in the application.
 """
 
-# jason used to convert API resonse to a Python dictionary
+# json is used to convert the API response into a Python dictionary or list.
 import json
 
-# used to call external APIs, Requests is a popular library for making HTTP requests in Python. It simplifies the process of sending HTTP requests and handling responses.
+# Request and urlopen are used to send a request to the external quote API
+# and read the response returned by the server.
 from urllib.request import urlopen, Request
 
-# used to handle URL errors when calling external APIs, such as network issues or invalid URLs. URLError is raised when there is a problem with the network connection or the URL is invalid, 
-# while HTTPError is raised when the server returns an HTTP error status code (e.g., 404 Not Found, 500 Internal Server Error).
+# URLError and HTTPError are used to handle problems when calling the API,
+# such as connection issues, invalid URLs, or server-side errors.
 from urllib.error import URLError, HTTPError
 
-#we use it for fallback qoutes if API is not working, it allows us to select a random quote from a predefined list of quotes.
+# random is used to choose a fallback quote if the API is unavailable.
 import random
 
 
-# This function calls an external API to get a random quote for the homepage. If the API call fails for any reason (network issues, API downtime, etc.), 
-# it falls back to a predefined list of quotes to ensure that the homepage always has a quote to display. 
-# The function returns a dictionary containing the quote text, author, and source (either "ZenQuotes" for API or "MySpend" for fallback).
-#zenquotes.io is a free API that provides random inspirational quotes. But since it's a free service, it can sometimes be unreliable or slow. Also has no key and limited requests per hour. So we need a fallback mechanism to ensure that our app can still provide value to users even when the API is not working.
+# STEP 1: Get a homepage quote
+def get_home_quote() -> dict:
+    """
+    Retrieve a quote for the homepage.
 
-def get_home_quote():
+    This function:
+    - sends a request to the ZenQuotes API
+    - reads and converts the response into Python data
+    - returns the quote text, author, and source
+    - uses a fallback quote if the API request fails
+
+    Returns:
+        dict: A dictionary containing:
+            - text: the quote content
+            - author: the name of the author
+            - source: where the quote came from
+    """
+
+    # API endpoint used to request one random quote
     url = "https://zenquotes.io/api/random"
 
+    # Fallback quotes used if the API is unavailable
     fallback_quotes = [
         ("A budget is telling your money where to go instead of wondering where it went.", "Dave Ramsey"),
         ("Do not save what is left after spending, but spend what is left after saving.", "Warren Buffett"),
         ("Small daily money habits create long-term financial success.", "Arslan Hassan"),
-        
     ]
 
     try:
+        # Create the request with a browser-style header
         request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+
+        # Send the request and wait up to 5 seconds for a response
         response = urlopen(request, timeout=5)
 
+        # Convert the JSON response into Python data
         data = json.loads(response.read().decode("utf-8"))
 
+        # The API returns a list, so check that it contains at least one quote
         if isinstance(data, list) and len(data) > 0:
             quote = data[0]
 
+            # Return the quote details using fallback values if any field is missing
             return {
                 "text": quote.get("q", "Stay consistent with your money habits!"),
                 "author": quote.get("a", "Arslan Hassan"),
                 "source": "ZenQuotes"
             }
 
+    # If the API fails, ignore the error and use a fallback quote instead
     except (URLError, HTTPError, TimeoutError, json.JSONDecodeError):
         pass
 
-    # fallback if API fails
+    # Choose one fallback quote at random
     text, author = random.choice(fallback_quotes)
 
     return {

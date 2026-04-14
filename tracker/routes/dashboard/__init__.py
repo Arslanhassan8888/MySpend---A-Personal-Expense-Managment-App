@@ -1,10 +1,10 @@
 """
 tracker/routes/dashboard/__init__.py
-
-This package contains dashboard route modules.
+-----------------------------------
+This package groups all dashboard-related route modules.
 """
 
-# Import dashboard route modules so Flask can register them.
+# Import dashboard route modules so their routes are registered
 from . import dashboard_page
 from . import add_expense
 from . import delete_expense

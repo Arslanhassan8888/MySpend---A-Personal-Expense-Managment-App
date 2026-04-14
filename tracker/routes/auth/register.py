@@ -4,32 +4,53 @@ tracker/routes/auth/register.py
 This file contains the register route for the MySpend application.
 """
 
-# Route for the register page.
-# This route handles both displaying the registration page
-# and processing the registration form submission..
+# render_template is used to display HTML pages.
+# request is used to read form data sent by the user.
 from flask import render_template, request
 
-# Import the get_db_connection function from models.py to interact with the database.
+# Import the database connection helper from models.py.
 from ...models import get_db_connection
 
-# Import generate_password_hash to securely hash user passwords before storing them in the database.
+# generate_password_hash is used to securely hash passwords before storing them.
 from werkzeug.security import generate_password_hash
 
-# Import flash for displaying messages to users (e.g., success or error messages)
+# flash is used to display messages to the user.
 from flask import flash
 
 # Import the shared Blueprint.
 from ..main_blueprint import main
 
-@main.route("/register", methods=["GET", "POST"])
-def register():
 
+# Register route handles both:
+# - displaying the registration page
+# - processing the registration form
+@main.route("/register", methods=["GET", "POST"])
+def register() -> str:
+    """
+    Handle user registration.
+
+    This route:
+    - shows the registration page
+    - validates form input
+    - checks for existing email
+    - validates password rules
+    - creates a new user in the database
+
+    Returns:
+        str: Rendered HTML page
+    """
+
+    # Default values used when the page first loads
     error = None
     entered_name = ""
     entered_email = ""
 
+    # Process the form only when submitted
     if request.method == "POST":
 
+        # Read form input
+        # Get the entered name, email, password, and confirmation from the form. Use strip() to remove any leading or trailing whitespace from the name and email fields. 
+        # Convert the email to lowercase to ensure consistency when checking for existing users.
         entered_name = request.form.get("name", "").strip()
         entered_email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
@@ -37,6 +58,9 @@ def register():
         agree_terms = request.form.get("agree_terms")
 
         # REQUIRED FIELDS
+        # Ensure all fields are filled
+        # Check if any of the required fields (name, email, password, confirm password) are empty after stripping whitespace. 
+        # If any field is missing, set an error message and re-render the registration page with the user's input pre-filled.
         if entered_name == "" or entered_email == "" or password == "" or confirm_password == "":
             error = "Please fill in all fields."
             return render_template(
@@ -47,6 +71,7 @@ def register():
             )
 
         # TERMS CHECKBOX
+        # Ensure the user agrees to terms
         if not agree_terms:
             error = "You must agree to the Terms of Service and Privacy Policy."
             return render_template(
@@ -57,6 +82,7 @@ def register():
             )
 
         # SIMPLE EMAIL VALIDATION
+        # Check basic email format
         if "@" not in entered_email or "." not in entered_email:
             error = "Please enter a valid email address."
             return render_template(
@@ -66,6 +92,7 @@ def register():
                 entered_email=entered_email
             )
 
+        # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -86,6 +113,7 @@ def register():
             )
 
         # PASSWORD MATCH
+        # Ensure password and confirmation match
         if password != confirm_password:
             conn.close()
             error = "Passwords do not match."
@@ -97,6 +125,9 @@ def register():
             )
 
         # PASSWORD RULES
+        # Check password strength requirements
+        # Ensure the password is at least 12 characters long and contains at least one number and one special character.
+        # This helps improve security by enforcing stronger passwords.
         has_number = any(char.isdigit() for char in password)
         has_special = any(not char.isalnum() for char in password)
 
@@ -130,8 +161,11 @@ def register():
                 entered_email=entered_email
             )
 
+        # HASH PASSWORD
+        # Convert password into a secure hash before storing
         password_hash = generate_password_hash(password)
 
+        # INSERT NEW USER
         cursor.execute(
             "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
             (entered_name, entered_email, password_hash)
@@ -140,6 +174,7 @@ def register():
         conn.commit()
         conn.close()
 
+        # SUCCESS MESSAGE
         success = "Registration completed successfully. Redirecting to login page..."
 
         return render_template(
@@ -149,6 +184,7 @@ def register():
             entered_email=""
         )
 
+    # Show page on GET request or after validation errors
     return render_template(
         "register.html",
         error=error,

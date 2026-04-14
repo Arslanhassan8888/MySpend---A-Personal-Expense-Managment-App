@@ -1,16 +1,22 @@
+{# TEMPLATE: reviews.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Reviews{% endblock %}
 
+{# Page-specific CSS files #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/reviews.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <section class="reviews-page">
     <h1 class="visually-hidden">Reviews</h1>
 
+    <!-- HERO SECTION - page introduction -->
     <section class="about-hero">
         <h2 id="reviews-title">What Our Users Say</h2>
         <p class="about-hero-text">
@@ -19,34 +25,35 @@
         </p>
     </section>
 
+    <!-- ACTION SECTION - button to add a new review -->
     <section class="reviews-action">
         <h2 class="visually-hidden">Review page action</h2>
         <a href="{{ url_for('main.add_review') }}" class="reviews-add-button">Add Review</a>
     </section>
 
-    <!-- Reviews Grid -->
+    <!-- REVIEWS GRID - displays all user reviews -->
     <section class="reviews-grid">
         <h2 class="visually-hidden">User reviews</h2>
 
-        <!-- Loop through reviews passed from the Flask view and display them -->
+        {# Loop through reviews passed from Flask and display each one #}
         {% for review in reviews %}
         <article class="review-card">
             <h2 class="visually-hidden">Review by {{ review.reviewer_name }}</h2>
 
-            <!-- Display star rating based on the review.rating value -->
+            <!-- STAR RATING - shows stars based on rating value -->
             <p class="review-card-rating">
-                <!-- Use a loop to display filled stars based on the rating -->
+                {# Loop to display filled stars (★) equal to the rating number #}
                 {% for _ in range(review.rating) %}★{% endfor %}
             </p>
 
-            <!-- Display review text -->
+            <!-- REVIEW TEXT -->
             <p class="review-card-text">
-                <!-- Ensure that review text is properly escaped to prevent XSS -->
+                {# Jinja auto-escapes content to prevent XSS #}
                 {{ review.review_text }}
             </p>
 
+            <!-- REVIEW FOOTER - name and location -->
             <footer class="review-card-footer">
-                <!-- Display reviewer name and location -->
                 <h3>{{ review.reviewer_name }}</h3>
                 <p class="review-card-location">{{ review.location }}</p>
             </footer>
@@ -54,4 +61,5 @@
         {% endfor %}
     </section>
 </section>
+
 {% endblock %}

@@ -1,5 +1,6 @@
+/* REVIEWS PAGE STYLES */
 
-
+/* Keep header left and right sections above decorative layers */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -8,19 +9,25 @@ header .nav-right {
     margin-bottom: 10px;
 }
 
+
+/* HERO SECTION */
+
+/* Extra spacing for the reviews page hero */
 .reviews-page .about-hero {
     margin-top: -40px;
     padding-top: 2.5rem;
 }
 
-/* HERO SPACING FIX */
+/* Shared hero spacing fix */
 .about-hero {
     margin-top: 20px;
     padding-top: 3.5rem;
-    
 }
 
+
 /* ACTION SECTION */
+
+/* Wrapper for the Add Review button */
 .reviews-action {
     max-width: 1200px;
     margin: 0 auto 42px;
@@ -29,7 +36,7 @@ header .nav-right {
     font-size: 20px;
 }
 
-/* Add Review Button */
+/* Add Review button */
 .reviews-add-button {
     display: inline-block;
     padding: 16px 32px;
@@ -44,13 +51,16 @@ header .nav-right {
     margin-top: 20px;
 }
 
-/* Add Review Button Hover Effect */
+/* Add Review button hover effect */
 .reviews-add-button:hover {
     transform: translateY(-4px) scale(1.03);
     box-shadow: 0 16px 30px rgba(124, 44, 255, 0.14);
 }
 
-/* REVIEW GRID */
+
+/* REVIEWS GRID */
+
+/* Main grid layout for review cards */
 .reviews-grid {
     max-width: 1300px;
     margin: 0 auto 60px;
@@ -61,27 +71,30 @@ header .nav-right {
     align-items: stretch;
 }
 
+
 /* REVIEW CARD */
+
+/* Single review card */
 .review-card {
-    background: #ffffff;
-    border: 2px solid #eadcff;
-    border-radius: 24px;
-    padding: 28px 26px;
-    min-height: 250px;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    min-height: 250px;
+    padding: 28px 26px;
+    background: #ffffff;
+    border: 2px solid #eadcff;
+    border-radius: 24px;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* REVIEW CARD HOVER EFFECT */
+/* Review card hover effect */
 .review-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 28px rgba(15, 23, 42, 0.10);
 }
 
-/* REVIEW RATING */
+/* Star rating */
 .review-card-rating {
     margin: 0 0 22px;
     font-size: 1.2rem;
@@ -90,37 +103,36 @@ header .nav-right {
     color: #9a6700;
 }
 
-/* REVIEW TEXT */
+/* Review text */
 .review-card-text {
     margin: 0 0 10px;
     font-size: 1rem;
     line-height: 1.8;
     color: #334155;
     flex-grow: 1;
-    
 }
 
-/* REVIEW CARD FOOTER */
-
+/* Reviewer name */
 .review-card-footer h3 {
     margin: 0 0 2px;
     font-size: 1.3rem;
     line-height: 1.15;
-    color: #111827;
     font-weight: 800;
-    
+    color: #111827;
 }
 
-/* REVIEWER LOCATION */
+/* Reviewer location */
 .review-card-location {
     margin: 0;
+    margin-bottom: 25px;
     font-size: 1.05rem;
     color: #6b7280;
-    margin-bottom: 25px;
 }
 
 
 /* TABLET */
+
+/* Layout changes for screens 1000px and below */
 @media (max-width: 1000px) {
     .reviews-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -132,7 +144,10 @@ header .nav-right {
     }
 }
 
+
 /* MOBILE */
+
+/* Layout changes for screens 650px and below */
 @media (max-width: 650px) {
     .about-hero {
         padding-top: 2.5rem;
@@ -143,31 +158,35 @@ header .nav-right {
         margin-bottom: 28px;
     }
 
-    /* Adjust Add Review Button for mobile */
+    /* Smaller Add Review button on mobile */
     .reviews-add-button {
         padding: 14px 28px;
         font-size: 16px;
     }
 
-    /* Stack reviews in a single column on mobile */
+    /* Single-column review layout */
     .reviews-grid {
         grid-template-columns: 1fr;
         padding: 0 1rem;
         gap: 18px;
     }
 
-    /* Adjust Review Card for mobile */
+    /* Smaller review card spacing */
     .review-card {
         min-height: auto;
         padding: 24px 20px;
     }
 
+    /* Larger reviewer name on mobile */
     .review-card-footer h3 {
         font-size: 1.6rem;
     }
 }
 
 
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;

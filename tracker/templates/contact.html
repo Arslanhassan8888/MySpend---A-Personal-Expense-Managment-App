@@ -1,69 +1,85 @@
+{# TEMPLATE: contact.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Contact Us{% endblock %}
 
+{# Page-specific CSS file #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <section class="contact-page">
     <h1 class="visually-hidden">Contact Us</h1>
 
+    <!-- PAGE SHELL - main contact page wrapper -->
     <section class="contact-shell">
         <h2 class="visually-hidden">Contact page section</h2>
 
+        <!-- HERO SECTION - page heading and introduction -->
         <section class="about-hero">
             <h2>Contact Us</h2>
             <p class="about-hero-text">
-                Get in touch with the MySpend team. We are here to help with questions, feedback, or support.
+                Get in touch with the MySpend team. The team is here to help with questions, feedback, or support.
             </p>
         </section>
 
+        <!-- CONTACT LAYOUT - form on one side and contact details on the other -->
         <section class="contact-layout">
             <h2 class="visually-hidden">Contact content</h2>
 
+            <!-- CONTACT FORM CARD - contains form fields and messages -->
             <article class="contact-form-card">
                 <h2 class="visually-hidden">Contact form card</h2>
 
+                <!-- FORM INTRO - form heading -->
                 <section class="contact-form-intro">
                     <h2 id="contact-form-title">Send Us a Message</h2>
                 </section>
 
+                {# Display error message passed directly from the route #}
                 {% if error %}
                 <p class="contact-message contact-message-error" role="alert">
                     {{ error }}
                 </p>
                 {% endif %}
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            {% if category == "success" %}
+                {# Display flashed messages sent from Flask with their categories #}
+                {% with messages = get_flashed_messages(with_categories=true) %} {# Retrieve flashed messages along with their categories (e.g., "success", "error"). #}
+                    {% if messages %} {# Check if there are any flashed messages. #}
+                        {% for category, message in messages %} {# Loop through the messages and their categories. #}
+                            {% if category == "success" %} {# Check if the category of the message is "success". #}
                 <p class="contact-message contact-message-success" role="status">
-                    {{ message }}
+                    {{ message }} {# Display the success message content. #}
                 </p>
-                {% elif category == "error" %}
+                            {% elif category == "error" %} {# Check if the category of the message is "error". #}
                 <p class="contact-message contact-message-error" role="alert">
-                    {{ message }}
+                    {{ message }} {# Display the error message content. #}
                 </p>
-                {% endif %}
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
 
+                <!-- CONTACT FORM - sends message details to the backend -->
                 <form
                     method="POST"
                     action="{{ url_for('main.contact') }}"
                     class="contact-form"
                     novalidate
                 >
+                    {# CSRF token helps protect the form from unauthorised submissions #}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+                    <!-- HELP TEXT - short instruction above the form -->
                     <p class="contact-help-text">
-                        Please enter your details and message clearly so we can respond properly.
+                        Please enter your details and message clearly so the team can respond properly.
                     </p>
 
+                    <!-- FULL NAME FIELD - keeps entered value after validation errors -->
                     <section class="contact-field">
                         <h2 class="visually-hidden">Full name field</h2>
                         <label for="full_name">Full Name</label>
@@ -78,6 +94,7 @@
                         >
                     </section>
 
+                    <!-- EMAIL FIELD - keeps entered value after validation errors -->
                     <section class="contact-field">
                         <h2 class="visually-hidden">Email field</h2>
                         <label for="email">Email Address</label>
@@ -92,6 +109,7 @@
                         >
                     </section>
 
+                    <!-- SUBJECT FIELD - keeps entered value after validation errors -->
                     <section class="contact-field">
                         <h2 class="visually-hidden">Subject field</h2>
                         <label for="subject">Subject</label>
@@ -105,6 +123,7 @@
                         >
                     </section>
 
+                    <!-- MESSAGE FIELD - keeps entered value after validation errors -->
                     <section class="contact-field">
                         <h2 class="visually-hidden">Message field</h2>
                         <label for="message">Message</label>
@@ -117,35 +136,42 @@
                         >{{ entered_message or '' }}</textarea>
                     </section>
 
+                    <!-- SUBMIT BUTTON - sends form data -->
                     <button type="submit" class="contact-submit">Send Message</button>
                 </form>
             </article>
 
+            <!-- CONTACT INFO - displays extra contact details -->
             <aside class="contact-info">
                 <h2 id="contact-info-title" class="contact-info-title">Get in Touch</h2>
-                <p class="contact-info-text">Our team is here to help you anytime.</p>
+                <p class="contact-info-text">The support team is available to help at any time.</p>
 
+                <!-- CONTACT INFO GRID - shows email, phone, address, and hours -->
                 <section class="contact-info-grid">
                     <h2 class="visually-hidden">Contact details</h2>
 
+                    <!-- Email details -->
                     <article class="contact-info-card">
                         <h3>Email</h3>
                         <p>support@myspend.com</p>
                         <p>help@myspend.com</p>
                     </article>
 
+                    <!-- Phone details -->
                     <article class="contact-info-card">
                         <h3>Phone</h3>
                         <p>+44 161 123 4567</p>
                         <p>+44 074 5466 8005</p>
                     </article>
 
+                    <!-- Address details -->
                     <article class="contact-info-card">
                         <h3>Address</h3>
                         <p>45 Market Street</p>
                         <p>Manchester, M1 1AA</p>
                     </article>
 
+                    <!-- Opening hours -->
                     <article class="contact-info-card">
                         <h3>Hours</h3>
                         <p>Mon - Fri: 9am - 6pm</p>
@@ -156,4 +182,5 @@
         </section>
     </section>
 </section>
+
 {% endblock %}

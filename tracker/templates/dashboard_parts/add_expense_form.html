@@ -1,30 +1,37 @@
+<!-- ADD EXPENSE SECTION - form to create a new expense -->
 <section id="add-expense" class="expense-card">
     <h2 class="visually-hidden">Add expense form</h2>
 
+    <!-- HEADER - section title -->
     <section class="expense-header">
         <h2>Add New Expense</h2>
     </section>
 
+    <!-- FORM - sends new expense data to backend -->
     <form method="POST" action="/add-expense#add-expense" class="expense-form">
+
+        {# CSRF protection token #}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        {% set add_expense_messages = [] %}
-        {% for category, message in flashed_messages %}
-            {% if "expense added" in message|lower or "amount must" in message|lower or "invalid amount" in message|lower %}
-                {% set _ = add_expense_messages.append((category, message)) %}
+        {# FILTER FLASH MESSAGES - only show messages related to adding expenses #}
+        {% set add_expense_messages = [] %}   {# Create an empty list to store messages related to adding expenses. #}
+        {% for category, message in flashed_messages %}  {# Loop through all flashed messages (passed from the backend) and their categories. #}
+            {% if "expense added" in message|lower or "amount must" in message|lower or "invalid amount" in message|lower %} {# Check if the message contains keywords related to adding expenses (case-insensitive). #}
+                {% set _ = add_expense_messages.append((category, message)) %} {# If the message contains keywords related to adding expenses (case-insensitive), add it to the add_expense_messages list along with its category. #}
             {% endif %}
         {% endfor %}
 
-        {% if add_expense_messages %}
+        {# DISPLAY FILTERED MESSAGES #}
+        {% if add_expense_messages %} {# If there are any messages related to adding expenses, display them in a list. #}
         <ul class="form-messages expense-form-messages">
-            {% for category, message in add_expense_messages %}
-            <li class="{{ category }}">{{ message }}</li>
+            {% for category, message in add_expense_messages %} {# Loop through the filtered messages and their categories. #}
+            <li class="{{ category }}">{{ message }}</li>  {# Display each message in a list item, using the category as a CSS class for styling #}
             {% endfor %}
         </ul>
         {% endif %}
 
+        <!-- AMOUNT FIELD -->
         <section>
-            <h3 class="visually-hidden">Amount field</h3>
             <label for="amount">Amount (£)</label>
             <input
                 id="amount"
@@ -37,8 +44,8 @@
             >
         </section>
 
+        <!-- DATE FIELD -->
         <section>
-            <h3 class="visually-hidden">Date field</h3>
             <label for="date">Date</label>
             <input
                 id="date"
@@ -48,19 +55,19 @@
             >
         </section>
 
+        <!-- CATEGORY FIELD - dropdown populated from database -->
         <section>
-            <h3 class="visually-hidden">Category field</h3>
             <label for="category">Category</label>
             <select id="category" name="category_id" required>
                 <option value="">Choose a category</option>
-                {% for c in categories %}
+                {% for c in categories %}  {# Loop through the list of categories passed from the backend and create an option for each category in the dropdown. The value of each option is set to the category's ID, and the displayed text is the category's name. #}
                 <option value="{{ c.category_id }}">{{ c.name }}</option>
                 {% endfor %}
             </select>
         </section>
 
+        <!-- DESCRIPTION FIELD - optional user note -->
         <section>
-            <h3 class="visually-hidden">Description field</h3>
             <label for="description">Description</label>
             <input
                 id="description"
@@ -70,8 +77,8 @@
             >
         </section>
 
+        <!-- SUBMIT BUTTON -->
         <section class="expense-button">
-            <h3 class="visually-hidden">Submit button</h3>
             <button type="submit">Add Expense</button>
         </section>
     </form>

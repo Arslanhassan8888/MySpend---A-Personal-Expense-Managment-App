@@ -1,45 +1,57 @@
+{# TEMPLATE: login.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Login{% endblock %}
 
+{# Page-specific CSS file #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <section class="login-shell">
     <h1 class="visually-hidden">Login</h1>
 
+    <!-- LOGIN CARD - main login container -->
     <article class="login-form-card">
         <h2 class="visually-hidden">Login form card</h2>
 
+        <!-- FORM HEADER - page heading and short description -->
         <section class="login-form-header">
             <h2 id="login-form-title">Welcome Back!</h2>
             <p>Login to access your financial dashboard</p>
         </section>
 
+        {# Display error message passed directly from the route #}
         {% if error %}
         <p class="login-message login-message-error" role="alert">{{ error }}</p>
         {% endif %}
 
+        {# Display flashed success messages, such as login confirmation or logout feedback #}
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {% if category == "success" %}
+            {% if messages %} {# use get_flashed_messages(with_categories=true) to retrieve flashed messages along with their categories (e.g., "success", "error"). #}
+                {% for category, message in messages %} {# Loop through the messages and their categories. #}
+                    {% if category == "success" %} {# Check if the category of the message is "success". #}
         <p class="login-message login-message-success" role="status">{{ message }}</p>
-        {% endif %}
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
+        <!-- LOGIN FORM - sends user credentials to the backend -->
         <form
             method="POST"
             action="/login"
             class="login-form"
             novalidate
         >
+            {# CSRF token helps protect the form from unauthorised submissions #}
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+            <!-- EMAIL FIELD - stores previously entered value if login fails -->
             <section class="login-field">
                 <h2 class="visually-hidden">Email field</h2>
                 <label for="email">Email Address</label>
@@ -54,9 +66,11 @@
                 >
             </section>
 
+            <!-- PASSWORD FIELD - includes password visibility toggle -->
             <section class="login-field">
                 <h2 class="visually-hidden">Password field</h2>
                 <label for="password">Password</label>
+
                 <section class="login-password-wrap">
                     <h3 class="visually-hidden">Password input and toggle</h3>
                     <input
@@ -73,9 +87,11 @@
                 </section>
             </section>
 
+            <!-- SUBMIT BUTTON - sends form data for login -->
             <button type="submit" class="login-submit">Login to Dashboard</button>
         </form>
 
+        <!-- REGISTER LINK - for users without an account -->
         <section class="login-register">
             <h2 class="visually-hidden">Register link</h2>
             <p>
@@ -84,6 +100,7 @@
             </p>
         </section>
 
+        <!-- TERMS NOTE - short legal reminder -->
         <section class="login-terms">
             <h2 class="visually-hidden">Terms information</h2>
             <p>
@@ -92,4 +109,5 @@
         </section>
     </article>
 </section>
+
 {% endblock %}

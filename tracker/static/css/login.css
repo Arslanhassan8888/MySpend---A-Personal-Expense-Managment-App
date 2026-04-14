@@ -1,7 +1,6 @@
-/* =========================
-   LOGIN PAGE
-========================= */
+/* LOGIN PAGE */
 
+/* Keep header left and right sections above decorative layers */
 header .nav-left,
 header .nav-left section,
 header .nav-right {
@@ -10,13 +9,14 @@ header .nav-right {
     margin-bottom: 20px;
 }
 
-
+/* Outer wrapper for the login card */
 .login-shell {
     max-width: 620px;
     margin: 0 auto;
     padding: 36px 20px 48px;
 }
 
+/* Main login card */
 .login-form-card {
     background: #ffffff;
     border-radius: 28px;
@@ -25,15 +25,16 @@ header .nav-right {
     border: 1px solid #f1f5f9;
 }
 
-/* =========================
-   HEADER
-========================= */
 
+/* HEADER */
+
+/* Intro section above the form */
 .login-form-header {
     text-align: center;
     margin-bottom: 28px;
 }
 
+/* Main heading */
 .login-form-header h2 {
     margin: 0;
     font-size: 38px;
@@ -41,16 +42,17 @@ header .nav-right {
     color: #7c2cff;
 }
 
+/* Supporting text */
 .login-form-header p {
     margin: 14px 0 0;
     font-size: 18px;
     color: #6b7280;
 }
 
-/* =========================
-   MESSAGES
-========================= */
 
+/* MESSAGES */
+
+/* Shared message style */
 .login-message {
     margin: 0 0 18px;
     padding: 14px 16px;
@@ -59,28 +61,31 @@ header .nav-right {
     font-weight: 600;
 }
 
+/* Error message */
 .login-message-error {
     background: #fef2f2;
     color: #b91c1c;
     border: 1px solid #fecaca;
 }
 
+/* Success message */
 .login-message-success {
     background: #ecfdf5;
     color: #15803d;
     border: 1px solid #bbf7d0;
 }
 
-/* =========================
-   FORM
-========================= */
 
+/* FORM */
+
+/* Form layout */
 .login-form {
     display: flex;
     flex-direction: column;
     gap: 22px;
 }
 
+/* Field labels */
 .login-field label {
     display: block;
     margin-bottom: 10px;
@@ -89,6 +94,7 @@ header .nav-right {
     color: #374151;
 }
 
+/* Shared input style */
 .login-field input {
     width: 100%;
     box-sizing: border-box;
@@ -102,19 +108,21 @@ header .nav-right {
     outline: none;
 }
 
+/* Input focus style */
 .login-field input:focus {
     border-color: #7c2cff;
     box-shadow: 0 0 0 4px rgba(124, 44, 255, 0.08);
 }
 
+/* Placeholder text */
 .login-field input::placeholder {
     color: #9ca3af;
 }
 
-/* =========================
-   BUTTON
-========================= */
 
+/* BUTTON */
+
+/* Submit button */
 .login-submit {
     margin-top: 4px;
     min-height: 58px;
@@ -129,37 +137,42 @@ header .nav-right {
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+/* Submit button hover effect */
 .login-submit:hover {
     transform: translateY(-1px);
     box-shadow: 0 18px 30px rgba(99, 82, 255, 0.28);
     filter: brightness(1.01);
 }
 
-/* =========================
-   FOOT TEXT
-========================= */
 
+/* FOOT TEXT */
+
+/* Register link section */
 .login-register {
     margin-top: 24px;
     text-align: center;
 }
 
+/* Register text */
 .login-register p {
     margin: 0;
     font-size: 17px;
     color: #4b5563;
 }
 
+/* Register link */
 .login-register a {
     color: #7c2cff;
     font-weight: 800;
     text-decoration: none;
 }
 
+/* Register link hover */
 .login-register a:hover {
     text-decoration: underline;
 }
 
+/* Terms section */
 .login-terms {
     margin-top: 24px;
     padding-top: 24px;
@@ -167,6 +180,7 @@ header .nav-right {
     text-align: center;
 }
 
+/* Terms text */
 .login-terms p {
     margin: 0;
     font-size: 15px;
@@ -175,17 +189,21 @@ header .nav-right {
 }
 
 
+/* PASSWORD TOGGLE */
 
+/* Wrapper for password input and show/hide button */
 .login-password-wrap {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
+/* Password input takes remaining space */
 .login-password-wrap input {
     flex: 1;
 }
 
+/* Show/hide password button */
 .login-password-wrap button {
     padding: 8px 12px;
     border-radius: 8px;
@@ -196,15 +214,15 @@ header .nav-right {
     cursor: pointer;
 }
 
+/* Show/hide button hover */
 .login-password-wrap button:hover {
     background: #ddd6fe;
 }
 
-/* =========================
-   Responsive Design
-========================= */
 
 /* TABLET */
+
+/* Layout changes for screens 900px and below */
 @media (max-width: 900px) {
     .login-shell {
         max-width: 560px;
@@ -224,8 +242,10 @@ header .nav-right {
     }
 }
 
+
 /* MOBILE */
 
+/* Layout changes for screens 600px and below */
 @media (max-width: 600px) {
     .login-shell {
         max-width: 100%;
@@ -279,6 +299,10 @@ header .nav-right {
     }
 }
 
+
+/* NAV FIX FOR SMALLER SCREENS */
+
+/* Extra nav adjustments for screens 768px and below */
 @media (max-width: 768px) {
     nav {
         display: flex;

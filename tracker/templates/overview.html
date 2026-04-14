@@ -1,97 +1,131 @@
+{# TEMPLATE: overview.html #}
+
 {% extends "base.html" %}
 
+{# Page title for browser tab #}
 {% block title %}Overview{% endblock %}
 
+{# Page-specific CSS files #}
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/overview.css') }}">
 {% endblock %}
 
 {% block content %}
+
+<!-- PAGE HERO - overview heading and summary text -->
 <section class="dashboard-hero overview-page-hero">
     <h1 id="overview-title">Financial Overview</h1>
     <p>
-        View your daily, weekly, and monthly spending trends,
+        View daily, weekly, and monthly spending trends,
         with a category breakdown for the current month.
     </p>
 </section>
+
+<!-- CHART GRID - contains all overview charts -->
 <section class="overview-chart-grid">
     <h2 class="visually-hidden">Overview charts</h2>
+
+    <!-- DAILY CHART CARD - shows spending for the last 7 days -->
     <article class="overview-chart-card">
         <h2 class="visually-hidden">Daily Spending Trend</h2>
+
         <section class="overview-chart-top">
             <h2>Daily Spending Trend</h2>
-            <p class="overview-chart-badge">Last 7 Days</p>
         </section>
+
         <figure class="overview-chart-figure">
+            {# daily_labels and daily_values are converted to JSON
+               so JavaScript can read them and build the chart #}
+               {# The default filter ensures that if the variables are not provided, empty arrays are used instead, preventing errors in JavaScript. #}
             <canvas
-                id="dailyChart"
-                data-labels='{{ daily_labels | default([]) | tojson }}'
-                data-values='{{ daily_values | default([]) | tojson }}'
-                role="img"
-                aria-label="Line chart showing daily spending for the last 7 days"
+                id="dailyChart" {# The id attribute allows JavaScript to target this specific canvas element to render the chart. #}
+                data-labels='{{ daily_labels | default([]) | tojson }}' {# data-labels attribute stores the daily_labels data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                data-values='{{ daily_values | default([]) | tojson }}' {# data-values attribute stores the daily_values data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                role="img"                                              {# role="img" indicates that this canvas element is an image, which is important for accessibility. #}
+                aria-label="Line chart showing daily spending for the last 7 days" {# aria-label provides a descriptive label for screen readers, explaining what the chart represents. #}
             ></canvas>
+
             <figcaption class="overview-chart-caption">
-                Track how your spending changes each day over the last 7 days.
+                Track how spending changes each day over the last 7 days.
             </figcaption>
         </figure>
     </article>
+
+    <!-- WEEKLY CHART CARD - shows totals for the last 4 weeks -->
     <article class="overview-chart-card">
         <h2 class="visually-hidden">Weekly Spending Trend</h2>
+
         <section class="overview-chart-top">
             <h2>Weekly Spending Trend</h2>
-            <p class="overview-chart-badge">Last 4 Weeks</p>
         </section>
+
         <figure class="overview-chart-figure">
+            {# weekly_labels and weekly_values are passed from Flask
+               and used by JavaScript to build the chart #}
             <canvas
-                id="weeklyChart"
-                data-labels='{{ weekly_labels | default([]) | tojson }}'
-                data-values='{{ weekly_values | default([]) | tojson }}'
-                role="img"
-                aria-label="Bar chart showing weekly spending totals for the last 4 weeks"
+                id="weeklyChart" {# The id attribute allows JavaScript to target this specific canvas element to render the chart. #}
+                data-labels='{{ weekly_labels | default([]) | tojson }}' {# data-labels attribute stores the weekly_labels data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                data-values='{{ weekly_values | default([]) | tojson }}' {# data-values attribute stores the weekly_values data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                role="img" {# role="img" indicates that this canvas element is an image, which is important for accessibility. #}
+                aria-label="Bar chart showing weekly spending totals for the last 4 weeks" {# aria-label provides a descriptive label for screen readers, explaining what the chart represents. #}
             ></canvas>
+
             <figcaption class="overview-chart-caption">
-                Compare your total spending across the last 4 weeks.
+                Compare total spending across the last 4 weeks.
             </figcaption>
         </figure>
     </article>
+
+    <!-- MONTHLY CHART CARD - shows totals across 12 months -->
     <article class="overview-chart-card">
         <h2 class="visually-hidden">Monthly Spending Trend</h2>
+
         <section class="overview-chart-top">
             <h2>Monthly Spending Trend</h2>
-            <p class="overview-chart-badge">12 Months</p>
         </section>
+
         <figure class="overview-chart-figure">
+            {# monthly_labels and monthly_values are passed from Flask
+               and used by JavaScript to build the chart #}
             <canvas
-                id="monthlyChart"
-                data-labels='{{ monthly_labels | default([]) | tojson }}'
-                data-values='{{ monthly_values | default([]) | tojson }}'
-                role="img"
-                aria-label="Line chart showing monthly spending across 12 months"
+                id="monthlyChart" {# The id attribute allows JavaScript to target this specific canvas element to render the chart. #}
+                data-labels='{{ monthly_labels | default([]) | tojson }}' {# data-labels attribute stores the monthly_labels data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                data-values='{{ monthly_values | default([]) | tojson }}' {# data-values attribute stores the monthly_values data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                role="img" {# role="img" indicates that this canvas element is an image, which is important for accessibility. #}
+                aria-label="Line chart showing monthly spending across 12 months" {# aria-label provides a descriptive label for screen readers, explaining what the chart represents. #}
             ></canvas>
+
             <figcaption class="overview-chart-caption">
                 Compare spending totals across all 12 months of the year.
             </figcaption>
         </figure>
     </article>
+
+    <!-- CATEGORY CHART CARD - shows current month spending by category -->
     <article class="overview-chart-card">
         <h2 class="visually-hidden">Category Distribution</h2>
+
         <section class="overview-chart-top">
             <h2>Category Distribution</h2>
-            <p class="overview-chart-badge">Current Month</p>
         </section>
+
         <figure class="overview-chart-figure overview-chart-figure-pie">
+            {# category_labels and category_values are passed from Flask
+               and used by JavaScript to build the pie chart #}
             <canvas
-                id="categoryPieChart"
-                data-labels='{{ category_labels | default([]) | tojson }}'
-                data-values='{{ category_values | default([]) | tojson }}'
-                role="img"
-                aria-label="Pie chart showing spending distribution by category for the current month"
+                id="categoryPieChart" {# The id attribute allows JavaScript to target this specific canvas element to render the chart. #}
+                data-labels='{{ category_labels | default([]) | tojson }}' {# data-labels attribute stores the category_labels data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                data-values='{{ category_values | default([]) | tojson }}' {# data-values attribute stores the category_values data as a JSON string, which can be accessed by JavaScript to build the chart. #}
+                role="img" {# role="img" indicates that this canvas element is an image, which is important for accessibility. #}
+                aria-label="Pie chart showing spending distribution by category for the current month" {# aria-label provides a descriptive label for screen readers, explaining what the chart represents. #}
             ></canvas>
+
             <figcaption class="overview-chart-caption">
-                See how your current month spending is divided by category.
+                See how current month spending is divided by category.
             </figcaption>
         </figure>
     </article>
 </section>
+
 {% endblock %}
