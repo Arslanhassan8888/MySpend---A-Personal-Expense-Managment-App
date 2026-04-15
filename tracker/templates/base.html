@@ -10,6 +10,9 @@
         {# Page title (can be overridden by child templates) #}
         <title>{% block title %}MySpend{% endblock %}</title>
 
+        {# Favicon for browser tab #}
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+
         {# Main shared CSS file #}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
