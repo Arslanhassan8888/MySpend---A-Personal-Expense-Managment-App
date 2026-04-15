@@ -176,20 +176,15 @@ def dashboard() -> str:
 
     # SORT VALIDATION
     # If the sort modal was submitted, require at least one sort option.
-    # We check the original submitted sort value, not the default value.
+    # Do not redirect again here, otherwise the page can enter a redirect loop.
     if open_modal == "sort":
         has_sort_option = raw_sort is not None and raw_sort != ""
         has_category = category_id is not None and category_id != ""
 
         if not has_sort_option and not has_category:
-            return redirect(
-                url_for(
-                    "main.dashboard",
-                    open_modal="sort",
-                    sort_error="Please choose a sort option or select a category before applying.",
-                    category_id=category_id
-                ) + "#expenses"
-            )
+            sort_error = "Pl    ease choose a sort option or select a category before applying."
+        else:
+            open_modal = "" # Clear the open_modal value to prevent the sort modal from reopening again after this validation.
     
     
     # BASE QUERY
