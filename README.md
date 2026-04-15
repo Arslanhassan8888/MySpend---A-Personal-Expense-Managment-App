@@ -81,9 +81,10 @@ The application uses the following important packages:
 - Jinja2
 - Chart.js
 
-
 ### Tools
-
+- Visual Studio Code
+- Git
+- GitHub
 
 ## Key Features
 
@@ -263,3 +264,56 @@ Accessibility testing has been completed and passed using the following tools:
 
 ---
 
+## Future Improvements
+
+The project can be extended further with more advanced financial features and system integrations.
+
+---
+
+### Income Handling
+
+- Add support for income tracking  
+- Calculate net balance using both income and expenses  
+- Display savings growth over time  
+
+---
+
+### Banking API Integration
+
+- Connect to external banking APIs  
+- Automate transaction importing  
+- Reduce manual entry of expenses  
+- Support automatic expense categorisation  
+
+---
+
+### Advanced Financial Analytics
+
+- Provide predictive spending insights  
+- Enable monthly comparisons  
+- Export data to CSV or PDF  
+- Generate custom financial reports  
+
+---
+
+### Security Improvements
+
+- Implement two-factor authentication (2FA)  
+- Add email verification  
+- Provide password reset functionality  
+- Improve secret management using environment variables  
+
+---
+
+### UI and UX Improvements
+
+- Improve mobile responsiveness  
+- Add dark mode support  
+- Introduce advanced user preferences  
+- Enhance onboarding experience  
+
+---
+
+## Author
+
+## Arslan Hassan
