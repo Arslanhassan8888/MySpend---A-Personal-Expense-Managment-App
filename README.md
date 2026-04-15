@@ -282,6 +282,8 @@ tracker/
 ├── app.py                 (application entry point)
 └── myspend.db             (SQLite database)
 
+```
+
 ## Future Improvements
 
 The project can be extended further with more advanced financial features and system integrations.
