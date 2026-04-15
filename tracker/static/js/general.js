@@ -258,33 +258,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-/* AUTO HIDE TEMPORARY MESSAGES */
-
-// This section hides temporary messages after a short delay.
-// It fades them out first, then removes them from view.
-document.addEventListener("DOMContentLoaded", function () {
-    const timedMessages = document.querySelectorAll(".form-messages li, .table-messages li");
-
-    timedMessages.forEach(function (message) {
-
-        // WAIT BEFORE FADING
-        // Leave the message visible for 5 seconds first.
-        setTimeout(function () {
-            message.style.transition = "opacity 0.4s ease";
-            message.style.opacity = "0";
-
-            // REMOVE AFTER FADE
-            // After the fade-out finishes, remove the message from layout.
-            setTimeout(function () {
-                message.style.display = "none";
-            }, 400);
-        }, 5000);
-    });
-});
-
-
 /* GENERAL UI EFFECTS */
 
 // This section handles small user interface effects used across the site.
