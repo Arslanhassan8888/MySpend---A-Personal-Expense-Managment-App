@@ -111,15 +111,33 @@ def dashboard() -> str:
     
     # SEARCH VALIDATION
     # Validate search input values before applying filters.
-    # If validation fails, redirect back and reopen the search modal with an error.
+
+    # If the search modal was submitted, require at least one search field.
+    if open_modal == "search":
+        has_search_option = (
+            (description is not None and description.strip() != "") or
+            (min_amount is not None and min_amount.strip() != "") or
+            (max_amount is not None and max_amount.strip() != "") or
+            (date_from is not None and date_from.strip() != "") or
+            (date_to is not None and date_to.strip() != "") or
+            (category_id is not None and category_id.strip() != "")
+        )
+
+        if not has_search_option:
+            search_error = "Please select at least one search option before applying."
+            
+        else:
+            open_modal = "" # Clear the open_modal value to prevent the search modal from reopening again after this validation.
 
     # VALIDATE AMOUNT VALUES
     # Check that min and max amounts are valid numbers if provided.
-    try: # Attempt to convert the min_amount and max_amount values from the URL query string to floats. If the conversion fails (e.g., if the user entered a non-numeric value), a ValueError will be raised, and we catch that to handle the error gracefully.
-        if min_amount: # If a min_amount value is provided in the URL query string (e.g., ?min_amount=10).
-                raise ValueError 
+    try:
+        if min_amount and min_amount.strip() != "":
+            min_amount_float = float(min_amount)
+            if min_amount_float < 0:
+                raise ValueError
 
-        if max_amount:
+        if max_amount and max_amount.strip() != "":
             max_amount_float = float(max_amount)
             if max_amount_float < 0:
                 raise ValueError
@@ -137,7 +155,6 @@ def dashboard() -> str:
                 category_id=category_id
             ) + "#expenses"
         )
-
     # VALIDATE MIN <= MAX
     # Ensure minimum amount is not greater than maximum amount.
     if min_amount and max_amount:
@@ -182,7 +199,7 @@ def dashboard() -> str:
         has_category = category_id is not None and category_id != ""
 
         if not has_sort_option and not has_category:
-            sort_error = "Pl    ease choose a sort option or select a category before applying."
+            sort_error = "Please choose a sort option or select a category before applying."
         else:
             open_modal = "" # Clear the open_modal value to prevent the sort modal from reopening again after this validation.
     
