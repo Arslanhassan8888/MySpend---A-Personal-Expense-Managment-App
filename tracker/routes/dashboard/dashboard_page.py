@@ -66,11 +66,11 @@ def dashboard() -> str:
     # SORT
     # Get the selected sort option from the URL query string.
     # If nothing is chosen, use newest date first as the default.
-    sort = request.args.get("sort")
+    raw_sort = request.args.get("sort")  # Store the original sort value from the URL before applying any default.
 
+    sort = raw_sort
     if not sort: # If no sort option is provided in the URL, we set the default
         sort = "date_desc" # Default sorting is by date descending (newest first)
-
     # Match the selected sort key to the correct SQL ORDER BY clause.
     order_clause = {
         "date_desc": "expenses.date DESC", # Sort by date descending (newest first)
@@ -86,12 +86,112 @@ def dashboard() -> str:
     # SEARCH FILTERS
     # Read optional filter values from the URL query string.
     date_from = request.args.get("date_from")   # Get the "date_from" filter value from the URL query string, which represents the start date for filtering expenses. If the user has entered a date in the filter form, it will be included in the URL as a query parameter (e.g., ?date_from=2024-01-01). If no value is provided, this will be None.
-    date_to = request.args.get("date_to")
-    min_amount = request.args.get("min_amount")
-    max_amount = request.args.get("max_amount")
-    description = request.args.get("description")
-    category_id = request.args.get("category_id")
+    date_to = request.args.get("date_to")      
+    min_amount = request.args.get("min_amount") 
+    max_amount = request.args.get("max_amount")    
+    description = request.args.get("description") 
+    category_id = request.args.get("category_id")   
+    
+    # MODAL CONTROL AND SERVER-SIDE VALIDATION MESSAGES
+    # These values allow Flask to reopen a modal after redirect
+    # and display any validation errors inside it.
+    open_modal = request.args.get("open_modal", "")   # Get the "open_modal" value from the URL query string, which indicates which modal should be reopened after a redirect. If no value is provided, this will be an empty string.
+    sort_error = request.args.get("sort_error", "")   
+    search_error = request.args.get("search_error", "") 
+    edit_error = request.args.get("edit_error", "")   
 
+    # EDIT MODAL FIELD VALUES
+    # These values are used to refill the edit modal form
+    # if validation fails after submission.
+    edit_expense_id = request.args.get("edit_expense_id", "")
+    edit_amount_value = request.args.get("edit_amount_value", "")
+    edit_category_value = request.args.get("edit_category_value", "")
+    edit_date_value = request.args.get("edit_date_value", "")
+    edit_description_value = request.args.get("edit_description_value", "")
+    
+    # SEARCH VALIDATION
+    # Validate search input values before applying filters.
+    # If validation fails, redirect back and reopen the search modal with an error.
+
+    # VALIDATE AMOUNT VALUES
+    # Check that min and max amounts are valid numbers if provided.
+    try: # Attempt to convert the min_amount and max_amount values from the URL query string to floats. If the conversion fails (e.g., if the user entered a non-numeric value), a ValueError will be raised, and we catch that to handle the error gracefully.
+        if min_amount: # If a min_amount value is provided in the URL query string (e.g., ?min_amount=10).
+                raise ValueError 
+
+        if max_amount:
+            max_amount_float = float(max_amount)
+            if max_amount_float < 0:
+                raise ValueError
+    except ValueError:
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="search",
+                search_error="Amounts must be valid positive numbers.",
+                description=description,
+                min_amount=min_amount,
+                max_amount=max_amount,
+                date_from=date_from,
+                date_to=date_to,
+                category_id=category_id
+            ) + "#expenses"
+        )
+
+    # VALIDATE MIN <= MAX
+    # Ensure minimum amount is not greater than maximum amount.
+    if min_amount and max_amount:
+        if float(min_amount) > float(max_amount):
+            return redirect(
+                url_for(
+                    "main.dashboard",
+                    open_modal="search",
+                    search_error="Minimum amount cannot be greater than maximum amount.",
+                    description=description,
+                    min_amount=min_amount,
+                    max_amount=max_amount,
+                    date_from=date_from,
+                    date_to=date_to,
+                    category_id=category_id
+                ) + "#expenses"
+            )
+
+    # VALIDATE DATE RANGE
+    # Ensure the start date is not after the end date.
+    if date_from and date_to:
+        if date_from > date_to:
+            return redirect(
+                url_for(
+                    "main.dashboard",
+                    open_modal="search",
+                    search_error="Start date cannot be after end date.",
+                    description=description,
+                    min_amount=min_amount,
+                    max_amount=max_amount,
+                    date_from=date_from,
+                    date_to=date_to,
+                    category_id=category_id
+                ) + "#expenses"
+            )
+
+    # SORT VALIDATION
+    # If the sort modal was submitted, require at least one sort option.
+    # We check the original submitted sort value, not the default value.
+    if open_modal == "sort":
+        has_sort_option = raw_sort is not None and raw_sort != ""
+        has_category = category_id is not None and category_id != ""
+
+        if not has_sort_option and not has_category:
+            return redirect(
+                url_for(
+                    "main.dashboard",
+                    open_modal="sort",
+                    sort_error="Please choose a sort option or select a category before applying.",
+                    category_id=category_id
+                ) + "#expenses"
+            )
+    
+    
     # BASE QUERY
     # Start with the main query to load this user's expenses,
     # joined with categories so the category name can also be shown.
@@ -216,17 +316,27 @@ def dashboard() -> str:
     conn.close()
 
     # Render the dashboard page with all required data
-    return render_template( # We render the "dashboard.html" template and pass all the necessary data for displaying the dashboard, including the user's name, the list of expenses, totals, categories, budget information, and the current month for display.
+    return render_template(
         "dashboard.html",
-        name=user["name"], # Pass the user's name to the template for display in the dashboard header.
-        expenses=expenses, # Pass the list of expenses to the template for display in the expenses table.
-        total=total,       # Pass the total spending across all expenses to the template for display in the dashboard summary.
-        monthly_total=monthly_total, # Pass the total spending for the current month to the template for display in the monthly summary section.
+        name=user["name"],
+        expenses=expenses,
+        total=total,
+        monthly_total=monthly_total,
         daily_total=daily_total,
         weekly_total=weekly_total,
         categories=categories,
         budget_amount=budget_amount,
         remaining=remaining,
         progress=progress,
-        current_month=datetime.now().strftime("%B %Y") # Pass the current month formatted as "Month Year" (e.g., "January 2024") to the template for display in the budget section.
+        current_month=datetime.now().strftime("%B %Y"),
+        open_modal=open_modal,
+        sort_error=sort_error,
+        search_error=search_error,
+        edit_error=edit_error,
+        edit_expense_id=edit_expense_id,
+        edit_amount_value=edit_amount_value,
+        edit_category_value=edit_category_value,
+        edit_date_value=edit_date_value,
+        edit_description_value=edit_description_value
     )
+    

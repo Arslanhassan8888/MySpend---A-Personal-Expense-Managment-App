@@ -29,6 +29,7 @@ def update_expense() -> str:
     This route:
     - checks that the user is logged in
     - retrieves updated form values
+    - validates the submitted values
     - updates the selected expense in the database
     - ensures the expense belongs to the user
     - redirects back to the dashboard
@@ -42,11 +43,93 @@ def update_expense() -> str:
         return redirect(url_for("main.login"))
 
     # Get updated values from the form
-    expense_id = request.form["expense_id"]
-    amount = request.form["amount"]
-    category_id = request.form["category_id"]
-    date = request.form["date"]
-    description = request.form["description"].strip()
+    expense_id = request.form.get("expense_id", "").strip()
+    raw_amount = request.form.get("amount", "").strip()
+    category_id = request.form.get("category_id", "").strip()
+    date = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    # VALIDATE AMOUNT FIELD
+    # Ensure the amount field is not empty before trying to convert it.
+    if raw_amount == "":
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="edit",
+                edit_error="Please enter an amount.",
+                edit_expense_id=expense_id,
+                edit_amount_value=raw_amount,
+                edit_category_value=category_id,
+                edit_date_value=date,
+                edit_description_value=description
+            ) + "#expenses"
+        )
+
+    # VALIDATE AMOUNT TYPE
+    # Convert the entered amount to a float and handle invalid input.
+    try:
+        amount = float(raw_amount)
+    except ValueError:
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="edit",
+                edit_error="Please enter a valid number.",
+                edit_expense_id=expense_id,
+                edit_amount_value=raw_amount,
+                edit_category_value=category_id,
+                edit_date_value=date,
+                edit_description_value=description
+            ) + "#expenses"
+        )
+
+    # VALIDATE POSITIVE AMOUNT
+    # The amount must be greater than zero.
+    if amount <= 0:
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="edit",
+                edit_error="Amount must be greater than zero.",
+                edit_expense_id=expense_id,
+                edit_amount_value=raw_amount,
+                edit_category_value=category_id,
+                edit_date_value=date,
+                edit_description_value=description
+            ) + "#expenses"
+        )
+
+    # VALIDATE DATE
+    # Ensure a date has been selected.
+    if date == "":
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="edit",
+                edit_error="Please choose a date.",
+                edit_expense_id=expense_id,
+                edit_amount_value=raw_amount,
+                edit_category_value=category_id,
+                edit_date_value=date,
+                edit_description_value=description
+            ) + "#expenses"
+        )
+
+    # VALIDATE CATEGORY
+    # Ensure a category has been selected.
+    if category_id == "":
+        return redirect(
+            url_for(
+                "main.dashboard",
+                open_modal="edit",
+                edit_error="Please choose a category.",
+                edit_expense_id=expense_id,
+                edit_amount_value=raw_amount,
+                edit_category_value=category_id,
+                edit_date_value=date,
+                edit_description_value=description
+            ) + "#expenses"
+        )
 
     # Connect to the database
     conn = get_db_connection()

@@ -197,3 +197,7 @@ I improved the modular structure across the project, especially in the routes sy
 ## 18/04/2026 Full comments across the project
 
 Added detailed comments across the full project in Python, HTML templates, CSS, and JavaScript. Improved explanations for imports, sections, functions, and logic to make the code clearer and easier to understand
+
+## 19/04/2026 Moved form validation from JavaScript to Flask.
+
+Validation for edit, search, and sort is now handled on the server. Errors are passed back to the dashboard, modals reopen, and user input is preserved. No changes were made to CSS or layout.

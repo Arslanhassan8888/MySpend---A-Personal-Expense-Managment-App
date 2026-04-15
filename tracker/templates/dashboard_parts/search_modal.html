@@ -12,8 +12,16 @@
         <!-- TITLE AND FEEDBACK -->
         <h3 id="search-title">Search Expenses</h3>
 
-        {# Feedback message shown dynamically via JavaScript #}
-        <p id="search-feedback" class="modal-feedback" hidden></p>
+        {# Display search validation error passed from Flask.
+           If there is no error, keep the feedback hidden. #}
+           {# The class of the feedback element is set to "modal-feedback" and conditionally includes "error" if there is a search error. If there is no search error, the hidden attribute is added to keep the feedback element hidden. #}
+        <p
+            id="search-feedback"
+            class="modal-feedback {% if search_error %}error{% endif %}"
+            {% if not search_error %}hidden{% endif %}        {# If there is no search error, add the hidden attribute to keep the feedback element hidden. #}
+        >
+            {{ search_error }}        {# Display the search error message passed from the backend if validation fails. #}
+        </p>
 
         <!-- SEARCH FORM - sends filters via GET request -->
         <form
@@ -22,6 +30,9 @@
             action="/dashboard#expenses"
             novalidate
         >
+            {# Hidden field used to tell Flask that this request came from the search modal.
+               This allows the backend to reopen the same modal after redirect if validation fails. #}
+            <input type="hidden" name="open_modal" value="search">
 
             <!-- DESCRIPTION FIELD -->
             <section class="modal-field">
@@ -33,6 +44,7 @@
                     id="search_description"
                     type="text"
                     name="description"
+                    value="{{ request.args.get('description', '') }}"
                 >
             </section>
 
@@ -48,6 +60,7 @@
                     name="min_amount"
                     min="0"
                     step="0.01"
+                    value="{{ request.args.get('min_amount', '') }}"
                 >
 
                 <p id="search-min-hint" class="field-hint">
@@ -67,6 +80,7 @@
                     name="max_amount"
                     min="0"
                     step="0.01"
+                    value="{{ request.args.get('max_amount', '') }}"
                 >
 
                 <p id="search-max-hint" class="field-hint">
@@ -84,6 +98,7 @@
                     id="search_date_from"
                     type="date"
                     name="date_from"
+                    value="{{ request.args.get('date_from', '') }}"
                 >
             </section>
 
@@ -97,6 +112,7 @@
                     id="search_date_to"
                     type="date"
                     name="date_to"
+                    value="{{ request.args.get('date_to', '') }}"
                 >
             </section>
 

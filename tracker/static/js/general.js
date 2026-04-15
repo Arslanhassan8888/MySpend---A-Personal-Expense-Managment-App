@@ -2,7 +2,7 @@
 general.js
 
 This file handles the interactive behaviour for the MySpend application.
-It supports expense selection, delete confirmation, modal actions, form validation,
+It supports expense selection, delete confirmation, modal actions,
 general UI behaviour, password toggles, registration redirect, and charts.
 The same file is used on multiple pages, so each section checks whether the
 required HTML elements exist before running.
@@ -227,189 +227,37 @@ window.onclick = function(event) {
 };
 
 
-/* FORM FEEDBACK AND VALIDATION */
+/* REOPEN MODAL AFTER SERVER VALIDATION */
 
-// This section validates the sort, search, and edit forms before they submit.
-// It also shows validation messages inside the modal windows.
+// This section reopens a modal after the page reloads
+// if Flask tells the page which modal should be shown.
 document.addEventListener("DOMContentLoaded", function () {
-    const sortForm = document.getElementById("sortForm");
-    const searchForm = document.getElementById("searchForm");
-    const editForm = document.getElementById("editForm");
+    const modalToOpen = document.body.dataset.openModal;
 
-    const sortFeedback = document.getElementById("sort-feedback");
-    const searchFeedback = document.getElementById("search-feedback");
-    const editFeedback = document.getElementById("edit-feedback");
+    // REOPEN SORT MODAL
+    // If Flask requested the sort modal, open it again.
+    if (modalToOpen === "sort") {
+        openSortModal();
+    }
 
-    // SHOW FEEDBACK MESSAGE
-    // This helper function makes a feedback element visible,
-    // applies the correct style class, and inserts the message text.
-    function showFeedback(element, type, message) {
-        if (!element) {
-            return;
+    // REOPEN SEARCH MODAL
+    // If Flask requested the search modal, open it again.
+    if (modalToOpen === "search") {
+        openSearchModal();
+    }
+
+    // REOPEN EDIT MODAL
+    // If Flask requested the edit modal, show it again.
+    if (modalToOpen === "edit") {
+        const modal = document.getElementById("editModal");
+
+        if (modal) {
+            modal.hidden = false;
         }
-
-        element.hidden = false;
-        element.classList.remove("success", "error");
-        element.classList.add(type);
-        element.textContent = message;
-    }
-
-    // CLEAR FEEDBACK MESSAGE
-    // This helper function hides the feedback element
-    // and removes any old message and styling.
-    function clearFeedback(element) {
-        if (!element) {
-            return;
-        }
-
-        element.hidden = true;
-        element.classList.remove("success", "error");
-        element.textContent = "";
-    }
-
-    /* VALIDATION RULES */
-    
-    // VALIDATE SORT FORM
-    // This checks that the user has selected a sort option
-    // before the sort form is submitted.
-    if (sortForm) {
-        sortForm.addEventListener("submit", function (event) {
-            clearFeedback(sortFeedback);
-
-            const selectedSort = sortForm.querySelector('input[name="sort"]:checked');
-            const selectedCategory = document.getElementById("sort_category_id").value;
-
-            const hasSortOption = selectedSort !== null;
-            const hasCategory = selectedCategory && selectedCategory.value.trim() !== "";
-
-            // REQUIRE SORT CHOICE
-            // Stop form submission if no sort option is selected.
-            if (!selectedSort) {
-                event.preventDefault();
-                showFeedback(
-                    sortFeedback,
-                    "error",
-                    "Please choose a sort option or select a category before applying."
-                );
-
-                return;
-            }
-        });
-    }
-
-    // VALIDATE SEARCH FORM
-    // This checks that at least one field is filled in
-    // and that amount and date ranges are valid.
-    if (searchForm) {
-        searchForm.addEventListener("submit", function (event) {
-            clearFeedback(searchFeedback);
-
-            const description = document.getElementById("search_description");
-            const minAmount = document.getElementById("search_min_amount");
-            const maxAmount = document.getElementById("search_max_amount");
-            const dateFrom = document.getElementById("search_date_from");
-            const dateTo = document.getElementById("search_date_to");
-
-            const hasValue =
-                description.value.trim() !== "" ||
-                minAmount.value.trim() !== "" ||
-                maxAmount.value.trim() !== "" ||
-                dateFrom.value.trim() !== "" ||
-                dateTo.value.trim() !== "";
-
-            // REQUIRE AT LEAST ONE SEARCH FIELD
-            // Stop submission if every search field is empty.
-            if (!hasValue) {
-                event.preventDefault();
-                showFeedback(searchFeedback, "error", "Please fill at least one field before applying search.");
-                return;
-            }
-
-            // VALIDATE MINIMUM AMOUNT
-            // The minimum amount cannot be negative.
-            if (minAmount.value !== "" && Number(minAmount.value) < 0) {
-                event.preventDefault();
-                showFeedback(searchFeedback, "error", "Minimum amount must be a positive number.");
-                return;
-            }
-
-            // VALIDATE MAXIMUM AMOUNT
-            // The maximum amount cannot be negative.
-            if (maxAmount.value !== "" && Number(maxAmount.value) < 0) {
-                event.preventDefault();
-                showFeedback(searchFeedback, "error", "Maximum amount must be a positive number.");
-                return;
-            }
-
-            // VALIDATE AMOUNT RANGE
-            // The minimum amount cannot be greater than the maximum amount.
-            if (
-                minAmount.value !== "" &&
-                maxAmount.value !== "" &&
-                Number(minAmount.value) > Number(maxAmount.value)
-            ) {
-                event.preventDefault();
-                showFeedback(searchFeedback, "error", "Minimum amount cannot be greater than maximum amount.");
-                return;
-            }
-
-            // VALIDATE DATE RANGE
-            // The start date cannot be later than the end date.
-            if (
-                dateFrom.value !== "" &&
-                dateTo.value !== "" &&
-                dateFrom.value > dateTo.value
-            ) {
-                event.preventDefault();
-                showFeedback(searchFeedback, "error", "Date From cannot be later than Date To.");
-            }
-        });
-    }
-
-    // VALIDATE EDIT FORM
-    // This checks the edit modal fields before the form submits.
-    if (editForm) {
-        editForm.addEventListener("submit", function (event) {
-            clearFeedback(editFeedback);
-
-            const editAmount = document.getElementById("edit_amount");
-            const editDate = document.getElementById("edit_date");
-            const editCategory = document.getElementById("edit_category");
-
-            // REQUIRE AMOUNT
-            // The amount field must not be empty.
-            if (editAmount.value.trim() === "") {
-                event.preventDefault();
-                showFeedback(editFeedback, "error", "Please enter an amount.");
-                return;
-            }
-
-            // REQUIRE POSITIVE AMOUNT
-            // The amount must be greater than zero.
-            if (Number(editAmount.value) <= 0) {
-                event.preventDefault();
-                showFeedback(editFeedback, "error", "Amount must be greater than zero.");
-                return;
-            }
-
-            // REQUIRE DATE
-            // The date field must not be empty.
-            if (editDate.value.trim() === "") {
-                event.preventDefault();
-                showFeedback(editFeedback, "error", "Please choose a date.");
-                return;
-            }
-
-            // REQUIRE CATEGORY
-            // The category field must not be empty.
-            if (editCategory.value.trim() === "") {
-                event.preventDefault();
-                showFeedback(editFeedback, "error", "Please choose a category.");
-                return;
-            }
-        });
     }
 });
+
+
 
 
 /* AUTO HIDE TEMPORARY MESSAGES */
