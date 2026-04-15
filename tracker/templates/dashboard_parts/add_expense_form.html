@@ -8,7 +8,7 @@
     </section>
 
     <!-- FORM - sends new expense data to backend -->
-    <form method="POST" action="/add-expense#add-expense" class="expense-form">
+    <form method="POST" action="/add-expense#add-expense" class="expense-form" novalidate>
 
         {# CSRF protection token #}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -16,7 +16,12 @@
         {# FILTER FLASH MESSAGES - only show messages related to adding expenses #}
         {% set add_expense_messages = [] %}   {# Create an empty list to store messages related to adding expenses. #}
         {% for category, message in flashed_messages %}  {# Loop through all flashed messages (passed from the backend) and their categories. #}
-            {% if "expense added" in message|lower or "amount must" in message|lower or "invalid amount" in message|lower %} {# Check if the message contains keywords related to adding expenses (case-insensitive). #}
+            {% if "expense added" in message|lower 
+                or "amount must" in message|lower 
+                or "invalid amount" in message|lower 
+                or "please enter an amount" in message|lower 
+                or "please choose a date" in message|lower 
+                or "please choose a category" in message|lower %}{# Check if the message contains keywords related to adding expenses (case-insensitive). #}
                 {% set _ = add_expense_messages.append((category, message)) %} {# If the message contains keywords related to adding expenses (case-insensitive), add it to the add_expense_messages list along with its category. #}
             {% endif %}
         {% endfor %}

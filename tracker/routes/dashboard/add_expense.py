@@ -43,24 +43,41 @@ def add_expense() -> str:
     # This route only handles POST requests (form submission)
     if request.method == "POST":
 
-        # Validate the amount entered by the user
-        try:
-            amount = float(request.form["amount"])
+        # Retrieve form values first
+        raw_amount = request.form.get("amount", "").strip()
+        category_id = request.form.get("category_id", "").strip()
+        date = request.form.get("date", "").strip()
+        description = request.form.get("description", "").strip()
 
-            # Ensure the amount is greater than zero
+        # VALIDATE REQUIRED FIELDS
+        # Ensure the main required fields are not empty before continuing.
+        if raw_amount == "":
+            flash("Please enter an amount.", "error")
+            return redirect(url_for("main.dashboard") + "#add-expense")
+
+        if date == "":
+            flash("Please choose a date.", "error")
+            return redirect(url_for("main.dashboard") + "#add-expense")
+
+        if category_id == "":
+            flash("Please choose a category.", "error")
+            return redirect(url_for("main.dashboard") + "#add-expense")
+
+        # VALIDATE AMOUNT TYPE
+        # Convert the entered amount to a number and handle invalid input.
+        try:
+            amount = float(raw_amount)
+
+            # VALIDATE POSITIVE AMOUNT
+            # Ensure the amount is greater than zero.
             if amount <= 0:
-                flash("Amount must be greater than zero.")
-                return redirect(url_for("main.dashboard") + "#expenses")
+                flash("Amount must be greater than zero.", "error")
+                return redirect(url_for("main.dashboard") + "#add-expense")
 
         except ValueError:
             # Handle cases where the input is not a valid number
-            flash("Invalid amount. Please enter a valid number.")
-            return redirect(url_for("main.dashboard") + "#expenses")
-
-        # Retrieve other form values
-        category_id = request.form["category_id"]
-        date = request.form["date"]
-        description = request.form["description"].strip()
+            flash("Invalid amount. Please enter a valid number.", "error")
+            return redirect(url_for("main.dashboard") + "#add-expense")
 
         # Connect to the database and insert the new expense
         conn = get_db_connection()
