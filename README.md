@@ -264,6 +264,23 @@ Accessibility testing has been completed and passed using the following tools:
 
 ---
 
+tracker/
+│
+├── routes/
+│   ├── auth/              # login, register, logout
+│   ├── dashboard/         # dashboard actions, sorting, searching, budget, expenses
+│   └── pages/             # general site pages
+│
+├── templates/             # Jinja2 HTML templates
+├── static/
+│   ├── css/               # stylesheets
+│   ├── js/                # JavaScript files
+│   └── images/            # images, logo, favicon
+│
+├── models.py              # database logic
+├── app.py                 # application entry point
+└── myspend.db             # SQLite database
+
 ## Future Improvements
 
 The project can be extended further with more advanced financial features and system integrations.
