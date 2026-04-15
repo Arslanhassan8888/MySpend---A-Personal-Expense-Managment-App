@@ -201,3 +201,12 @@ Added detailed comments across the full project in Python, HTML templates, CSS, 
 ## 19/04/2026 Moved form validation from JavaScript to Flask.
 
 Validation for edit, search, and sort is now handled on the server. Errors are passed back to the dashboard, modals reopen, and user input is preserved. No changes were made to CSS or layout.
+
+## 20/04/2026 CSV Export Feature
+
+## 20/04/2026 CSV Export Feature
+
+I added a CSV export feature to allow users to download their expense data from the dashboard.
+
+I created a new route using Flask Response to return a downloadable file and used the built-in csv and io modules to generate the CSV in memory instead of saving it on disk. The data is retrieved using a SQL query filtered by session["user_id"] and joined with the categories table to display category names.
+I used a loop to write rows dynamically into the CSV file and set the Content-Disposition header to trigger the download in the browser.

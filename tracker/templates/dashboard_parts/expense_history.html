@@ -14,6 +14,8 @@
         <p class="history-total">
             {{ expenses|length }} Total {# Display the total number of expenses, calculated by getting the length of the expenses list passed from the backend. #}
         </p>
+
+        <a href="{{ url_for('main.export_csv') }}" class="table-action-button">Export CSV</a>
     </section>
 
     <!-- TABLE WRAPPER -->
