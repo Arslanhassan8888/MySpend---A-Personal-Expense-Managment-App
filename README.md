@@ -23,6 +23,7 @@ MySpend allows users to:
 - monitor spending trends over time
 - set and track monthly budgets
 - sort and search expense history
+- export expense data as CSV for external use
 - Review spending visually through charts
 - interact with a structured dashboard with real-time feedback
 
@@ -72,6 +73,7 @@ The application uses the following important packages:
 * Python
 * Flask
 * SQLite
+* Python csv and io modules (for CSV export functionality)
 
 ### Frontend
 
@@ -85,6 +87,14 @@ The application uses the following important packages:
 - Visual Studio Code
 - Git
 - GitHub
+
+## Design Decisions
+
+- Flask was chosen for its simplicity and flexibility  
+- SQLite was used for lightweight local storage  
+- Server-side validation ensures data integrity  
+- Modal-based UI improves user experience without page reloads  
+- Blueprint structure improves maintainability  
 
 ## Key Features
 
@@ -115,6 +125,7 @@ The application uses the following important packages:
 - remaining balance calculation
 - progress bar and budget chart
 - live user feedback through flash messages
+- export expense data directly from the dashboard as CSV
 
 ### Search and Filtering
 
@@ -134,6 +145,15 @@ The application uses the following important packages:
 - sort by high to low amount
 - optional category-based sorting/filtering
 - success and validation messages displayed clearly in the interface
+
+### Data Export (CSV)
+
+- export all expense data as a CSV file
+- one-click download from the dashboard
+- includes date, category, amount, and description
+- generated dynamically using Flask Response (no file stored on server)
+- data filtered based on logged-in user
+- useful for external analysis in Excel or Google Sheets
 
 ### Financial Overview
 
@@ -311,7 +331,7 @@ The project can be extended further with more advanced financial features and sy
 
 - Provide predictive spending insights  
 - Enable monthly comparisons  
-- Export data to CSV or PDF  
+- Export data to PDF  
 - Generate custom financial reports  
 
 ---
