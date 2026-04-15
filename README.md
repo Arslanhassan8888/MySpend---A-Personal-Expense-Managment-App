@@ -23,7 +23,7 @@ MySpend allows users to:
 - monitor spending trends over time
 - set and track monthly budgets
 - sort and search expense history
-- review spending visually through charts
+- Review spending visually through charts
 - interact with a structured dashboard with real-time feedback
 
 The application uses **Flask**, **SQLite**, **Jinja2**, **HTML/CSS**, and **JavaScript**, and follows a modular architecture using **Blueprints** and the **Application Factory pattern**.
@@ -74,6 +74,13 @@ The application uses the following important packages:
 * SQLite
 
 ### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- Jinja2
+- Chart.js
+
 
 ### Tools
 
