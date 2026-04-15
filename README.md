@@ -263,23 +263,24 @@ Accessibility testing has been completed and passed using the following tools:
 - clear visual states and messaging
 
 ---
+## Project Structure
 
+```text
 tracker/
-│
 ├── routes/
-│   ├── auth/              # login, register, logout
-│   ├── dashboard/         # dashboard actions, sorting, searching, budget, expenses
-│   └── pages/             # general site pages
+│   ├── auth/              (login, register, logout)
+│   ├── dashboard/         (dashboard actions, sorting, searching, budget, expenses)
+│   └── pages/             (general site pages)
 │
-├── templates/             # Jinja2 HTML templates
+├── templates/             (Jinja2 HTML templates)
 ├── static/
-│   ├── css/               # stylesheets
-│   ├── js/                # JavaScript files
-│   └── images/            # images, logo, favicon
+│   ├── css/               (stylesheets)
+│   ├── js/                (JavaScript files)
+│   └── images/            (images, logo, favicon)
 │
-├── models.py              # database logic
-├── app.py                 # application entry point
-└── myspend.db             # SQLite database
+├── models.py              (database logic)
+├── app.py                 (application entry point)
+└── myspend.db             (SQLite database)
 
 ## Future Improvements
 
