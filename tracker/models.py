@@ -89,17 +89,17 @@ def create_tables() -> None:
     )
     """)
 
-    # INCOME TABLE – money received by users
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS income (
-        income_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        amount REAL,
-        date TEXT,
-        source TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
-    )
-    """)
+    # # INCOME TABLE – money received by users
+    # cursor.execute("""
+    # CREATE TABLE IF NOT EXISTS income (
+    #     income_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #     user_id INTEGER,
+    #     amount REAL,
+    #     date TEXT,
+    #     source TEXT,
+    #     FOREIGN KEY (user_id) REFERENCES users(user_id)
+    # )
+    # """)
 
     # BUDGETS TABLE – monthly budget limits
     cursor.execute("""
@@ -112,29 +112,20 @@ def create_tables() -> None:
     )
     """)
 
-    # GOALS TABLE – financial saving goals
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS goals (
-        goal_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        target_amount REAL,
-        deadline TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
-    )
-    """)
+  
 
-    # RECURRING EXPENSES TABLE – subscriptions or repeated payments
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS recurring_expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        category_id INTEGER,
-        amount REAL,
-        frequency TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (category_id) REFERENCES categories(category_id)
-    )
-    """)
+    # # RECURRING EXPENSES TABLE – subscriptions or repeated payments
+    # cursor.execute("""
+    # CREATE TABLE IF NOT EXISTS recurring_expenses (
+    #     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #     user_id INTEGER,
+    #     category_id INTEGER,
+    #     amount REAL,
+    #     frequency TEXT,
+    #     FOREIGN KEY (user_id) REFERENCES users(user_id),
+    #     FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    # )
+    # """)
 
     # REVIEWS TABLE – user feedback for the Reviews page
     cursor.execute("""
