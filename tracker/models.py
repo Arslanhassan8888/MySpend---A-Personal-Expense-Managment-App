@@ -89,14 +89,15 @@ def create_tables() -> None:
     )
     """)
 
-    # # INCOME TABLE – money received by users
+  # INCOME TABLE – money received by users
     # cursor.execute("""
     # CREATE TABLE IF NOT EXISTS income (
     #     income_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    #     user_id INTEGER,
-    #     amount REAL,
-    #     date TEXT,
-    #     source TEXT,
+    #     user_id INTEGER NOT NULL,
+    #     amount REAL NOT NULL,
+    #     date TEXT NOT NULL,
+    #     source TEXT NOT NULL,
+    #     description TEXT,
     #     FOREIGN KEY (user_id) REFERENCES users(user_id)
     # )
     # """)

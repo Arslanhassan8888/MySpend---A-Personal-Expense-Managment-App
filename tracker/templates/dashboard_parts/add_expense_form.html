@@ -10,6 +10,10 @@
     <!-- FORM - sends new expense data to backend -->
     <form method="POST" action="/add-expense#add-expense" class="expense-form" novalidate>
 
+         <p class="visually-hidden">
+        All required fields must be completed before submitting the form.
+        </p>
+
         {# CSRF protection token #}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
