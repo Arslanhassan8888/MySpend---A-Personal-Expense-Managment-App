@@ -15,6 +15,16 @@
     white-space: nowrap;
 }
 
+/* Global keyboard focus style (accessible) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #7c2cff;
+    outline-offset: 3px;
+}
+
 
 /* PAGE BASE */
 
