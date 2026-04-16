@@ -104,61 +104,64 @@
             {% block content %}{% endblock %}  {# This block will be replaced by the content defined in child templates that extend this base template. #}
         </main>
 
-        <!-- FOOTER - shared across all pages -->
-        <footer class="footer">
+<!-- FOOTER - shared across all pages -->
+<footer class="footer">
 
-            <section class="footer-top">
+    <section class="footer-top">
+        <h2 class="visually-hidden">Footer top section</h2>
 
-                <!-- Brand section -->
-                <section class="footer-col">
-                    <h2>MySpend</h2>
-                    <p class="sub">Financial Dashboard</p>
-                    <p class="desc">
-                        Take control of your finances with our intuitive expense tracking platform.
-                    </p>
-                </section>
+        <!-- Brand section -->
+        <section class="footer-col">
+            <h3>MySpend</h3>
+            <p class="sub">Financial Dashboard</p>
+            <p class="desc">
+                Take control of your finances with our intuitive expense tracking platform.
+            </p>
+        </section>
 
-                <!-- Quick links -->
-                <section class="footer-col">
-                    <section class="quick-links-block">
-                        <h3 class="quick-title">Quick Links</h3>
+        <!-- Quick links -->
+        <section class="footer-col">
+            <h3 class="visually-hidden">Footer quick links section</h3>
+            <section class="quick-links-block">
+                <h3 class="quick-title">Quick Links</h3>
 
-                        <ul class="footer-links">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="{{ url_for('main.about') }}">About</a></li>
-                            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
-                            <li><a href="{{ url_for('main.overview') }}">Overview</a></li>
-                            <li><a href="{{ url_for('main.reviews') }}">Reviews</a></li>
-                            <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
-                        </ul>
-                    </section>
-                </section>
-
-                <!-- Contact info -->
-                <section class="footer-col">
-                    <h3>Contact Us</h3>
-                    <p>support@myspend.com</p>
-                    <p>
-                        Manchester, England
-                        <br>
-                        United Kingdom
-                    </p>
-                </section>
-
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{{ url_for('main.about') }}">About</a></li>
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('main.overview') }}">Overview</a></li>
+                    <li><a href="{{ url_for('main.reviews') }}">Reviews</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
+                </ul>
             </section>
+        </section>
 
-            <!-- Footer bottom -->
-            <section class="footer-bottom">
-                <p>© 2026 MySpend. Made in Manchester</p>
+        <!-- Contact info -->
+        <section class="footer-col">
+            <h3>Contact Us</h3>
+            <p>support@myspend.com</p>
+            <p>
+                Manchester, England
+                <br>
+                United Kingdom
+            </p>
+        </section>
+    </section>
 
-                <section class="footer-policy">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </section>
-            </section>
+    <!-- Footer bottom -->
+    <section class="footer-bottom">
+        <h2 class="visually-hidden">Footer bottom section</h2>
 
-        </footer>
+        <p>© 2026 MySpend. Made in Manchester</p>
 
+        <section class="footer-policy">
+            <h3 class="visually-hidden">Footer policy links</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </section>
+    </section>
+
+</footer>
         <!-- SCRIPTS - shared JS and external libraries -->
 
         <!-- Chart.js for charts -->
