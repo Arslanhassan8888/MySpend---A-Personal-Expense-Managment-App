@@ -1,5 +1,6 @@
 /* HEADER AND FOOTER */
 
+
 /* Hide visually but keep for screen readers */
 .visually-hidden {
     position: absolute;
@@ -16,6 +17,26 @@
 
 
 /* PAGE BASE */
+
+/* Skip link for keyboard users */
+.skip-link {
+    position: absolute;
+    top: -60px;
+    left: 20px;
+    z-index: 2000;
+    padding: 12px 16px;
+    background: #ffffff;
+    color: #111827;
+    border: 2px solid #7c2cff;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Show skip link only when focused */
+.skip-link:focus {
+    top: 20px;
+}
 
 /* Main page background and font */
 body {

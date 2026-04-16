@@ -114,14 +114,18 @@ def create_tables() -> None:
 
   
 
-    # # RECURRING EXPENSES TABLE – subscriptions or repeated payments
+   # RECURRING EXPENSES TABLE – subscriptions or repeated payments
     # cursor.execute("""
     # CREATE TABLE IF NOT EXISTS recurring_expenses (
     #     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    #     user_id INTEGER,
-    #     category_id INTEGER,
-    #     amount REAL,
-    #     frequency TEXT,
+    #     user_id INTEGER NOT NULL,
+    #     category_id INTEGER NOT NULL,
+    #     amount REAL NOT NULL,
+    #     description TEXT,
+    #     frequency TEXT NOT NULL,  -- e.g. daily, weekly, monthly
+    #     start_date TEXT NOT NULL,
+    #     next_due_date TEXT NOT NULL,
+    #     is_active INTEGER DEFAULT 1,
     #     FOREIGN KEY (user_id) REFERENCES users(user_id),
     #     FOREIGN KEY (category_id) REFERENCES categories(category_id)
     # )
