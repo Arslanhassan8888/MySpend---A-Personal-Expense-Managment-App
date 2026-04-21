@@ -83,7 +83,7 @@
             <h3 class="visually-hidden">Progress</h3>
 
             {# Progress bar class changes depending on percentage used #}
-            <progress value="{{ progress }}" max="100" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
+            <progress value="{{ progress }}" max="100" data-progress ="{{ progress }}" class="{% if progress >= 100 %}high{% elif progress >= 80 %}mid{% else %}low{% endif %}"></progress>
 
             <span class="progress-label">
                 {{ progress|round(1) }}% Used {# Display the percentage of the budget that has been used, rounded to one decimal place. #}

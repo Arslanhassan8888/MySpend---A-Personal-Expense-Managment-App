@@ -298,6 +298,49 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/* SHARED CHART OPTIONS */
+
+// Reusable tooltip style for overview charts.
+// This gives the tooltips a darker modern style with rounded corners.
+const overviewTooltipStyle = {
+    backgroundColor: "rgba(17, 24, 39, 0.95)",
+    titleColor: "#ffffff",
+    bodyColor: "#ffffff",
+    borderColor: "rgba(139, 92, 246, 0.35)",
+    borderWidth: 1,
+    cornerRadius: 12,
+    displayColors: true,
+    padding: 12,
+    titleFont: {
+        size: 13,
+        weight: "700"
+    },
+    bodyFont: {
+        size: 13
+    }
+};
+
+// Reusable animation timing for overview charts.
+// This controls how long the chart takes to grow to its real values.
+const overviewAnimationStyle = {
+    duration: 1000,
+    easing: "easeOutCubic"
+};
+
+// Reusable axis animation for overview charts.
+// This forces line and bar charts to start from the zero line
+// of the chart and then grow to their real values.
+const overviewAxisAnimationStyle = {
+    y: {
+        from: function (context) {
+            if (context.chart && context.chart.scales && context.chart.scales.y) {
+                return context.chart.scales.y.getPixelForValue(0);
+            }
+        }
+    }
+};
+
+
 /* BUDGET SPLIT CHART */
 
 // This section creates the doughnut chart used in the budget area.
@@ -331,41 +374,59 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         usedColor = "#16a34a";
     }
-
-    // CREATE CHART
-    // Build the budget doughnut chart with used and remaining values.
-    new Chart(chartCanvas, {
-        type: "doughnut",
-        data: {
-            labels: ["Used", "Remaining"],
-            datasets: [
-                {
-                    data: [usedAmount, leftAmount],
-                    backgroundColor: [usedColor, "#d1d5db"],
-                    borderColor: "#ffffff",
-                    borderWidth: 4,
-                    hoverOffset: 4
-                }
-            ]
+// CREATE CHART
+// Build the budget doughnut chart with used and remaining values.
+// Start with zero values first so the doughnut animates from empty.
+const budgetChart = new Chart(chartCanvas, {
+    type: "doughnut",
+    data: {
+        labels: ["Used", "Remaining"],
+        datasets: [
+            {
+                data: [0, 0],
+                backgroundColor: [usedColor, "#d1d5db"],
+                borderColor: "#ffffff",
+                borderWidth: 4,
+                hoverOffset: 6
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "74%",
+        animation: {
+            duration: 1800,
+            easing: "easeOutCubic",
+            animateRotate: true,
+            animateScale: true
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: "74%",
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return context.label + ": £" + Number(context.raw).toFixed(2);
-                        }
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                ...overviewTooltipStyle,
+                callbacks: {
+                    title: function (context) {
+                        return context[0].label;
+                    },
+                    label: function (context) {
+                        return "Amount: £" + Number(context.raw).toFixed(2);
                     }
                 }
             }
         }
-    });
+    }
+});
+
+// UPDATE TO REAL VALUES
+// After creating the chart with zero values,
+// update it so it animates to the real values.
+setTimeout(function () {
+    budgetChart.data.datasets[0].data = [usedAmount, leftAmount];
+    budgetChart.update();
+}, 80);
 });
 
 
@@ -476,25 +537,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     borderColor: "#10b981",
                     backgroundColor: "rgba(16, 185, 129, 0.10)",
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
                     borderWidth: 4,
-                    pointRadius: 5,
-                    pointHoverRadius: 6
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3,
+                    pointBackgroundColor: "#ffffff",
+                    pointBorderColor: "#10b981",
+                    pointHoverBackgroundColor: "#10b981",
+                    pointHoverBorderColor: "#ffffff"
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: "index",
+                intersect: false
+            },
+            animation: overviewAnimationStyle,
+            animations: overviewAxisAnimationStyle,
             plugins: {
                 legend: {
                     display: true,
                     position: "bottom"
                 },
                 tooltip: {
+                    ...overviewTooltipStyle,
                     callbacks: {
+                        title: function (context) {
+                            return "Day: " + context[0].label;
+                        },
                         label: function (context) {
-                            return "£" + Number(context.raw).toFixed(2);
+                            return "Spent: £" + Number(context.raw).toFixed(2);
                         }
                     }
                 }
@@ -565,25 +641,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 {
                     label: "Weekly Spending",
                     data: values,
-                    backgroundColor: "#8b5cf6",
+                    backgroundColor: "rgba(139, 92, 246, 0.88)",
                     borderColor: "#7c3aed",
                     borderWidth: 1,
-                    borderRadius: 10
+                    borderRadius: 12,
+                    hoverBackgroundColor: "rgba(124, 58, 237, 0.98)",
+                    hoverBorderColor: "#6d28d9"
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: "index",
+                intersect: false
+            },
+            animation: overviewAnimationStyle,
+            animations: overviewAxisAnimationStyle,
             plugins: {
                 legend: {
                     display: true,
                     position: "bottom"
                 },
                 tooltip: {
+                    ...overviewTooltipStyle,
                     callbacks: {
+                        title: function (context) {
+                            return context[0].label;
+                        },
                         label: function (context) {
-                            return "£" + Number(context.raw).toFixed(2);
+                            return "Weekly total: £" + Number(context.raw).toFixed(2);
                         }
                     }
                 }
@@ -657,25 +745,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     borderColor: "#3b82f6",
                     backgroundColor: "rgba(59, 130, 246, 0.10)",
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
                     borderWidth: 4,
-                    pointRadius: 5,
-                    pointHoverRadius: 6
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3,
+                    pointBackgroundColor: "#ffffff",
+                    pointBorderColor: "#3b82f6",
+                    pointHoverBackgroundColor: "#3b82f6",
+                    pointHoverBorderColor: "#ffffff"
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: "index",
+                intersect: false
+            },
+            animation: overviewAnimationStyle,
+            animations: overviewAxisAnimationStyle,
             plugins: {
                 legend: {
                     display: true,
                     position: "bottom"
                 },
                 tooltip: {
+                    ...overviewTooltipStyle,
                     callbacks: {
+                        title: function (context) {
+                            return "Month: " + context[0].label;
+                        },
                         label: function (context) {
-                            return "£" + Number(context.raw).toFixed(2);
+                            return "Spent: £" + Number(context.raw).toFixed(2);
                         }
                     }
                 }
@@ -781,14 +884,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CREATE PIE CHART
     // Build the category spending chart and apply the custom plugin.
-    new Chart(categoryPieChartCanvas, {
+    // Start with zero values first so the pie can animate up to the real data.
+    const startingPieValues = values.map(function () {
+        return 0;
+    });
+
+    const categoryPieChart = new Chart(categoryPieChartCanvas, {
         type: "pie",
         data: {
             labels: labels,
             datasets: [
                 {
                     label: "Category Spending",
-                    data: values,
+                    data: startingPieValues,
                     backgroundColor: [
                         "#8b5cf6",
                         "#3b82f6",
@@ -802,24 +910,35 @@ document.addEventListener("DOMContentLoaded", function () {
                         "#f97316"
                     ],
                     borderColor: "#ffffff",
-                    borderWidth: 3
+                    borderWidth: 3,
+                    hoverOffset: 8
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 1800,
+                easing: "easeOutCubic",
+                animateRotate: true,
+                animateScale: true
+            },
             plugins: {
                 legend: {
                     display: true,
                     position: "bottom"
                 },
                 tooltip: {
+                    ...overviewTooltipStyle,
                     callbacks: {
+                        title: function (context) {
+                            return context[0].label;
+                        },
                         label: function (context) {
                             const value = Number(context.raw);
                             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : "0.0";
-                            return context.label + ": £" + value.toFixed(2) + " (" + percentage + "%)";
+                            return "Spent: £" + value.toFixed(2) + " (" + percentage + "%)";
                         }
                     }
                 }
@@ -827,4 +946,34 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         plugins: [piePercentagePlugin]
     });
+
+    // UPDATE TO REAL VALUES
+    // After the chart is created with zero values, update it to the real values.
+    // This makes the slices animate from empty to their real sizes.
+    setTimeout(function () {
+        categoryPieChart.data.datasets[0].data = values;
+        categoryPieChart.update();
+    }, 80);
+});
+
+// This section animates the budget progress bar on the dashboard page.
+document.addEventListener("DOMContentLoaded", () => {
+    const bar = document.querySelector(".progress-wrapper progress");
+    if (!bar) return;
+
+    const target = +bar.dataset.progress || 0;
+    let start = null;
+
+    const duration = 1000;
+
+    function animate(time) {
+        if (!start) start = time;
+        let progress = Math.min((time - start) / duration, 1);
+
+        bar.value = target * progress;
+
+        if (progress < 1) requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
 });
