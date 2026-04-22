@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // It disables the button if no rows are selected.
     // It also updates the button text to show the selected count.
     function updateDeleteButton() {
-        let checked = document.querySelectorAll(".expense-checkbox:checked").length;
+        const checked = document.querySelectorAll(".expense-checkbox:checked").length;
 
         if (deleteButton) {
             deleteButton.disabled = checked === 0;
@@ -49,14 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         selectAll.addEventListener("change", function () {
             checkboxes.forEach(function (checkbox) {
                 checkbox.checked = selectAll.checked;
-
-                if (checkbox.closest("tr")) {
-                    if (selectAll.checked) {
-                        checkbox.closest("tr").classList.add("selected-row");
-                    } else {
-                        checkbox.closest("tr").classList.remove("selected-row");
-                    }
-                }
+                checkbox.closest("tr")?.classList.toggle("selected-row", selectAll.checked);
             });
 
             updateDeleteButton();
@@ -69,15 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // when the user selects expenses one by one.
     checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener("change", function () {
-
-            if (checkbox.closest("tr")) {
-                if (checkbox.checked) {
-                    checkbox.closest("tr").classList.add("selected-row");
-                } else {
-                    checkbox.closest("tr").classList.remove("selected-row");
-                }
-            }
-
+            checkbox.closest("tr")?.classList.toggle("selected-row", checkbox.checked);
             updateDeleteButton();
         });
     });
@@ -143,13 +128,7 @@ function openEditModal(id, amount, category, date, description) {
 
 // This function closes the edit modal.
 function closeModal() {
-    const modal = document.getElementById("editModal");
-
-    // HIDE MODAL
-    // If the edit modal exists, hide it.
-    if (modal) {
-        modal.hidden = true;
-    }
+    document.getElementById("editModal")?.setAttribute("hidden", true);
 }
 
 
@@ -157,24 +136,12 @@ function closeModal() {
 
 // This function opens the sort modal.
 function openSortModal() {
-    const modal = document.getElementById("sortModal");
-
-    // SHOW MODAL
-    // If the sort modal exists, display it.
-    if (modal) {
-        modal.hidden = false;
-    }
+    document.getElementById("sortModal")?.removeAttribute("hidden");
 }
 
 // This function closes the sort modal.
 function closeSortModal() {
-    const modal = document.getElementById("sortModal");
-
-    // HIDE MODAL
-    // If the sort modal exists, hide it.
-    if (modal) {
-        modal.hidden = true;
-    }
+    document.getElementById("sortModal")?.setAttribute("hidden", true);
 }
 
 
@@ -182,24 +149,12 @@ function closeSortModal() {
 
 // This function opens the search modal.
 function openSearchModal() {
-    const modal = document.getElementById("searchModal");
-
-    // SHOW MODAL
-    // If the search modal exists, display it.
-    if (modal) {
-        modal.hidden = false;
-    }
+    document.getElementById("searchModal")?.removeAttribute("hidden");
 }
 
 // This function closes the search modal.
 function closeSearchModal() {
-    const modal = document.getElementById("searchModal");
-
-    // HIDE MODAL
-    // If the search modal exists, hide it.
-    if (modal) {
-        modal.hidden = true;
-    }
+    document.getElementById("searchModal")?.setAttribute("hidden", true);
 }
 
 
@@ -212,9 +167,7 @@ window.onclick = function(event) {
     // STORE MODAL IDS
     // Keep a list of all modal ids that should close
     // when the user clicks on the modal background.
-    const modals = ["editModal", "sortModal", "searchModal"];
-
-    modals.forEach(function (id) {
+    ["editModal", "sortModal", "searchModal"].forEach(function (id) {
         const modal = document.getElementById(id);
 
         // CLOSE MODAL IF BACKGROUND IS CLICKED
@@ -236,24 +189,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // REOPEN SORT MODAL
     // If Flask requested the sort modal, open it again.
-    if (modalToOpen === "sort") {
-        openSortModal();
-    }
+    if (modalToOpen === "sort") openSortModal();
 
     // REOPEN SEARCH MODAL
     // If Flask requested the search modal, open it again.
-    if (modalToOpen === "search") {
-        openSearchModal();
-    }
+    if (modalToOpen === "search") openSearchModal();
 
     // REOPEN EDIT MODAL
     // If Flask requested the edit modal, show it again.
     if (modalToOpen === "edit") {
         const modal = document.getElementById("editModal");
-
-        if (modal) {
-            modal.hidden = false;
-        }
+        if (modal) modal.hidden = false;
     }
 });
 
@@ -270,23 +216,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const menu = document.getElementById("nav-menu");
 
     if (toggle && menu) {
-        toggle.addEventListener("click", () => {
-            menu.classList.toggle("show");
-        });
+        toggle.addEventListener("click", () => menu.classList.toggle("show"));
     }
 
     // HEADER SCROLL EFFECT
     // Add a visual class after the user scrolls down the page.
     window.addEventListener("scroll", () => {
         const header = document.querySelector("header");
-
-        if (header) {
-            if (window.scrollY > 50) {
-                header.classList.add("scrolled");
-            } else {
-                header.classList.remove("scrolled");
-            }
-        }
+        if (header) header.classList.toggle("scrolled", window.scrollY > 50);
     });
 
     // POINTER CURSOR FIX
@@ -311,13 +248,8 @@ const overviewTooltipStyle = {
     cornerRadius: 12,
     displayColors: true,
     padding: 12,
-    titleFont: {
-        size: 13,
-        weight: "700"
-    },
-    bodyFont: {
-        size: 13
-    }
+    titleFont: { size: 13, weight: "700" },
+    bodyFont: { size: 13 }
 };
 
 // Reusable animation timing for overview charts.
@@ -332,13 +264,39 @@ const overviewAnimationStyle = {
 // of the chart and then grow to their real values.
 const overviewAxisAnimationStyle = {
     y: {
-        from: function (context) {
-            if (context.chart && context.chart.scales && context.chart.scales.y) {
-                return context.chart.scales.y.getPixelForValue(0);
-            }
-        }
+        from: context => context.chart?.scales?.y?.getPixelForValue(0)
     }
 };
+
+// Shared chart colours used in the category spending chart.
+const categoryChartColours = [
+    "#8b5cf6",
+    "#3b82f6",
+    "#10b981",
+    "#f59e0b",
+    "#ef4444",
+    "#06b6d4",
+    "#ec4899",
+    "#84cc16",
+    "#6366f1",
+    "#f97316"
+];
+
+// This helper reads chart labels and values from HTML data attributes.
+function getChartData(canvas) {
+    return {
+        labels: JSON.parse(canvas.getAttribute("data-labels") || "[]"),
+        values: JSON.parse(canvas.getAttribute("data-values") || "[]")
+    };
+}
+
+// This helper updates pie or doughnut charts from zero values to real values.
+function animateDatasetValues(chart, values, delay = 80) {
+    setTimeout(function () {
+        chart.data.datasets[0].data = values;
+        chart.update();
+    }, delay);
+}
 
 
 /* BUDGET SPLIT CHART */
@@ -365,68 +323,59 @@ document.addEventListener("DOMContentLoaded", function () {
     // CHOOSE CHART COLOUR
     // Start with green by default, then switch to orange or red
     // when the budget usage reaches warning or danger levels.
-    let usedColor = "#16a34a";
+    const usedColor =
+        progressValue >= 100 ? "#dc2626" :
+        progressValue >= 80 ? "#f59e0b" :
+        "#16a34a";
 
-    if (progressValue >= 100) {
-        usedColor = "#dc2626";
-    } else if (progressValue >= 80) {
-        usedColor = "#f59e0b";
-    } else {
-        usedColor = "#16a34a";
-    }
-// CREATE CHART
-// Build the budget doughnut chart with used and remaining values.
-// Start with zero values first so the doughnut animates from empty.
-const budgetChart = new Chart(chartCanvas, {
-    type: "doughnut",
-    data: {
-        labels: ["Used", "Remaining"],
-        datasets: [
-            {
-                data: [0, 0],
-                backgroundColor: [usedColor, "#d1d5db"],
-                borderColor: "#ffffff",
-                borderWidth: 4,
-                hoverOffset: 6
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "74%",
-        animation: {
-            duration: 1800,
-            easing: "easeOutCubic",
-            animateRotate: true,
-            animateScale: true
+    // CREATE CHART
+    // Build the budget doughnut chart with used and remaining values.
+    // Start with zero values first so the doughnut animates from empty.
+    const budgetChart = new Chart(chartCanvas, {
+        type: "doughnut",
+        data: {
+            labels: ["Used", "Remaining"],
+            datasets: [
+                {
+                    data: [0, 0],
+                    backgroundColor: [usedColor, "#d1d5db"],
+                    borderColor: "#ffffff",
+                    borderWidth: 4,
+                    hoverOffset: 6
+                }
+            ]
         },
-        plugins: {
-            legend: {
-                display: false
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "74%",
+            animation: {
+                duration: 1800,
+                easing: "easeOutCubic",
+                animateRotate: true,
+                animateScale: true
             },
-            tooltip: {
-                ...overviewTooltipStyle,
-                callbacks: {
-                    title: function (context) {
-                        return context[0].label;
-                    },
-                    label: function (context) {
-                        return "Amount: £" + Number(context.raw).toFixed(2);
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    ...overviewTooltipStyle,
+                    callbacks: {
+                        title: function (context) {
+                            return context[0].label;
+                        },
+                        label: function (context) {
+                            return "Amount: £" + Number(context.raw).toFixed(2);
+                        }
                     }
                 }
             }
         }
-    }
-});
+    });
 
-// UPDATE TO REAL VALUES
-// After creating the chart with zero values,
-// update it so it animates to the real values.
-setTimeout(function () {
-    budgetChart.data.datasets[0].data = [usedAmount, leftAmount];
-    budgetChart.update();
-}, 80);
+    // UPDATE TO REAL VALUES
+    // After creating the chart with zero values,
+    // update it so it animates to the real values.
+    animateDatasetValues(budgetChart, [usedAmount, leftAmount]);
 });
 
 
@@ -448,13 +397,9 @@ function setupPasswordToggle(buttonId, inputId) {
     // Switch the input between password and text,
     // and update the button label to match.
     button.addEventListener("click", function () {
-        if (input.type === "password") {
-            input.type = "text";
-            button.textContent = "Hide";
-        } else {
-            input.type = "password";
-            button.textContent = "Show";
-        }
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        button.textContent = isPassword ? "Hide" : "Show";
     });
 }
 
@@ -500,24 +445,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CHECK REQUIRED ELEMENTS
     // Stop if the chart canvas does not exist.
-    if (!dailyChartCanvas) {
-        return;
-    }
-
-    // CHECK CHART.JS
-    // Stop if the Chart.js library is not loaded.
-    if (typeof Chart === "undefined") {
+    if (!dailyChartCanvas || typeof Chart === "undefined") {
         return;
     }
 
     // READ CHART DATA
     // Read chart labels and values from the HTML data attributes.
-    const labelsText = dailyChartCanvas.getAttribute("data-labels") || "[]";
-    const valuesText = dailyChartCanvas.getAttribute("data-values") || "[]";
-
-    // CONVERT JSON TEXT TO ARRAYS
-    const labels = JSON.parse(labelsText);
-    const values = JSON.parse(valuesText);
+    const { labels, values } = getChartData(dailyChartCanvas);
 
     // DEBUG CHART DATA
     // These logs help check whether the correct data reaches the chart.
@@ -529,7 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
     new Chart(dailyChartCanvas, {
         type: "line",
         data: {
-            labels: labels,
+            labels,
             datasets: [
                 {
                     label: "Daily Spending",
@@ -552,17 +486,11 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                mode: "index",
-                intersect: false
-            },
+            interaction: { mode: "index", intersect: false },
             animation: overviewAnimationStyle,
             animations: overviewAxisAnimationStyle,
             plugins: {
-                legend: {
-                    display: true,
-                    position: "bottom"
-                },
+                legend: { display: true, position: "bottom" },
                 tooltip: {
                     ...overviewTooltipStyle,
                     callbacks: {
@@ -608,24 +536,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CHECK REQUIRED ELEMENTS
     // Stop if the chart canvas does not exist.
-    if (!weeklyChartCanvas) {
-        return;
-    }
-
-    // CHECK CHART.JS
-    // Stop if the Chart.js library is not loaded.
-    if (typeof Chart === "undefined") {
+    if (!weeklyChartCanvas || typeof Chart === "undefined") {
         return;
     }
 
     // READ CHART DATA
     // Read chart labels and values from the HTML data attributes.
-    const labelsText = weeklyChartCanvas.getAttribute("data-labels") || "[]";
-    const valuesText = weeklyChartCanvas.getAttribute("data-values") || "[]";
-
-    // CONVERT JSON TEXT TO ARRAYS
-    const labels = JSON.parse(labelsText);
-    const values = JSON.parse(valuesText);
+    const { labels, values } = getChartData(weeklyChartCanvas);
 
     // DEBUG CHART DATA
     console.log("Weekly chart labels:", labels);
@@ -636,7 +553,7 @@ document.addEventListener("DOMContentLoaded", function () {
     new Chart(weeklyChartCanvas, {
         type: "bar",
         data: {
-            labels: labels,
+            labels,
             datasets: [
                 {
                     label: "Weekly Spending",
@@ -653,17 +570,11 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                mode: "index",
-                intersect: false
-            },
+            interaction: { mode: "index", intersect: false },
             animation: overviewAnimationStyle,
             animations: overviewAxisAnimationStyle,
             plugins: {
-                legend: {
-                    display: true,
-                    position: "bottom"
-                },
+                legend: { display: true, position: "bottom" },
                 tooltip: {
                     ...overviewTooltipStyle,
                     callbacks: {
@@ -709,24 +620,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CHECK REQUIRED ELEMENTS
     // Stop if the chart canvas does not exist.
-    if (!monthlyChartCanvas) {
-        return;
-    }
-
-    // CHECK CHART.JS
-    // Stop if the Chart.js library is not loaded.
-    if (typeof Chart === "undefined") {
+    if (!monthlyChartCanvas || typeof Chart === "undefined") {
         return;
     }
 
     // READ CHART DATA
     // Read chart labels and values from the HTML data attributes.
-    const labelsText = monthlyChartCanvas.getAttribute("data-labels") || "[]";
-    const valuesText = monthlyChartCanvas.getAttribute("data-values") || "[]";
-
-    // CONVERT JSON TEXT TO ARRAYS
-    const labels = JSON.parse(labelsText);
-    const values = JSON.parse(valuesText);
+    const { labels, values } = getChartData(monthlyChartCanvas);
 
     // DEBUG CHART DATA
     console.log("Monthly chart labels:", labels);
@@ -737,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function () {
     new Chart(monthlyChartCanvas, {
         type: "line",
         data: {
-            labels: labels,
+            labels,
             datasets: [
                 {
                     label: "Monthly Spending",
@@ -760,17 +660,11 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                mode: "index",
-                intersect: false
-            },
+            interaction: { mode: "index", intersect: false },
             animation: overviewAnimationStyle,
             animations: overviewAxisAnimationStyle,
             plugins: {
-                legend: {
-                    display: true,
-                    position: "bottom"
-                },
+                legend: { display: true, position: "bottom" },
                 tooltip: {
                     ...overviewTooltipStyle,
                     callbacks: {
@@ -818,24 +712,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CHECK REQUIRED ELEMENTS
     // Stop if the chart canvas does not exist.
-    if (!categoryPieChartCanvas) {
-        return;
-    }
-
-    // CHECK CHART.JS
-    // Stop if the Chart.js library is not loaded.
-    if (typeof Chart === "undefined") {
+    if (!categoryPieChartCanvas || typeof Chart === "undefined") {
         return;
     }
 
     // READ CHART DATA
     // Read chart labels and values from the HTML data attributes.
-    const labelsText = categoryPieChartCanvas.getAttribute("data-labels") || "[]";
-    const valuesText = categoryPieChartCanvas.getAttribute("data-values") || "[]";
-
-    // CONVERT JSON TEXT TO ARRAYS
-    const labels = JSON.parse(labelsText);
-    const values = JSON.parse(valuesText);
+    const { labels, values } = getChartData(categoryPieChartCanvas);
 
     // DEBUG CHART DATA
     console.log("Category chart labels:", labels);
@@ -843,9 +726,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CALCULATE TOTAL
     // Add up all values so the code can calculate percentages for each slice.
-    const total = values.reduce(function (sum, value) {
-        return sum + Number(value);
-    }, 0);
+    const total = values.reduce((sum, value) => sum + Number(value), 0);
 
     // CREATE CUSTOM PERCENTAGE PLUGIN
     // This custom plugin runs after the pie chart is drawn.
@@ -868,9 +749,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // IGNORE EMPTY SLICES
                 // Skip empty slices and avoid division errors if total is zero.
-                if (value <= 0 || total <= 0) {
-                    return;
-                }
+                if (value <= 0 || total <= 0) return;
 
                 const percentage = ((value / total) * 100).toFixed(1) + "%";
                 const position = slice.tooltipPosition();
@@ -885,30 +764,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // CREATE PIE CHART
     // Build the category spending chart and apply the custom plugin.
     // Start with zero values first so the pie can animate up to the real data.
-    const startingPieValues = values.map(function () {
-        return 0;
-    });
-
     const categoryPieChart = new Chart(categoryPieChartCanvas, {
         type: "pie",
         data: {
-            labels: labels,
+            labels,
             datasets: [
                 {
                     label: "Category Spending",
-                    data: startingPieValues,
-                    backgroundColor: [
-                        "#8b5cf6",
-                        "#3b82f6",
-                        "#10b981",
-                        "#f59e0b",
-                        "#ef4444",
-                        "#06b6d4",
-                        "#ec4899",
-                        "#84cc16",
-                        "#6366f1",
-                        "#f97316"
-                    ],
+                    data: values.map(() => 0),
+                    backgroundColor: categoryChartColours,
                     borderColor: "#ffffff",
                     borderWidth: 3,
                     hoverOffset: 8
@@ -925,10 +789,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 animateScale: true
             },
             plugins: {
-                legend: {
-                    display: true,
-                    position: "bottom"
-                },
+                legend: { display: true, position: "bottom" },
                 tooltip: {
                     ...overviewTooltipStyle,
                     callbacks: {
@@ -950,11 +811,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // UPDATE TO REAL VALUES
     // After the chart is created with zero values, update it to the real values.
     // This makes the slices animate from empty to their real sizes.
-    setTimeout(function () {
-        categoryPieChart.data.datasets[0].data = values;
-        categoryPieChart.update();
-    }, 80);
+    animateDatasetValues(categoryPieChart, values);
 });
+
+
+/* BUDGET PROGRESS BAR ANIMATION */
 
 // This section animates the budget progress bar on the dashboard page.
 document.addEventListener("DOMContentLoaded", () => {
@@ -963,12 +824,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const target = +bar.dataset.progress || 0;
     let start = null;
-
     const duration = 1000;
 
     function animate(time) {
         if (!start) start = time;
-        let progress = Math.min((time - start) / duration, 1);
+        const progress = Math.min((time - start) / duration, 1);
 
         bar.value = target * progress;
 
