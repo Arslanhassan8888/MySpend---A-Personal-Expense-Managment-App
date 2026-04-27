@@ -1,4 +1,4 @@
-# MySpend – Personal Finance Tracker
+# MySpend – Personal Expense Managment App
 
 MySpend is a full-stack web application built with **Flask** that helps users manage personal finances, track expenses, and monitor budgets through a clean, accessible, and user-friendly interface.
 
