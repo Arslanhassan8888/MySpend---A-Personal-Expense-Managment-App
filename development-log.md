@@ -204,8 +204,6 @@ Validation for edit, search, and sort is now handled on the server. Errors are p
 
 ## 20/04/2026 CSV Export Feature
 
-## 20/04/2026 CSV Export Feature
-
 I added a CSV export feature to allow users to download their expense data from the dashboard.
 
 I created a new route using Flask Response to return a downloadable file and used the built-in csv and io modules to generate the CSV in memory instead of saving it on disk. The data is retrieved using a SQL query filtered by session["user_id"] and joined with the categories table to display category names.
